@@ -1,0 +1,19 @@
+version: "3"
+services:
+  app_alessandro_viol:
+    container_name: app_alessandro_viol
+    build: .
+    command: nodemon --watch /usr/src/app -e js app.js
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/usr/src/app
+    links:
+      - "mongo_alessandro_viol:mongosrv"
+  mongo_alessandro_viol:
+    container_name: mongo_alessandro_viol
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27017:27017'

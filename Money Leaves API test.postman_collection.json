@@ -1,0 +1,517 @@
+{
+	"info": {
+		"_postman_id": "999e0d9b-573d-44f0-ab22-19b9e811695a",
+		"name": "Money Leaves",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36620900"
+	},
+	"item": [
+		{
+			"name": "Sign In",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Zuppiero\",\r\n    \"password\": \"passwordA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/auth/signin",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign Up",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"_id\": \"TestAPI\",\r\n    \"name\": \"TestAPI\",\r\n    \"surname\": \"TestAPI\",\r\n    \"password\": \"TestAPI\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/auth/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Budget",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/budget/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Budget in a year",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/budget/:year",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						":year"
+					],
+					"variable": [
+						{
+							"key": "year",
+							"value": "2023"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Budget in a year/month",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/budget/:year/:month",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						":year",
+						":month"
+					],
+					"variable": [
+						{
+							"key": "year",
+							"value": "2024"
+						},
+						{
+							"key": "month",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Budget in a year/month/id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/budget/:year/:month/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						":year",
+						":month",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "year",
+							"value": "2023"
+						},
+						{
+							"key": "month",
+							"value": "12"
+						},
+						{
+							"key": "id",
+							"value": "667fc80c9de86cdc2219fff9"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New expense",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Extract the user ID from the response\r",
+							"const res = pm.response.json();\r",
+							"const newExpenseId = res.insertedId\r",
+							"\r",
+							"// Save the user ID as an environment variable\r",
+							"pm.collectionVariables.set('newExpenseId', newExpenseId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"total_cost\": 10,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 7\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 3\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/budget/:year/:month",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						":year",
+						":month"
+					],
+					"variable": [
+						{
+							"key": "year",
+							"value": "2024"
+						},
+						{
+							"key": "month",
+							"value": "6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit expense",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"total_cost\": 100,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 60\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 40\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/budget/:year/:month/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						":year",
+						":month",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "year",
+							"value": "2024"
+						},
+						{
+							"key": "month",
+							"value": "6"
+						},
+						{
+							"key": "id",
+							"value": "{{newExpenseId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete expense",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"total_cost\": 100,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 60\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 40\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/budget/:year/:month/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						":year",
+						":month",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "year",
+							"value": "2024"
+						},
+						{
+							"key": "month",
+							"value": "6"
+						},
+						{
+							"key": "id",
+							"value": "{{newExpenseId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Balance",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/balance/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"balance",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Balance with friend",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/balance/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"balance",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "FedeAzz"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search expense",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/budget/search?q=bowling",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "bowling"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get logged user info",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/budget/whoami",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"budget",
+						"whoami"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/users/search?q=ali",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"users",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "ali"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "newExpenseId"
+		}
+	]
+}
