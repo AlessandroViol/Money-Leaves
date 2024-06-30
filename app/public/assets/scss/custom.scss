@@ -1,0 +1,22 @@
+//npx sass --watch ./public/assets/scss/custom.scss ./public/assets/css/custom.css
+
+@import "../../../node_modules/bootstrap/scss/functions"; 
+@import "../../../node_modules/bootstrap/scss/variables";
+
+$primary: #28a745; // set the $primary variable
+
+// merge with existing $theme-colors map
+$theme-colors: map-merge($theme-colors, (
+  "primary": $primary
+));
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+@import "../../../node_modules/bootstrap/scss/forms/form-control";
+$input-focus-border-color: $primary;
+$input-plaintext-color: $primary;
+
+$input-focus-box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+
+// set changes
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+

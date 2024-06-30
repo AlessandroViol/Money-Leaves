@@ -48,7 +48,8 @@ app.post('/api/auth/signin', async (req, res) => {
 	const user = await db.collection('users').findOne({ _id: req.body.username });
 
 	if (user === null) {
-		console.log('Utente non esistente: ', req.body.username);
+		res.status(403).send('Not authenticated!');
+		console.log('Not logged in ', req.body.username);
 	} else {
 		const isValid = await bcrypt.compare(req.body.password, user.password);
 		if (isValid) {
@@ -59,7 +60,6 @@ app.post('/api/auth/signin', async (req, res) => {
 			res.json(req.session.user);
 		} else {
 			res.status(403).send('Not authenticated!');
-
 			console.log('Not logged in ', user._id);
 		}
 	}

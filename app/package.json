@@ -9,6 +9,7 @@
   "author": "Alessandro Viol",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.3",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "mongodb": "^6.7.0"
