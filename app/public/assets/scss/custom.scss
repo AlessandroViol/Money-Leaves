@@ -1,4 +1,4 @@
-//npx sass --watch ./public/assets/scss/custom.scss ./public/assets/css/custom.css
+//npx sass --watch ./app/public/assets/scss/custom.scss ./app/public/assets/css/custom.css 
 
 @import "../../../node_modules/bootstrap/scss/functions"; 
 @import "../../../node_modules/bootstrap/scss/variables";
@@ -20,3 +20,8 @@ $input-focus-box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
 // set changes
 @import "../../../node_modules/bootstrap/scss/bootstrap";
 
+@import "../../../node_modules/bootstrap/scss/dropdown";
+
+$dropdown-link-active-bg: $primary;
+
+@import "../../../node_modules/bootstrap/scss/bootstrap";

@@ -1,3 +1,4 @@
+
 const ThemeDropdown = {
 	template: `
     <div>
@@ -183,36 +184,6 @@ const ThemeDropdown = {
 			});
 		});
 	},
-
-	style: `
-		.b-example-divider {
-			width: 100%;
-			height: 3rem;
-			background-color: rgba(0, 0, 0, 0.1);
-			border: solid rgba(0, 0, 0, 0.15);
-			border-width: 1px 0;
-			box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1), inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
-		}
-
-		.b-example-vr {
-			flex-shrink: 0;
-			width: 1.5rem;
-			height: 100vh;
-		}
-
-		.bi {
-			vertical-align: -0.125em;
-			fill: currentColor;
-		}
-
-		.bd-mode-toggle {
-			z-index: 1500;
-		}
-
-		.bd-mode-toggle .dropdown-menu .active .bi {
-			display: block !important;
-		}
-	`,
 };
 
 export default ThemeDropdown;

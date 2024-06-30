@@ -3,22 +3,26 @@ body {
   height: 100%;
 }
 
-.form-signin {
+.form-auth {
   max-width: 330px;
   padding: 1rem;
 }
 
-.form-signin .form-floating:focus-within {
+.form-auth .form-floating:focus-within {
   z-index: 2;
 }
 
-.form-signin input[type="text"] {
+.form-auth input.first {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.form-signin input[type="password"] {
+.form-auth input.middle{
+  border-radius: 0;
+}
+
+.form-auth input.last {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
