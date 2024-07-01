@@ -28,7 +28,7 @@ const SignIn = {
           <router-link to="/signup" class="link-primary link-opacity-75-hover link-underline-opacity-0" style="font-weight: bold;">Sign Up!</router-link>
         </p>
 
-        <button class='btn btn-primary w-100 py-2' type='submit' @click.prevent='submit' :disabled="isDisabled">
+        <button class='mb-4 btn btn-primary w-100 py-2' type='submit' @click.prevent='submit' :disabled="isDisabled">
           Sign In
         </button>
       </form>

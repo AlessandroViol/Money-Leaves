@@ -16,6 +16,7 @@ app.use(
 	session({
 		secret: 'segreto',
 		resave: false,
+		saveUninitialized: false,
 	})
 );
 
@@ -73,68 +74,6 @@ function validator({
 	console.log(',######################################\n');
 	return result;
 }
-
-`app.post('/api/auth/signup', async (req, res) => {
-	const hashedPassword = await bcrypt.hash(req.body.password, 10);
-	const newUser = {
-		_id: req.body._id.trim(),
-		name: req.body.name.trim(),
-		surname: req.body.name.trim(),
-		password: hashedPassword,
-	};
-
-	const errorInfo = { isUsernameAlreadyTanken: false, errorString: '' };
-
-	if (!validator({ str: req.body.password, allowWhiteSpaces: false, minLength: 6, maxLength: 20, minNumber: 2 })) {
-		console.error('Invalid password');
-		errorInfo.isInvalidPassword = true;
-		errorInfo.errorString = errorInfo.errorString + 'Invalid password' + ', ';
-	} else {
-		errorInfo.isInvalidPassword = false;
-	}
-
-	if (!validator({ str: newUser._id, allowWhiteSpaces: false, minLength: 2, maxLength: 20 })) {
-		console.error('Invalid username');
-		errorInfo.isUsernameInvalid = true;
-		errorInfo.errorString = errorInfo.errorString + 'Invalid username' + ', ';
-	} else {
-		errorInfo.isUsernameInvalid = false;
-	}
-
-	if (!validator({ str: newUser.name, minLength: 2, maxLength: 20, allowNumbers: false, allowSymbols: false })) {
-		console.error('Invalid name');
-		errorInfo.isNameInvalid = true;
-		errorInfo.errorString = errorInfo.errorString + 'Invalid name' + ', ';
-	} else {
-		errorInfo.isNameInvalid = false;
-	}
-
-	if (!validator({ str: newUser.surname, minLength: 2, maxLength: 20, allowNumbers: false, allowSymbols: false })) {
-		console.error('Invalid surname');
-		errorInfo.isSurnameInvalid = true;
-		errorInfo.errorString = errorInfo.errorString + 'Invalid surname' + ', ';
-	} else {
-		errorInfo.isSurnameInvalid = false;
-	}
-
-	if (errorInfo.errorString.length !== 0) {
-		return res.status(400).json({ error: errorInfo });
-	}
-
-	try {
-		await db.collection('users').insertOne(newUser);
-		res.json(newUser);
-	} catch (err) {
-		if (err.code === 11000) {
-			errorInfo.isUsernameAlreadyTanken = true;
-			errorInfo.errorString = 'Username is already tanken';
-			res.status(400).json({ error: errorInfo });
-		} else {
-			console.error('Error inserting user:', err);
-			res.status(500).json({ error: 'Internal Server Error' });
-		}
-	}
-});`;
 
 // create new user's credentials
 app.post('/api/auth/signup', async (req, res) => {
@@ -497,6 +436,10 @@ app.get('/api/users/search', verifyUser, async (req, res) => {
 		console.error('Search error:', err);
 		res.status(500).json({ error: 'Internal server error' });
 	}
+});
+
+app.get('*', (req, res) => {
+	res.sendFile(`${__dirname}/public/index.html`);
 });
 
 app.listen(3000, async () => {

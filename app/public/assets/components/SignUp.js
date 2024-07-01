@@ -48,7 +48,7 @@ const SignUp = {
           <router-link to="/" class="link-primary link-opacity-75-hover link-underline-opacity-0" style="font-weight: bold;">Sign In!</router-link>
         </p>
 
-        <button class='btn btn-primary w-100 py-2' type='submit' @click.prevent='submit' :disabled="isDisabled">
+        <button class='mb-4 btn btn-primary w-100 py-2' type='submit' @click.prevent='submit' :disabled="isDisabled">
           Sign Up
         </button>
       </form>
@@ -71,7 +71,6 @@ const SignUp = {
 			isPasswordInvalid: false,
 
 			passwordRepeat: '',
-			isDifferentPassword: false,
 		};
 	},
 
@@ -81,17 +80,6 @@ const SignUp = {
 			const name = this.name;
 			const surname = this.surname;
 			const password = this.password;
-			const passwordRepeat = this.passwordRepeat;
-
-			console.log(JSON.stringify({ _id: username, name, surname, password }));
-
-			if (password !== passwordRepeat) {
-				console.error('Password must match!');
-				this.isDifferentPassword = true;
-				return;
-			} else {
-				this.isDifferentPassword = false;
-			}
 
 			const response = await fetch('/api/auth/signup', {
 				method: 'POST',
@@ -101,35 +89,39 @@ const SignUp = {
 				body: JSON.stringify({ _id: username, name, surname, password }),
 			});
 
-			`if (response.status === 400) {
-				this.isUsernameAlreadyTanken = response.error.isUsernameAlreadyTanken;
-				this.isUsernameInvalid = response.error.isUsernameInvalid;
-				this.isNameInvalid = response.error.isNameInvalid;
-				this.isSurnameInvalid = response.error.isSurnameInvalid;
-				this.isPasswordInvalid = response.error.isPasswordInvalid;
-			}`;
+			if (response.status === 460) {
+				console.error('460 Forbidden: invalid password');
+				this.isPasswordInvalid = true;
+			} else {
+				this.isPasswordInvalid = false;
+			}
 
-			switch (response.status) {
-				case 460:
-					console.error('460 Forbidden: invalid password');
-					this.isPasswordInvalid = true;
-					return;
-				case 461:
-					console.error('461 Forbidden: invalid username');
-					this.isUsernameInvalid = true;
-					return;
-				case 462:
-					console.error('462 Forbidden: invalid name');
-					this.isNameInvalid = true;
-					return;
-				case 463:
-					console.error('463 Forbidden: invalid surname');
-					this.isSurnameInvalid = true;
-					return;
-				case 464:
-					console.error('464 Forbidden: username already exists');
-					this.isUsernameAlreadyTanken = true;
-					return;
+			if (response.status === 461) {
+				console.error('461 Forbidden: invalid username');
+				this.isUsernameInvalid = true;
+			} else {
+				this.isUsernameInvalid = false;
+			}
+
+			if (response.status === 462) {
+				console.error('462 Forbidden: invalid name');
+				this.isNameInvalid = true;
+			} else {
+				this.isNameInvalid = false;
+			}
+
+			if (response.status === 463) {
+				console.error('463 Forbidden: invalid surname');
+				this.isSurnameInvalid = true;
+			} else {
+				this.isSurnameInvalid = false;
+			}
+
+			if (response.status === 464) {
+				console.error('464 Forbidden: username already exists');
+				this.isUsernameAlreadyTanken = true;
+			} else {
+				this.isUsernameAlreadyTanken = false;
 			}
 
 			if (!response.ok) {
@@ -138,12 +130,9 @@ const SignUp = {
 				return;
 			}
 
-			this.isUsernameAlreadyTanken = false;
-			this.isUsernameInvalid = false;
-			this.isNameInvalid = false;
-			this.isSurnameInvalid = false;
-			this.isPasswordInvalid = false;
-			this.isDifferentPassword = false;
+			if (response.ok) {
+				this.$router.push({ path: '/' });
+			}
 
 			const res = await response.json();
 			console.log(res);
@@ -160,6 +149,14 @@ const SignUp = {
 				this.passwordRepeat === '';
 
 			return isDisabled;
+		},
+		isDifferentPassword: function () {
+			if (this.password !== this.passwordRepeat) {
+				console.error('Password must match!');
+				return true;
+			} else {
+				return false;
+			}
 		},
 	},
 };
