@@ -1,6 +1,6 @@
 const SignIn = {
 	template: `
-    <div class="form-auth m-auto">
+    <div class="form-auth m-auto py-4 ">
       <form class='needs-validation' novalidate>
         <img
           class='mb-4 d-block mx-auto'
@@ -33,6 +33,7 @@ const SignIn = {
         </button>
       </form>
     </div>
+		
   `,
 
 	data: function () {
@@ -67,6 +68,10 @@ const SignIn = {
 				console.error(errorMessage);
 				alert(errorMessage);
 				return;
+			}
+
+			if (response.ok) {
+				this.$router.push({ path: '/' });
 			}
 
 			this.isInvalid = false;

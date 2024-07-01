@@ -1,6 +1,6 @@
 const SignUp = {
 	template: `
-    <div class="form-auth m-auto">
+    <div class="form-auth m-auto py-4">
       <form class='needs-validation' novalidate>
         <img
           class='mb-4 d-block mx-auto'
@@ -71,6 +71,7 @@ const SignUp = {
       </div>
 
     </div>
+		
   `,
 
 	data: function () {
@@ -94,9 +95,6 @@ const SignUp = {
 
 	methods: {
 		async submit() {
-			const modal = new bootstrap.Modal(document.getElementById('signUpConfirm'));
-			modal.show();
-			return;
 			const username = this.username;
 			const name = this.name;
 			const surname = this.surname;
@@ -163,7 +161,7 @@ const SignUp = {
 		goToLogin() {
 			const modal = bootstrap.Modal.getInstance(document.getElementById('signUpConfirm'));
 			modal.hide();
-			this.$router.push({ path: '/' });
+			this.$router.push({ path: '/signin' });
 		},
 	},
 

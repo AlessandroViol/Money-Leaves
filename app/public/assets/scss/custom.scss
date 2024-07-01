@@ -9,6 +9,7 @@ $primary: #28a745; // set the $primary variable
 $theme-colors: map-merge($theme-colors, (
   "primary": $primary
 ));
+
 @import "../../../node_modules/bootstrap/scss/bootstrap";
 
 @import "../../../node_modules/bootstrap/scss/forms/form-control";
@@ -32,4 +33,31 @@ $modal-header-border-color: "#6c757d30";
 $modal-header-border-width: 2px;
 $modal-footer-border-color: "#00000000";
 
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+@import "../../../node_modules/bootstrap/scss/navbar";
+
+// Custom navbar link colors
+.navbar-nav {
+  --#{$prefix}nav-link-color: $primary;
+  --#{$prefix}nav-link-hover-color: $primary;
+
+  .nav-link {
+    &.active,
+    &.show {
+      color: $primary;
+    }
+  }
+}
+
+.navbar-text {
+  color: $primary;
+
+  a,
+  a:hover,
+  a:focus  {
+    color: $primary;
+  }
+}
+  
 @import "../../../node_modules/bootstrap/scss/bootstrap";
