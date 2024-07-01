@@ -52,6 +52,24 @@ const SignUp = {
           Sign Up
         </button>
       </form>
+
+      <div class="modal fade" id="signUpConfirm" tabindex="-1" aria-labelledby="signUpConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="signUpConfirmLabel">Sign up completed!</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Please, sign in to continue.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary mx-auto" @click="goToLogin">Go to sign in</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   `,
 
@@ -76,6 +94,9 @@ const SignUp = {
 
 	methods: {
 		async submit() {
+			const modal = new bootstrap.Modal(document.getElementById('signUpConfirm'));
+			modal.show();
+			return;
 			const username = this.username;
 			const name = this.name;
 			const surname = this.surname;
@@ -131,11 +152,18 @@ const SignUp = {
 			}
 
 			if (response.ok) {
-				this.$router.push({ path: '/' });
+				const modal = new bootstrap.Modal(document.getElementById('signUpConfirm'));
+				modal.show();
 			}
 
 			const res = await response.json();
 			console.log(res);
+		},
+
+		goToLogin() {
+			const modal = bootstrap.Modal.getInstance(document.getElementById('signUpConfirm'));
+			modal.hide();
+			this.$router.push({ path: '/' });
 		},
 	},
 
