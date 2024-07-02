@@ -29,13 +29,13 @@ const Expense = {
 						<hr />
 						<div class="bg-body-tertiary px-4 rounded-3">
 							<header>
-								<p class="small opacity-50 mt-1 d-flex flex-row justify-center">
+								<div class="small opacity-50 py-2 d-flex">
 									<span class="col">Username</span>
 									<span class="col text-end">Quota</span>
-								</p>
+								</div>
 							</header>
 							<div class="row py-2 d-flex flex-row border-top" v-for="contributor in expense.contributors">
-								<span class="col">@{{ contributor.user_id }}</span>
+								<span class="col" :class="{'text-primary fw-medium': contributor.user_id === username}">@{{ contributor.user_id }}</span>
 								<span class="col text-end" :class="{'text-danger': contributor.quota<0}">{{ contributor.quota.toFixed(2) }} €</span>
 							</div>
 						</div>

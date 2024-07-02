@@ -25,7 +25,15 @@ const Sidebar = {
             aria-label="Close"
           ></button>
         </div>
+        
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+          <div class="navbar-brand me-0 px-3 fs-6 text-white d-flex align-items-center d-none d-md-block">
+            <span class="material-symbols-outlined text-primary me-2">
+              temp_preferences_eco
+            </span>
+            Money Leaves
+          </div>
+
           <ul class="nav flex-column">
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">

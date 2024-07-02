@@ -396,8 +396,13 @@ app.get('/api/balance', verifyUser, async (req, res) => {
 	});
 
 	const aggregationResult = await db.collection('expenses').aggregate(pipeline).toArray();
-	console.log('Prova aggregazione', aggregationResult);
-	res.json(aggregationResult);
+
+	let balance = 0;
+	if (aggregationResult.length > 0) {
+		balance = aggregationResult[0].balance;
+	}
+
+	res.json(balance);
 });
 
 // View the logged user's balance wrt the user with the specified username

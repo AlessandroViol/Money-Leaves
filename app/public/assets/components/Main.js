@@ -9,8 +9,7 @@ const Dashboard = {
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
 						<div
-							class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-						>
+							class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 							<h1 class="h1">Dashboard</h1>
 							
 							<div class="btn-toolbar mb-2 mb-md-0">
@@ -23,13 +22,17 @@ const Dashboard = {
 									This week
 								</button>
 							</div>
+							<h2 class="mt-2">Welcome back <span class="text-primary">{{name}}</span>!</h2>
 						</div>
 
-						<strong class="strong">Welcome back {{name}}!</strong>
+						<div class="my-4">
+							<h3>Total Balance</h3>
+							<h4 class="fs-2 fw-bolder text-primary">{{ this.balance.toFixed(2) }} €</h4>
+						</div>
+						<h2 class="mb-2">Expenses</h2>
+						<canvas class="mb-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-						<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-
-						<h2>Expense list</h2>
+						<h3>Expense list</h3>
 						<div class="table-responsive small">
 							<header class="d-flex text-start" style="padding-left:1.25rem; padding-right:2.5rem;">
 								<span class="col-sm text-truncate w-25 mx-1">Date</span>
@@ -38,7 +41,7 @@ const Dashboard = {
 								<span class="col-sm text-truncate w-25 mx-1">Quota</span>
 							</header>
 							<hr />
-							<div class="accordion" id="accordionExpenses">
+							<div class="accordion pb-5" id="accordionExpenses">
 								<expense v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete">
 								</expense>
 							</div>
@@ -74,11 +77,41 @@ const Dashboard = {
 			surname: '',
 			expenses: [],
 			selectedExpense: {},
+			balance: 0,
 			myChart: null,
 		};
 	},
 
 	methods: {
+		updateData() {
+			this.getBalance();
+			this.drawLinePlot();
+		},
+
+		async getBalance() {
+			const response = await fetch('/api/balance/', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (response.status === 403) {
+				console.error('403 Forbidden: user not authenticated');
+				this.goToSignin();
+			}
+
+			if (!response.ok) {
+				const errorMessage = `Error: ${response.statusText}`;
+				console.error(errorMessage);
+				return;
+			}
+
+			const res = await response.json();
+			console.log(res);
+			this.balance = res;
+		},
+
 		async deleteExpense() {
 			const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirm'));
 			modal.hide();
@@ -105,7 +138,7 @@ const Dashboard = {
 
 			const res = await response.json();
 			console.log(res);
-			this.drawLinePlot();
+			this.updateData();
 		},
 
 		confirmDelete(expense) {
@@ -142,7 +175,7 @@ const Dashboard = {
 			console.log(res);
 			this.expenses = res;
 
-			this.drawLinePlot();
+			this.updateData();
 		},
 
 		drawLinePlot() {
