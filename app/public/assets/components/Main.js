@@ -1,5 +1,3 @@
-
-
 const Dashboard = {
 	template: `
 		<section class="bg-body d-flex flex-column vh-100">
@@ -234,6 +232,7 @@ const Dashboard = {
 			name: '',
 			surname: '',
 			expenses: {},
+			selectedExpense: {},
 		};
 	},
 
@@ -241,16 +240,33 @@ const Dashboard = {
 		async deleteExpense() {
 			const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirm'));
 			modal.hide();
-			const response = await fetch('/api/budget/', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const response = await fetch(
+				`/api/budget/${this.selectedExpense.date.year}/${this.selectedExpense.date.month}/${this.selectedExpense._id}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			if (response.status === 403) {
+				console.error('403 Forbidden: user not authenticated');
+				this.goToSignin();
+			}
+
+			if (response.ok) {
+				this.expenses = this.expenses.filter((expense) => expense._id !== this.selectedExpense);
+				this.selectedExpense = {};
+			}
+
+			const res = await response.json();
+			console.log(res);
 		},
 
-		confirmDelete(expenseId) {
-			console.log(expenseId);
+		confirmDelete(expense) {
+			console.log(expense);
+			this.selectedExpense = expense;
 			const modal = new bootstrap.Modal(document.getElementById('deleteConfirm'));
 			modal.show();
 		},

@@ -257,6 +257,19 @@ app.get('/api/budget/:year/:month/:id', verifyUser, async (req, res) => {
 	res.json(expense);
 });
 
+// Verify that the user has a quota in the expense he is creating/editng/deleting
+function verifyUserExpense(req, res, expense) {
+	const user_id = req.session.user._id;
+	const isValid = expense.contributors.find((contributor) => contributor.user_id === user_id) !== undefined;
+	if (isValid) {
+		return true;
+	} else {
+		res.status(403).send('User cannot operate on this expense!');
+		console.log('User not on contributors list', user_id);
+		return false;
+	}
+}
+
 // Create a new expense
 app.post('/api/budget/:year/:month', verifyUser, async (req, res) => {
 	const total_cost = parseInt(req.body.total_cost);
@@ -329,6 +342,16 @@ app.delete('/api/budget/:year/:month/:id', verifyUser, async (req, res) => {
 	console.log(`Deleting expense: ${_id}`);
 
 	const expense = await db.collection('expenses').findOne({ _id });
+
+	if (expense === null || expense === undefined) {
+		res.status(404).send('Expense not found!');
+		console.log('Expense not found', req.params._id);
+		return;
+	}
+
+	if (!verifyUserExpense(req, res, expense)) {
+		return;
+	}
 
 	let deleteResult = {};
 	if (expense.date.year === year && expense.date.month === month) {

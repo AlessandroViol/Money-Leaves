@@ -68,7 +68,7 @@ const Expense = {
   `,
 	methods: {
 		deleteExpense() {
-			this.$emit('delete', this.expense._id)
+			this.$emit('delete', this.expense)
 		},
 
 		getQuota() {
