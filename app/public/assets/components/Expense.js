@@ -1,23 +1,4 @@
 const Expense = {
-	props: {
-		expense: {
-			type: Object,
-			required: true,
-		},
-		username: {
-			type: String,
-			required: true,
-		},
-		index: {
-			type: Number,
-			required: true,
-		},
-	},
-
-	data() {
-		return {};
-	},
-
 	template: `
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -66,6 +47,26 @@ const Expense = {
       </div>
     </div>
   `,
+
+	props: {
+		expense: {	////////this expense nel html
+			type: Object,
+			required: true,
+		},
+		username: {
+			type: String,
+			required: true,
+		},
+		index: {
+			type: Number,
+			required: true,
+		},
+	},
+
+	data() {
+		return {};
+	},
+
 	methods: {
 		deleteExpense() {
 			this.$emit('delete', this.expense);
