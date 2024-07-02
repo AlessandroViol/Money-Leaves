@@ -23,9 +23,9 @@ const Expense = {
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#accordionExpense'+index" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
           <span class="small col-sm text-truncate w-25 mx-1">{{ dateObjToString(expense.date) }}</span>
-          <span class="col-sm text-truncate w-25 mx-1">{{ expense.total_cost.toFixed(2) }} €</span>
-          <span class="col-sm text-truncate w-25 mx-1">{{ getQuota().toFixed(2) }} €</span>
-          <span class="col-sm-6 text-truncate w-25 mx-1">{{ expense.category }}</span>
+          <span class="small col-sm-6 text-truncate w-25 mx-1">{{ expense.category }}</span>
+          <span class="small col-sm text-truncate w-25 mx-1">{{ expense.total_cost.toFixed(2) }} €</span>
+          <span class="small col-sm text-truncate w-25 mx-1">{{ getQuota().toFixed(2) }} €</span>
         </button>
       </h2>
 
@@ -68,7 +68,7 @@ const Expense = {
   `,
 	methods: {
 		deleteExpense() {
-			this.$emit('delete', this.expense)
+			this.$emit('delete', this.expense);
 		},
 
 		getQuota() {

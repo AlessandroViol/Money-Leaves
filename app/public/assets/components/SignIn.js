@@ -26,7 +26,7 @@ const SignIn = {
 
         <p class="text-start my-3">
 					You don't have an account? 
-          <router-link to="/signup" class="link-primary link-opacity-75-hover link-underline-opacity-0" style="font-weight: bold;">Sign Up!</router-link>
+          <router-link to="/signup" class="link-primary link-opacity-75-hover link-underline-opacity-0 fw-medium">Sign Up!</router-link>
         </p>
 
         <button class='mb-4 btn btn-primary w-100 py-2' type='submit' @click.prevent='submit' :disabled="isDisabled">
@@ -82,7 +82,7 @@ const SignIn = {
 	},
 
 	computed: {
-		isDisabled: function () {
+		isDisabled() {
 			const isDisabled = this.username === '' || this.password === '';
 			return isDisabled;
 		},

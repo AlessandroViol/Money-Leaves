@@ -166,7 +166,6 @@ const Dashboard = {
 					</div>
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
-						
 						<div
 							class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
 						>
@@ -192,9 +191,9 @@ const Dashboard = {
 						<div class="table-responsive small">
 							<header class="d-flex text-start" style="padding-left:1.25rem; padding-right:2.5rem;">
 								<span class="col-sm text-truncate w-25 mx-1">Date</span>
+								<span class="col-sm-6 text-truncate w-25 mx-1">Category</span>
 								<span class="col-sm text-truncate w-25 mx-1">Total</span>
 								<span class="col-sm text-truncate w-25 mx-1">Quota</span>
-								<span class="col-sm-6 text-truncate w-25 mx-1">Category</span>
 							</header>
 							<hr />
 							<div class="accordion" id="accordionExpenses">
@@ -231,8 +230,9 @@ const Dashboard = {
 			username: '',
 			name: '',
 			surname: '',
-			expenses: {},
+			expenses: [],
 			selectedExpense: {},
+			myChart: null,
 		};
 	},
 
@@ -256,12 +256,14 @@ const Dashboard = {
 			}
 
 			if (response.ok) {
-				this.expenses = this.expenses.filter((expense) => expense._id !== this.selectedExpense);
+				this.expenses = this.expenses.filter((expense) => expense._id !== this.selectedExpense._id);
+				console.log('Deleted. New expenses: ', this.expenses);
 				this.selectedExpense = {};
 			}
 
 			const res = await response.json();
 			console.log(res);
+			this.drawLinePlot();
 		},
 
 		confirmDelete(expense) {
@@ -297,6 +299,48 @@ const Dashboard = {
 			const res = await response.json();
 			console.log(res);
 			this.expenses = res;
+
+			this.drawLinePlot();
+		},
+
+		drawLinePlot() {
+			if (this.myChart) {
+				this.myChart.destroy();
+			}
+
+			const data = {
+				labels: this.expenses.map(
+					(expense) => expense.date.day.toString() + '/' + expense.date.month.toString() + '/' + expense.date.year.toString()
+				),
+				datasets: [
+					{
+						data: this.expenses.map((expense) => expense.total_cost),
+						lineTension: 0,
+						backgroundColor: 'transparent',
+						borderColor: '#28a745',
+						borderWidth: 4,
+						pointBackgroundColor: '#28a745',
+					},
+				],
+			};
+
+			const options = {
+				plugins: {
+					legend: {
+						display: false,
+					},
+					tooltip: {
+						boxPadding: 3,
+					},
+				},
+			};
+
+			const ctx = document.getElementById('myChart');
+			this.myChart = new Chart(ctx, {
+				type: 'line',
+				data,
+				options,
+			});
 		},
 	},
 
@@ -334,42 +378,7 @@ const Dashboard = {
 	},
 
 	mounted: async function () {
-		'use strict';
-
 		await this.getExpenses();
-
-		// Graphs
-		const ctx = document.getElementById('myChart');
-		// eslint-disable-next-line no-unused-vars
-		const myChart = new Chart(ctx, {
-			type: 'line',
-			data: {
-				labels: this.expenses.map(
-					(expense) => expense.date.day.toString() + '/' + expense.date.month.toString() + '/' + expense.date.year.toString()
-				),
-				//labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-				datasets: [
-					{
-						data: this.expenses.map((expense) => expense.total_cost),
-						lineTension: 0,
-						backgroundColor: 'transparent',
-						borderColor: '#28a745',
-						borderWidth: 4,
-						pointBackgroundColor: '#28a745',
-					},
-				],
-			},
-			options: {
-				plugins: {
-					legend: {
-						display: false,
-					},
-					tooltip: {
-						boxPadding: 3,
-					},
-				},
-			},
-		});
 	},
 };
 export default Dashboard;
