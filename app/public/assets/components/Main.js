@@ -22,8 +22,10 @@ const Dashboard = {
 									This week
 								</button>
 							</div>
-							<h2 class="mt-2">Welcome back <span class="text-primary">{{name}}</span>!</h2>
+							
 						</div>
+						
+						<h2 class="mt-2">Welcome back <span class="text-primary">{{name}}</span>!</h2>
 
 						<div class="my-4">
 							<h3>Total Balance</h3>
@@ -103,6 +105,7 @@ const Dashboard = {
 
 			if (!response.ok) {
 				const errorMessage = `Error: ${response.statusText}`;
+				this.$router.push({ path: `/error/${errorMessage}` });
 				console.error(errorMessage);
 				return;
 			}
@@ -167,6 +170,7 @@ const Dashboard = {
 
 			if (!response.ok) {
 				const errorMessage = `Error: ${response.statusText}`;
+				this.$router.push({ path: `/error/${errorMessage}` });
 				console.error(errorMessage);
 				return;
 			}
@@ -238,6 +242,7 @@ const Dashboard = {
 
 		if (!response.ok) {
 			const errorMessage = `Error: ${response.statusText}`;
+			this.$router.push({ path: `/error/${errorMessage}` });
 			console.error(errorMessage);
 			return;
 		}

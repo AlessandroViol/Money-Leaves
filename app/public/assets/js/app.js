@@ -1,11 +1,13 @@
 import Expense from '../components/Expense.js';
 import ThemeDropdown from '../components/ThemeDropdown.js';
 import Icons from '../components/Icons.js';
+import Topbar from '../components/Topbar.js';
+import Sidebar from '../components/Sidebar.js';
+
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
 import Main from '../components/Main.js';
-import Topbar from '../components/Topbar.js';
-import Sidebar from '../components/Sidebar.js';
+import ErrorLandingScreen from '../components/ErrorLandingScreen.js';
 
 const { createApp } = Vue;
 const { createRouter, createWebHistory } = VueRouter;
@@ -14,6 +16,7 @@ const routes = [
 	{ path: '/', component: Main },
 	{ path: '/signin', component: SignIn },
 	{ path: '/signup', component: SignUp },
+	{ path: '/error/:description', component: ErrorLandingScreen },
 ];
 
 const router = createRouter({ history: createWebHistory(), routes });

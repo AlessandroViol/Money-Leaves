@@ -49,7 +49,7 @@ const Expense = {
   `,
 
 	props: {
-		expense: {	////////this expense nel html
+		expense: {
 			type: Object,
 			required: true,
 		},
