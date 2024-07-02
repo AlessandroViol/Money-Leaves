@@ -1,3 +1,4 @@
+import Expense from '../components/Expense.js';
 import ThemeDropdown from '../components/ThemeDropdown.js';
 import Icons from '../components/Icons.js';
 import SignIn from '../components/SignIn.js';
@@ -18,7 +19,7 @@ const router = createRouter({ history: createWebHistory(), routes });
 const app = createApp();
 app.use(router);
 
-//app.component('sign-in', SignIn);
+app.component('expense', Expense);
 app.component('theme-dropdown', ThemeDropdown);
 app.component('icons', Icons);
 

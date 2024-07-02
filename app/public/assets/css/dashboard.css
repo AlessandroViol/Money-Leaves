@@ -34,7 +34,7 @@
 }
 
 .sidebar .nav-link.active {
-  color: #28a745;
+  color: var(--bs-primary);
 }
 
 .sidebar-heading {

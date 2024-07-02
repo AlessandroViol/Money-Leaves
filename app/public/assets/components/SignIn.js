@@ -24,7 +24,8 @@ const SignIn = {
           <div v-if="isInvalid" class="invalid-feedback">Wrong username or password.</div>
         </div>
 
-        <p class="text-start my-3">You don't have an account? 
+        <p class="text-start my-3">
+					You don't have an account? 
           <router-link to="/signup" class="link-primary link-opacity-75-hover link-underline-opacity-0" style="font-weight: bold;">Sign Up!</router-link>
         </p>
 

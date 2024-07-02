@@ -1,3 +1,5 @@
+
+
 const Dashboard = {
 	template: `
 		<section class="bg-body d-flex flex-column vh-100">
@@ -155,7 +157,7 @@ const Dashboard = {
 										</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link d-flex align-items-center gap-2"  @click="goToSignin" href="#">
+										<a class="nav-link d-flex align-items-center gap-2" @click="goToSignin" href="#">
 											<svg class="bi"><use xlink:href="#door-closed" /></svg>
 											Sign out
 										</a>
@@ -188,32 +190,42 @@ const Dashboard = {
 
 						<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-						<h2>Section title</h2>
+						<h2>Expense list</h2>
 						<div class="table-responsive small">
-							<table class="table table-striped table-sm">
-								<thead>
-									<tr>
-										<th scope="col">Description</th>
-										<th scope="col">Category</th>
-										<th scope="col">Total cost</th>
-										<th scope="col">Quota</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr v-for="expense in expenses">
-										<td>{{expense.description}}</td>
-										<td>{{expense.category}}</td>
-										<td>{{expense.total_cost}}</td>
-										<td>{{expense.contributors.find(contributor => contributor.user_id === this.username).quota}}</td>
-									</tr>
-								</tbody>
-							</table>
+							<header class="d-flex text-start" style="padding-left:1.25rem; padding-right:2.5rem;">
+								<span class="col-sm text-truncate w-25 mx-1">Date</span>
+								<span class="col-sm text-truncate w-25 mx-1">Total</span>
+								<span class="col-sm text-truncate w-25 mx-1">Quota</span>
+								<span class="col-sm-6 text-truncate w-25 mx-1">Category</span>
+							</header>
+							<hr />
+							<div class="accordion" id="accordionExpenses">
+								<expense v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete">
+								</expense>
+							</div>
 						</div>
 					</section>
 				</div>
 			</div>
 		</section>
-		
+
+		<div class="modal fade" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="deleteConfirmLabel">Delete expense</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to delete this expense?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary mx-auto" @click='deleteExpense'>Yes</button>
+						<button type="button" class="btn btn-secondary mx-auto" data-bs-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
   `,
 
 	data: function () {
@@ -226,6 +238,23 @@ const Dashboard = {
 	},
 
 	methods: {
+		async deleteExpense() {
+			const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirm'));
+			modal.hide();
+			const response = await fetch('/api/budget/', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+		},
+
+		confirmDelete(expenseId) {
+			console.log(expenseId);
+			const modal = new bootstrap.Modal(document.getElementById('deleteConfirm'));
+			modal.show();
+		},
+
 		goToSignin() {
 			this.$router.push({ path: '/signin' });
 		},
