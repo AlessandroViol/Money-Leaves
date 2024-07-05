@@ -8,6 +8,7 @@ import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
 import Main from '../components/Main.js';
 import ErrorLandingScreen from '../components/ErrorLandingScreen.js';
+import UserDetails from '../components/UserDetails.js';
 
 const { createApp } = Vue;
 const { createRouter, createWebHistory } = VueRouter;
@@ -17,6 +18,7 @@ const routes = [
 	{ path: '/signin', component: SignIn },
 	{ path: '/signup', component: SignUp },
 	{ path: '/error/:description', component: ErrorLandingScreen },
+	{ path: '/user/:otherUsername', component: UserDetails },
 ];
 
 const router = createRouter({ history: createWebHistory(), routes });

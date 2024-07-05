@@ -66,6 +66,7 @@ const setup = async () => {
 
 	const newExpenses = [
 		{
+			payer_id: 'Zuppiero',
 			total_cost: 34.5,
 			description: 'Dinner at the bowling',
 			category: 'Food and beverages',
@@ -93,7 +94,31 @@ const setup = async () => {
 				},
 			],
 		},
+
 		{
+			payer_id: 'FedeAzz',
+			total_cost: 0,
+			description: 'Bowling game',
+			category: 'Refound',
+			date: {
+				year: 2024,
+				month: 6,
+				day: 22,
+			},
+			contributors: [
+				{
+					user_id: 'FedeAzz',
+					quota: 6.0,
+				},
+				{
+					user_id: 'Zuppiero',
+					quota: -6.0,
+				},
+			],
+		},
+
+		{
+			payer_id: 'FedeAzz',
 			total_cost: 26.0,
 			description: 'Bowling game',
 			category: 'Entertainment',
@@ -121,7 +146,31 @@ const setup = async () => {
 				},
 			],
 		},
+
 		{
+			payer_id: 'Zuppiero',
+			total_cost: 0,
+			description: 'Bowling game',
+			category: 'Refound',
+			date: {
+				year: 2024,
+				month: 6,
+				day: 22,
+			},
+			contributors: [
+				{
+					user_id: 'Zuppiero',
+					quota: 6.0,
+				},
+				{
+					user_id: 'FedeAzz',
+					quota: -6.0,
+				},
+			],
+		},
+		
+		{
+			payer_id: 'LG',
 			total_cost: 26.0,
 			description: 'Bowling game',
 			category: 'Entertainment',
@@ -149,7 +198,9 @@ const setup = async () => {
 				},
 			],
 		},
+
 		{
+			payer_id: 'LG',
 			total_cost: 14.0,
 			description: 'Aperipiada',
 			category: 'Food and beverages',
@@ -169,7 +220,53 @@ const setup = async () => {
 				},
 			],
 		},
+
 		{
+			payer_id: 'FedeAzz',
+			total_cost: 15.0,
+			description: 'Picnic',
+			category: 'Food and beverages',
+			date: {
+				year: 2024,
+				month: 3,
+				day: 27,
+			},
+			contributors: [
+				{
+					user_id: 'FedeAzz',
+					quota: 7.0,
+				},
+				{
+					user_id: 'Zuppiero',
+					quota: 8.0,
+				},
+			],
+		},
+
+		{
+			payer_id: 'Zuppiero',
+			total_cost: 0,
+			description: 'Picnic',
+			category: 'Refound',
+			date: {
+				year: 2024,
+				month: 3,
+				day: 27,
+			},
+			contributors: [
+				{
+					user_id: 'Zuppiero',
+					quota: 8.0,
+				},
+				{
+					user_id: 'FedeAzz',
+					quota: -8.0,
+				},
+			],
+		},
+
+		{
+			payer_id: 'FedeAzz',
 			total_cost: 14.0,
 			description: 'Christmas dinner',
 			category: 'Food and beverages',
@@ -189,6 +286,72 @@ const setup = async () => {
 				},
 			],
 		},
+
+		{
+			payer_id: 'Zuppiero',
+			total_cost: 0,
+			description: 'Christmas dinner',
+			category: 'Refound',
+			date: {
+				year: 2023,
+				month: 12,
+				day: 20,
+			},
+			contributors: [
+				{
+					user_id: 'Zuppiero',
+					quota: 7.0,
+				},
+				{
+					user_id: 'FedeAzz',
+					quota: -7.0,
+				},
+			],
+		},
+
+		{
+			payer_id: 'Zuppiero',
+			total_cost: 15.0,
+			description: 'Christmas present',
+			category: 'Present',
+			date: {
+				year: 2023,
+				month: 12,
+				day: 20,
+			},
+			contributors: [
+				{
+					user_id: 'Zuppiero',
+					quota: 10.0,
+				},
+				{
+					user_id: 'LG',
+					quota: 5.0,
+				},
+			],
+		},
+
+		{
+			payer_id: 'LG',
+			total_cost: 0,
+			description: 'Christmas dinner',
+			category: 'Refound',
+			date: {
+				year: 2023,
+				month: 12,
+				day: 20,
+			},
+			contributors: [
+				{
+					user_id: 'LG',
+					quota: 5.0,
+				},
+				{
+					user_id: 'Zuppiero',
+					quota: -5.0,
+				},
+			],
+		},
 	];
 
 	try {
@@ -203,6 +366,7 @@ const setup = async () => {
 	}
 
 	expensesCollection.createIndex({ 'contributors.user_id': 1 });
+	expensesCollection.createIndex({ 'payer_id': 1 });
 
 	client.close();
 };

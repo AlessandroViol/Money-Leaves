@@ -45,7 +45,7 @@ const SignUp = {
         </div>
 
         <p class="text-start my-3">Do you already have an account? 
-          <router-link to="/" class="link-primary link-opacity-75-hover link-underline-opacity-0 fw-medium">Sign In!</router-link>
+          <router-link to="/signin" class="link-primary link-opacity-75-hover link-underline-opacity-0 fw-medium">Sign In!</router-link>
         </p>
 
         <button class='mb-4 btn btn-primary w-100 py-2' type='submit' @click.prevent='submit' :disabled="isDisabled">

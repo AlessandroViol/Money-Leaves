@@ -35,7 +35,10 @@ const Expense = {
 								</div>
 							</header>
 							<div class="row py-2 d-flex flex-row border-top" v-for="contributor in expense.contributors">
-								<span class="col" :class="{'text-primary fw-medium': contributor.user_id === username}">@{{ contributor.user_id }}</span>
+								<span class="col" :class="{'text-primary fw-medium': isUserContributor(contributor)}">
+									<router-link :to="'/user/'+contributor.user_id" v-if="!isUserContributor(contributor)" class="">@{{ contributor.user_id }}</router-link>
+									<span v-if="isUserContributor(contributor)">@{{ contributor.user_id }}</span>
+								</span>
 								<span class="col text-end" :class="{'text-danger': contributor.quota<0}">{{ contributor.quota.toFixed(2) }} €</span>
 							</div>
 						</div>
@@ -68,6 +71,10 @@ const Expense = {
 	},
 
 	methods: {
+		isUserContributor(contributor) {
+			return contributor.user_id === this.username;
+		}, 
+
 		deleteExpense() {
 			this.$emit('delete', this.expense);
 		},

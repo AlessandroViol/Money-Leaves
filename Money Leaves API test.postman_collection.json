@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "999e0d9b-573d-44f0-ab22-19b9e811695a",
-		"name": "Money Leaves",
+		"_postman_id": "61977149-2751-49b6-bd4e-8683af2a86cf",
+		"name": "Money Leaves Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "36620900"
 	},
@@ -54,7 +54,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"_id\": \"TestAPI\",\r\n    \"name\": \"TestAPI\",\r\n    \"surname\": \"TestAPI\",\r\n    \"password\": \"TestAPI\"\r\n}",
+					"raw": "{\r\n    \"_id\": \"TestAPI\",\r\n    \"name\": \"TestAPI\",\r\n    \"surname\": \"TestAPI\",\r\n    \"password\": \"TestAPI12\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -206,7 +206,7 @@
 						},
 						{
 							"key": "id",
-							"value": "667fc80c9de86cdc2219fff9"
+							"value": "6685af9fca0db8fa1c127b5e"
 						}
 					]
 				}
@@ -237,7 +237,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"total_cost\": 10,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 7\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 3\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"payer_id\": \"Zuppiero\",\r\n    \"total_cost\": 10,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 7\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 3\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -277,7 +277,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"total_cost\": 100,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 60\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 40\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"payer_id\": \"Zuppiero\",\r\n    \"total_cost\": 100,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 60\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 40\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -322,7 +322,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"total_cost\": 100,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 60\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 40\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"payer_id\": \"Zuppiero\",\r\n    \"total_cost\": 100,\r\n    \"description\": \"API test\",\r\n    \"category\": \"Food and beverages\",\r\n    \"contributors\": [\r\n        {\r\n            \"user_id\": \"Zuppiero\",\r\n            \"quota\": 60\r\n        },\r\n        {\r\n            \"user_id\": \"FedeAzz\",\r\n            \"quota\": 40\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

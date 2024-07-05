@@ -101,6 +101,7 @@ const Dashboard = {
 			if (response.status === 403) {
 				console.error('403 Forbidden: user not authenticated');
 				this.goToSignin();
+				return;
 			}
 
 			if (!response.ok) {
@@ -131,6 +132,7 @@ const Dashboard = {
 			if (response.status === 403) {
 				console.error('403 Forbidden: user not authenticated'); ///////////////////////////////////////////////not trueeee
 				this.goToSignin();
+				return;
 			}
 
 			if (response.ok) {
@@ -166,8 +168,9 @@ const Dashboard = {
 			if (response.status === 403) {
 				console.error('403 Forbidden: user not authenticated');
 				this.goToSignin();
+				return;
 			}
-
+			
 			if (!response.ok) {
 				const errorMessage = `Error: ${response.statusText}`;
 				this.$router.push({ path: `/error/${errorMessage}` });
