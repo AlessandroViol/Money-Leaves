@@ -1,5 +1,15 @@
 const fs = require('fs').promises;
 
+const categories = [
+	'Refound',
+	'Food and beverages',
+	'Entertainment',
+	'Taxes and bills',
+	'Transportation',
+	'Travel',
+	'Present',
+];
+
 const setupExpenses = async (db) => {
 	console.log('Setting up database');
 
@@ -45,6 +55,7 @@ const setupExpenses = async (db) => {
 				},
 				category: {
 					bsonType: 'string',
+					enum: categories,
 					description: 'must be a string and is required',
 				},
 				date: {
@@ -129,4 +140,4 @@ const setupExpenses = async (db) => {
 	}
 };
 
-module.exports = setupExpenses;
+module.exports = { setupExpenses, categories };

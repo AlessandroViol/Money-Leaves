@@ -3,7 +3,7 @@ const session = require('express-session');
 const { MongoClient, ObjectId } = require('mongodb');
 
 const setupUsers = require('./setupUsers');
-const setupExpenses = require('./setupExpenses');
+const setupExpenses = require('./setupExpenses').setupExpenses;
 
 const userAPI = require('./user');
 const budgetAPI = require('./budget');

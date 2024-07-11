@@ -1,11 +1,154 @@
 const express = require('express');
 const router = express.Router();
 const verifyUser = require('./user').verifyUser;
+const categories = require('./setupExpenses').categories;
 
 let db = null;
 
 function setDb(database) {
 	db = database;
+}
+
+// Verify that the date is valid
+function isDateValid({ year, month = 1, day = 1 }) {
+	const date = new Date();
+	const currentYear = date.getFullYear();
+	const currentMonth = date.getMonth() + 1;
+	const maxDays = new Date(year, month - 1, 0).getDate();
+	const currentDay = date.getDate();
+
+	if (year < 2020 || year > currentYear) {
+		return false;
+	}
+	if (month < 1 || month > 12 || (year === currentYear && month > currentMonth)) {
+		return false;
+	}
+	if (day < 1 || day > maxDays || (year === currentYear && month === currentMonth && day > currentDay)) {
+		return false;
+	}
+
+	return true;
+}
+
+// Verify the validity of the expense the user is creating/editing/deleting
+async function verifyExpense(req, res, expense) {
+	const user_id = req.session.user._id;
+
+	if (expense.payer_id !== user_id) {
+		res.status(403).send('User cannot operate on this expense!');
+		console.log('User is not the payer', user_id, expense.payer_id);
+
+		return false;
+	}
+
+	if (!isDateValid({ year: expense.date.year, month: expense.date.month, day: expense.date.day })) {
+		console.log(`Invalid year/month ${expense.date.year}/${expense.date.month}/${expense.date.day}`);
+		res.status(400).json({ error: 'Invalid date specified' });
+
+		return false;
+	}
+
+	if (!categories.includes(expense.category)) {
+		console.log(`Invalid category ${expense.category}`);
+		res.status(400).json({ error: 'Invalid category specified' });
+
+		return false;
+	}
+
+	const total_quota = expense.contributors.reduce((sum, contributor) => sum + contributor.quota, 0);
+
+	if (expense.total_cost !== total_quota) {
+		console.log(`Invalid quotas, they must sum up to the total cost ${expense.contributors}`);
+		res.status(400).json({ error: 'Invalid quotas specified' });
+
+		return false;
+	}
+
+	const hasZeroQuota = expense.contributors.some((contributor) => contributor.quota === 0);
+
+	if (hasZeroQuota) {
+		console.log(`Invalid zero quota ${expense.contributor}`);
+		res.status(400).json({ error: 'Invalid zero quota specified' });
+
+		return false;
+	}
+
+	const hasNegativeQuota = expense.contributors.some((contributor) => contributor.quota < 0);
+
+	if (expense.category === 'Refound') {
+		if (expense.total_cost !== 0) {
+			console.log(`Invalid total cost ${expense.total_cost}`);
+			res.status(400).json({ error: 'Invalid total cost specified' });
+
+			return false;
+		}
+
+		if (!hasNegativeQuota) {
+			console.log(`Invalid quotas, one must be negative ${expense.contributors}`);
+			res.status(400).json({ error: 'Invalid quotas specified' });
+
+			return false;
+		}
+
+		if (expense.contributors.length !== 2) {
+			console.log(`Invalid number of contributors, must be two ${expense.contributors.length}`);
+			res.status(400).json({ error: 'Invalid number of contributors specified' });
+
+			return false;
+		}
+	} else {
+		if (expense.total_cost <= 0) {
+			console.log(`Invalid total cost ${expense.total_cost}`);
+			res.status(400).json({ error: 'Invalid total cost specified' });
+
+			return false;
+		}
+
+		if (hasNegativeQuota) {
+			console.log(`Invalid quotas, they all must be positive ${expense.contributors}`);
+			res.status(400).json({ error: 'Invalid quotas specified' });
+
+			return false;
+		}
+		if (expense.contributors.length <= 1) {
+			console.log(`Invalid number of contributors, must be at least two ${expense.contributors.length}`);
+			res.status(400).json({ error: 'Invalid number of contributors specified' });
+
+			return false;
+		}
+	}
+
+	const usernames = expense.contributors.map((contributor) => contributor.user_id);
+
+	if (!usernames.includes(expense.payer_id)) {
+		console.log(`Invalid contributors specified, payer must be among them ${expense.contributors}`);
+		res.status(400).json({ error: 'Invalid contributors specified' });
+
+		return false;
+	}
+
+	const uniqueUsernames = [...new Set(expense.contributors.map((contributor) => contributor.user_id))];
+	console.log(`Unique usernames: ${uniqueUsernames}, found usernames: ${usernames}`);
+	if (usernames.length !== uniqueUsernames.length) {
+		console.log(`Invalid duplicate contributors specified, contributors should only appear once ${expense.contributors}`);
+		res.status(400).json({ error: 'Invalid duplicate contributors specified' });
+
+		return false;
+	}
+
+	const users = await db
+		.collection('users')
+		.find({ _id: { $in: usernames } })
+		.toArray();
+	const actualUsernames = users.map((user) => user._id);
+
+	if (!usernames.every((userId) => actualUsernames.includes(userId))) {
+		res.status(400).json({ error: 'Invalid contributors username specified' });
+
+		return false;
+	}
+
+	return true;
 }
 
 // View logged user's budget
@@ -66,26 +209,6 @@ router.get('/whoami', verifyUser, async (req, res) => {
 	}
 });
 
-function isDateValid({ year, month = 1, day = 1 }) {
-	const date = new Date();
-	const currentYear = date.getFullYear();
-	const currentMonth = date.getMonth() + 1;
-	const maxDays = new Date(year, month - 1, 0).getDate();
-	const currentDay = date.getDate();
-
-	if (year < 2020 || year > currentYear) {
-		return false;
-	}
-	if (month < 1 || month > 12 || (year === currentYear && month > currentMonth)) {
-		return false;
-	}
-	if (day < 1 || day > maxDays || (year === currentYear && month === currentMonth && day > currentDay)) {
-		return false;
-	}
-
-	return true;
-}
-
 // View logged user's budget in a certain year
 router.get('/:year', verifyUser, async (req, res) => {
 	const _id = req.session.user._id;
@@ -120,8 +243,9 @@ router.get('/:year/:month', verifyUser, async (req, res) => {
 
 	if (!isDateValid({ year: year, month: month })) {
 		console.log(`Invalid year/month ${year}/${month}`);
-		res.status(400).json({ error: 'Invalid year/month requested' });
-		return;
+		res.status(400).json({ error: 'Invalid year/month specified' });
+
+		return false;
 	}
 
 	console.log(`Viewing budget of ${_id} in ${month}/${year}`);
@@ -171,20 +295,6 @@ router.get('/:year/:month/:id', verifyUser, async (req, res) => {
 	}
 });
 
-// Verify that the user is the payer the expense he is creating/editing/deleting
-function verifyUserExpense(req, res, expense) {
-	const user_id = req.session.user._id;
-
-	if (expense.payer_id !== user_id) {
-		res.status(403).send('User cannot operate on this expense!');
-		console.log('User is not the payer', user_id, expense.payer_id);
-
-		return false;
-	}
-
-	return true;
-}
-
 // Create a new expense
 router.post('/:year/:month', verifyUser, async (req, res) => {
 	const payer_id = req.body.payer_id;
@@ -193,16 +303,8 @@ router.post('/:year/:month', verifyUser, async (req, res) => {
 	const category = req.body.category;
 	const year = parseInt(req.params.year);
 	const month = parseInt(req.params.month);
-	const day = new Date().getDate();
+	const day = req.body.date.day;
 	const contributors = req.body.contributors;
-
-	if (!isDateValid({ year: year, month: month, day: day })) {
-		console.log(`Invalid year/month/day: ${year}/${month}/${day}`);
-		res.status(400).json({ error: 'Invalid year/month/day requested' });
-		return;
-	}
-
-	console.log(`Creating new expense`);
 
 	const newExpense = {
 		payer_id,
@@ -217,12 +319,9 @@ router.post('/:year/:month', verifyUser, async (req, res) => {
 		contributors,
 	};
 
-	if (!verifyUserExpense(req, res, newExpense)) {
-		console.log(`error`);
+	if (!(await verifyExpense(req, res, newExpense))) {
 		return;
 	}
-
-	console.log(`Can create new expense`);
 
 	try {
 		const createdExpense = await db.collection('expenses').insertOne(newExpense);
@@ -285,7 +384,7 @@ router.delete('/:year/:month/:id', verifyUser, async (req, res) => {
 		return;
 	}
 
-	if (!verifyUserExpense(req, res, expense)) {
+	if (!verifyExpense(req, res, expense)) {
 		return;
 	}
 
