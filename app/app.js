@@ -3,6 +3,9 @@ const express = require('express');
 const session = require('express-session');
 const { MongoClient, ObjectId } = require('mongodb');
 
+const setupUsers = require('./setupUsers');
+const setupExpenses = require('./setupExpenses');
+
 const uri = 'mongodb://mongosrv';
 const app = express();
 
@@ -11,7 +14,7 @@ let db = null;
 
 app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(
 	session({
 		// Just for the exam, the secret shouldn't be hardcoded
@@ -89,7 +92,7 @@ app.post('/api/auth/signup', async (req, res) => {
 		password: hashedPassword,
 	};
 
-	if (!validator({ str: req.body.password, allowWhiteSpaces: false, minLength: 6, maxLength: 20, minNumber: 2 })) {
+	if (!validator({ str: req.body.password, allowWhiteSpaces: false, minLength: 6, maxLength: 18, minNumber: 2 })) {
 		console.error('Invalid password');
 		return res.status(460).json({ error: 'Invalid password' });
 	}
@@ -332,7 +335,7 @@ app.get('/api/budget/:year/:month/:id', verifyUser, async (req, res) => {
 // Verify that the user is the payer the expense he is creating/editing/deleting
 function verifyUserExpense(req, res, expense) {
 	const user_id = req.session.user._id;
-	
+
 	if (expense.payer_id !== user_id) {
 		res.status(403).send('User cannot operate on this expense!');
 		console.log('User is not the payer', user_id);
@@ -368,6 +371,10 @@ app.post('/api/budget/:year/:month', verifyUser, async (req, res) => {
 		},
 		contributors,
 	};
+
+	if (!verifyUserExpense(req, res, newExpense)) {
+		return;
+	}
 
 	try {
 		const createdExpense = await db.collection('expenses').insertOne(newExpense);
@@ -729,7 +736,12 @@ app.get('*', (req, res) => {
 
 app.listen(3000, async () => {
 	await client.connect();
-	db = client.db('CashShare');
+	db = client.db('money-leaves');
+
+	if (true || (await db.listCollections({ name: 'users' }).toArray()).length === 0) {
+		await setupUsers(db);
+		await setupExpenses(db);
+	}
 
 	const users = await db.collection('users').find().toArray();
 	console.log('All users: ', users);

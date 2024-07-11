@@ -1,0 +1,287 @@
+[
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 34.5,
+    "description": "Dinner at the bowling",
+    "category": "Food and beverages",
+    "date": {
+      "year": 2024,
+      "month": 6,
+      "day": 22
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 6.0
+      },
+      {
+        "user_id": "FedeAzz",
+        "quota": 6.0
+      },
+      {
+        "user_id": "LG",
+        "quota": 11.5
+      },
+      {
+        "user_id": "Dani",
+        "quota": 11.0
+      }
+    ]
+  },
+  {
+    "payer_id": "FedeAzz",
+    "total_cost": 0,
+    "description": "Bowling game",
+    "category": "Refound",
+    "date": {
+      "year": 2024,
+      "month": 6,
+      "day": 22
+    },
+    "contributors": [
+      {
+        "user_id": "FedeAzz",
+        "quota": 6.0
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": -6.0
+      }
+    ]
+  },
+  {
+    "payer_id": "FedeAzz",
+    "total_cost": 26.0,
+    "description": "Bowling game",
+    "category": "Entertainment",
+    "date": {
+      "year": 2024,
+      "month": 6,
+      "day": 22
+    },
+    "contributors": [
+      {
+        "user_id": "FedeAzz",
+        "quota": 6.5
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": 6.5
+      },
+      {
+        "user_id": "LG",
+        "quota": 6.5
+      },
+      {
+        "user_id": "Dani",
+        "quota": 6.5
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 0,
+    "description": "Bowling game",
+    "category": "Refound",
+    "date": {
+      "year": 2024,
+      "month": 6,
+      "day": 22
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 6.0
+      },
+      {
+        "user_id": "FedeAzz",
+        "quota": -6.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "LG",
+    "total_cost": 26.0,
+    "description": "Bowling game",
+    "category": "Entertainment",
+    "date": {
+      "year": 2024,
+      "month": 6,
+      "day": 22
+    },
+    "contributors": [
+      {
+        "user_id": "LG",
+        "quota": 6.5
+      },
+      {
+        "user_id": "FedeAzz",
+        "quota": 6.5
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": 6.5
+      },
+      {
+        "user_id": "Dani",
+        "quota": 6.5
+      }
+    ]
+  },
+
+  {
+    "payer_id": "LG",
+    "total_cost": 14.0,
+    "description": "Aperipiada",
+    "category": "Food and beverages",
+    "date": {
+      "year": 2024,
+      "month": 5,
+      "day": 29
+    },
+    "contributors": [
+      {
+        "user_id": "LG",
+        "quota": 7.0
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": 7.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "FedeAzz",
+    "total_cost": 15.0,
+    "description": "Picnic",
+    "category": "Food and beverages",
+    "date": {
+      "year": 2024,
+      "month": 3,
+      "day": 27
+    },
+    "contributors": [
+      {
+        "user_id": "FedeAzz",
+        "quota": 7.0
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": 8.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 0,
+    "description": "Picnic",
+    "category": "Refound",
+    "date": {
+      "year": 2024,
+      "month": 3,
+      "day": 27
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 8.0
+      },
+      {
+        "user_id": "FedeAzz",
+        "quota": -8.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "FedeAzz",
+    "total_cost": 14.0,
+    "description": "Christmas dinner",
+    "category": "Food and beverages",
+    "date": {
+      "year": 2023,
+      "month": 12,
+      "day": 20
+    },
+    "contributors": [
+      {
+        "user_id": "FedeAzz",
+        "quota": 7.0
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": 7.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 0,
+    "description": "Christmas dinner",
+    "category": "Refound",
+    "date": {
+      "year": 2023,
+      "month": 12,
+      "day": 20
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 7.0
+      },
+      {
+        "user_id": "FedeAzz",
+        "quota": -7.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 15.0,
+    "description": "Christmas present",
+    "category": "Present",
+    "date": {
+      "year": 2023,
+      "month": 12,
+      "day": 20
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 10.0
+      },
+      {
+        "user_id": "LG",
+        "quota": 5.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "LG",
+    "total_cost": 0,
+    "description": "Christmas dinner",
+    "category": "Refound",
+    "date": {
+      "year": 2023,
+      "month": 12,
+      "day": 20
+    },
+    "contributors": [
+      {
+        "user_id": "LG",
+        "quota": 5.0
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": -5.0
+      }
+    ]
+  }
+]
