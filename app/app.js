@@ -48,7 +48,8 @@ app.get('/api/users/search', verifyUser, async (req, res) => {
 			$or: [{ _id: searchRegex }, { name: searchRegex }, { surname: searchRegex }],
 		};
 
-		const users = await db.collection('users').find(filter).toArray();
+		const projection = { _id: 1, name: 1, surname: 1 };
+		const users = await db.collection('users').find(filter).project(projection).toArray();
 
 		res.json(users);
 	} catch (err) {

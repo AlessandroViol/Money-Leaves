@@ -110,25 +110,29 @@ router.get('/', verifyUser, async (req, res) => {
 		},
 	});
 
-	const aggregationResult = await db.collection('expenses').aggregate(pipeline).toArray();
-	console.log('Balance:', aggregationResult);
+	try {
+		const aggregationResult = await db.collection('expenses').aggregate(pipeline).toArray();
+		console.log('Balance:', aggregationResult);
 
-	let balance = [];
-	if (aggregationResult.length > 0) {
-		balance = aggregationResult[0];
-	} else {
-		balance = {
-			_id: _id,
-			totalExpense: 0,
-			payed: 0,
-			expectedBack: 0,
-			debt: 0,
-			refounded: 0,
-			received: 0,
-		};
+		let balance = [];
+		if (aggregationResult.length > 0) {
+			balance = aggregationResult[0];
+		} else {
+			balance = {
+				_id: _id,
+				totalExpense: 0,
+				payed: 0,
+				expectedBack: 0,
+				debt: 0,
+				refounded: 0,
+				received: 0,
+			};
+		}
+
+		res.json(balance);
+	} catch (error) {
+		res.status(500).json({ error: 'An error occurred when computing the balance' });
 	}
-
-	res.json(balance);
 });
 
 // View the logged user's balance wrt the user with the specified username
@@ -240,28 +244,32 @@ router.get('/:id', verifyUser, async (req, res) => {
 		},
 	});
 
-	const aggregationResults = await db.collection('expenses').aggregate(pipeline).toArray();
+	try {
+		const aggregationResults = await db.collection('expenses').aggregate(pipeline).toArray();
 
-	let balance = [];
-	if (aggregationResults.length > 0) {
-		aggregationResults[0].expectedBack = aggregationResults[1].debt;
-		aggregationResults[1].expectedBack = aggregationResults[0].debt;
+		let balance = [];
+		if (aggregationResults.length > 0) {
+			aggregationResults[0].expectedBack = aggregationResults[1].debt;
+			aggregationResults[1].expectedBack = aggregationResults[0].debt;
 
-		balance = aggregationResults;
-	} else {
-		balance = {
-			_id: _id,
-			totalExpense: 0,
-			payed: 0,
-			expectedBack: 0,
-			debt: 0,
-			refounded: 0,
-			received: 0,
-		};
+			balance = aggregationResults;
+		} else {
+			balance = {
+				_id: _id,
+				totalExpense: 0,
+				payed: 0,
+				expectedBack: 0,
+				debt: 0,
+				refounded: 0,
+				received: 0,
+			};
+		}
+
+		console.log('Balance with friend:', balance);
+		res.json(balance);
+	} catch (error) {
+		res.status(500).json({ error: 'An error occurred when updating the expense' });
 	}
-
-	console.log('Balance with friend:', balance);
-	res.json(balance);
 });
 
 module.exports = { router, setDb };

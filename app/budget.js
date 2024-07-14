@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { ObjectId } = require('mongodb');
+
 const verifyUser = require('./user').verifyUser;
 const categories = require('./setupExpenses').categories;
 
@@ -31,28 +33,41 @@ function isDateValid({ year, month = 1, day = 1 }) {
 }
 
 // Verify the validity of the expense the user is creating/editing/deleting
-async function verifyExpense(req, res, expense) {
+async function verifyExpense(req, res, next) {
+	const expense = {
+		payer_id: req.body.payer_id,
+		total_cost: parseInt(req.body.total_cost),
+		description: req.body.description,
+		category: req.body.category,
+		date: {
+			year: parseInt(req.params.year),
+			month: parseInt(req.params.month),
+			day: parseInt(req.body.date.day),
+		},
+		contributors: req.body.contributors,
+	};
+
 	const user_id = req.session.user._id;
 
 	if (expense.payer_id !== user_id) {
 		res.status(403).send('User cannot operate on this expense!');
 		console.log('User is not the payer', user_id, expense.payer_id);
 
-		return false;
+		return;
 	}
 
 	if (!isDateValid({ year: expense.date.year, month: expense.date.month, day: expense.date.day })) {
 		console.log(`Invalid year/month ${expense.date.year}/${expense.date.month}/${expense.date.day}`);
 		res.status(400).json({ error: 'Invalid date specified' });
 
-		return false;
+		return;
 	}
 
 	if (!categories.includes(expense.category)) {
 		console.log(`Invalid category ${expense.category}`);
 		res.status(400).json({ error: 'Invalid category specified' });
 
-		return false;
+		return;
 	}
 
 	const total_quota = expense.contributors.reduce((sum, contributor) => sum + contributor.quota, 0);
@@ -61,7 +76,7 @@ async function verifyExpense(req, res, expense) {
 		console.log(`Invalid quotas, they must sum up to the total cost ${expense.contributors}`);
 		res.status(400).json({ error: 'Invalid quotas specified' });
 
-		return false;
+		return;
 	}
 
 	const hasZeroQuota = expense.contributors.some((contributor) => contributor.quota === 0);
@@ -70,7 +85,7 @@ async function verifyExpense(req, res, expense) {
 		console.log(`Invalid zero quota ${expense.contributor}`);
 		res.status(400).json({ error: 'Invalid zero quota specified' });
 
-		return false;
+		return;
 	}
 
 	const hasNegativeQuota = expense.contributors.some((contributor) => contributor.quota < 0);
@@ -80,41 +95,41 @@ async function verifyExpense(req, res, expense) {
 			console.log(`Invalid total cost ${expense.total_cost}`);
 			res.status(400).json({ error: 'Invalid total cost specified' });
 
-			return false;
+			return;
 		}
 
 		if (!hasNegativeQuota) {
 			console.log(`Invalid quotas, one must be negative ${expense.contributors}`);
 			res.status(400).json({ error: 'Invalid quotas specified' });
 
-			return false;
+			return;
 		}
 
 		if (expense.contributors.length !== 2) {
 			console.log(`Invalid number of contributors, must be two ${expense.contributors.length}`);
 			res.status(400).json({ error: 'Invalid number of contributors specified' });
 
-			return false;
+			return;
 		}
 	} else {
 		if (expense.total_cost <= 0) {
 			console.log(`Invalid total cost ${expense.total_cost}`);
 			res.status(400).json({ error: 'Invalid total cost specified' });
 
-			return false;
+			return;
 		}
 
 		if (hasNegativeQuota) {
 			console.log(`Invalid quotas, they all must be positive ${expense.contributors}`);
 			res.status(400).json({ error: 'Invalid quotas specified' });
 
-			return false;
+			return;
 		}
 		if (expense.contributors.length <= 1) {
 			console.log(`Invalid number of contributors, must be at least two ${expense.contributors.length}`);
 			res.status(400).json({ error: 'Invalid number of contributors specified' });
 
-			return false;
+			return;
 		}
 	}
 
@@ -124,7 +139,7 @@ async function verifyExpense(req, res, expense) {
 		console.log(`Invalid contributors specified, payer must be among them ${expense.contributors}`);
 		res.status(400).json({ error: 'Invalid contributors specified' });
 
-		return false;
+		return;
 	}
 
 	const uniqueUsernames = [...new Set(expense.contributors.map((contributor) => contributor.user_id))];
@@ -133,7 +148,7 @@ async function verifyExpense(req, res, expense) {
 		console.log(`Invalid duplicate contributors specified, contributors should only appear once ${expense.contributors}`);
 		res.status(400).json({ error: 'Invalid duplicate contributors specified' });
 
-		return false;
+		return;
 	}
 
 	const users = await db
@@ -145,10 +160,10 @@ async function verifyExpense(req, res, expense) {
 	if (!usernames.every((userId) => actualUsernames.includes(userId))) {
 		res.status(400).json({ error: 'Invalid contributors username specified' });
 
-		return false;
+		return;
 	}
 
-	return true;
+	next();
 }
 
 // View logged user's budget
@@ -296,32 +311,19 @@ router.get('/:year/:month/:id', verifyUser, async (req, res) => {
 });
 
 // Create a new expense
-router.post('/:year/:month', verifyUser, async (req, res) => {
-	const payer_id = req.body.payer_id;
-	const total_cost = parseInt(req.body.total_cost);
-	const description = req.body.description;
-	const category = req.body.category;
-	const year = parseInt(req.params.year);
-	const month = parseInt(req.params.month);
-	const day = req.body.date.day;
-	const contributors = req.body.contributors;
-
+router.post('/:year/:month', verifyUser, verifyExpense, async (req, res) => {
 	const newExpense = {
-		payer_id,
-		total_cost,
-		description,
-		category,
+		payer_id: req.body.payer_id,
+		total_cost: parseInt(req.body.total_cost),
+		description: req.body.description,
+		category: req.body.category,
 		date: {
-			year,
-			month,
-			day,
+			year: parseInt(req.params.year),
+			month: parseInt(req.params.month),
+			day: parseInt(req.body.date.day),
 		},
-		contributors,
+		contributors: req.body.contributors,
 	};
-
-	if (!(await verifyExpense(req, res, newExpense))) {
-		return;
-	}
 
 	try {
 		const createdExpense = await db.collection('expenses').insertOne(newExpense);
@@ -332,39 +334,49 @@ router.post('/:year/:month', verifyUser, async (req, res) => {
 });
 
 // Edit an expense
-router.put('/:year/:month/:id', verifyUser, async (req, res) => {
+router.put('/:year/:month/:id', verifyUser, verifyExpense, async (req, res) => {
 	const user_id = req.session.user._id;
+
+	const expense_id = req.params.id;
+	const payer_id = req.body.payer_id;
 	const total_cost = parseInt(req.body.total_cost);
 	const description = req.body.description;
 	const category = req.body.category;
 	const year = parseInt(req.params.year);
 	const month = parseInt(req.params.month);
+	const day = parseInt(req.body.date.day);
 	const contributors = req.body.contributors;
-	const expense_id = req.params.id;
 
 	console.log(`Viewing details of: ${expense_id}`);
 
 	const filter = {
 		'date.year': year,
 		'date.month': month,
-		contributors: { $elemMatch: { user_id: user_id } },
+		payer_id: user_id,
 	};
 
-	const expenses = await db.collection('expenses').find(filter).toArray();
+	try {
+		const expenses = await db.collection('expenses').find(filter).toArray();
+		console.log('Compatible expenses: ', expenses);
+		const expense = expenses.find((expense) => expense._id.equals(expense_id));
+		console.log('Match: ', expense);
 
-	const expense = expenses.find((expense) => expense._id.equals(expense_id));
+		if (expense !== undefined) {
+			const editedExpense = {
+				$set: { payer_id, total_cost, description, category, date: { ...expense.date, year, month, day }, contributors },
+			};
 
-	if (expense !== undefined) {
-		const editedExpense = {
-			$set: { total_cost, description, category, date: { ...expense.date, year, month }, contributors },
-		};
+			console.log(`Editing expense ${expense_id}: `, expense);
 
-		console.log(`Editing expense ${expense_id}: `, expense);
-
-		const updated = await db.collection('expenses').updateOne({ _id: new ObjectId(expense_id) }, editedExpense);
-		res.json(updated);
-	} else {
-		res.status(404).json({ error: 'Expense not found' });
+			const updated = await db.collection('expenses').updateOne({ _id: new ObjectId(expense_id) }, editedExpense);
+			console.log('HERE');
+			res.json(updated);
+		} else {
+			res.status(404).json({ error: 'Expense not found' });
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: 'An error occurred when updating the expense' });
 	}
 });
 
@@ -374,28 +386,38 @@ router.delete('/:year/:month/:id', verifyUser, async (req, res) => {
 	const month = parseInt(req.params.month);
 	const _id = new ObjectId(req.params.id);
 
+	const user_id = req.session.user._id;
+
 	console.log(`Deleting expense: ${_id}`);
 
-	const expense = await db.collection('expenses').findOne({ _id });
+	try {
+		const expense = await db.collection('expenses').findOne({ _id });
 
-	if (expense === null || expense === undefined) {
-		res.status(404).send('Expense not found!');
-		console.log('Expense not found', req.params._id);
-		return;
+		if (expense === null || expense === undefined) {
+			res.status(404).send('Expense not found!');
+			console.log('Expense not found', req.params._id);
+			return;
+		}
+
+		if (expense.payer_id !== user_id) {
+			res.status(403).send('User cannot operate on this expense!');
+			console.log('User is not the payer', user_id, expense.payer_id);
+
+			return;
+		}
+
+		if (year !== expense.date.year || month !== expense.date.month) {
+			console.log(`Invalid year/month ${year}/${month}`);
+			res.status(400).json({ error: 'Invalid date specified' });
+
+			return;
+		} else {
+			const deleteResult = await db.collection('expenses').deleteOne({ _id });
+			res.json(deleteResult);
+		}
+	} catch (error) {
+		res.status(500).json({ error: 'An error occurred when deleting the expense' });
 	}
-
-	if (!verifyExpense(req, res, expense)) {
-		return;
-	}
-
-	let deleteResult = {};
-	if (expense.date.year === year && expense.date.month === month) {
-		deleteResult = await db.collection('expenses').deleteOne({ _id });
-	} else {
-		deleteResult.deletedCount = 0;
-	}
-
-	res.json(deleteResult);
 });
 
 module.exports = { router, setDb };

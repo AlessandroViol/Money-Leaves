@@ -63,6 +63,23 @@ function validator({
 	return result;
 }
 
+async function verifyUser(req, res, next) {
+	if (req.session.user) {
+		const user = await db.collection('users').findOne({ _id: req.session.user._id });
+
+		if (user === null) {
+			res.status(403).send('Not authenticated!');
+			console.log('Not logged in');
+			return;
+		}
+
+		next();
+	} else {
+		res.status(403).send('Not authenticated!');
+		return;
+	}
+}
+
 // create new user's credentials
 router.post('/signup', async (req, res) => {
 	console.log('req', req.body);
@@ -135,21 +152,5 @@ router.post('/signin', async (req, res) => {
 		res.status(500).json({ error: 'An error occurred during the login' });
 	}
 });
-
-async function verifyUser(req, res, next) {
-	if (req.session.user) {
-		const user = await db.collection('users').findOne({ _id: req.session.user._id });
-
-		if (user === null) {
-			res.status(403).send('Not authenticated!');
-			console.log('Not logged in');
-			return;
-		}
-
-		next();
-	} else {
-		res.status(403).send('Not authenticated!');
-	}
-}
 
 module.exports = { router, verifyUser, setDb };
