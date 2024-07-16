@@ -70,10 +70,12 @@ const Expense = {
 		return {};
 	},
 
+	emits: ['delete'],
+
 	methods: {
 		isUserContributor(contributor) {
 			return contributor.user_id === this.username;
-		}, 
+		},
 
 		deleteExpense() {
 			this.$emit('delete', this.expense);

@@ -28,47 +28,17 @@ const Dashboard = {
 
 						<div class="my-4">
 							<h3>Total Balance</h3>
-							<h4 class="fs-2 fw-bolder text-primary">{{ this.balance.toFixed(2) }} €</h4>
+							<h4 class="fs-2 fw-bolder text-primary">{{ this.balance }} €</h4>
 						</div>
 						<h2 class="mb-2">Expenses</h2>
 						<expense-line-chart :expenses="expenses"></expense-line-chart>
 
 						<h3>Expense list</h3>
-						<div class="table-responsive small">
-							<header class="d-flex text-start" style="padding-left:1.25rem; padding-right:2.5rem;">
-								<span class="col-sm text-truncate w-25 mx-1">Date</span>
-								<span class="col-sm-6 text-truncate w-25 mx-1">Category</span>
-								<span class="col-sm text-truncate w-25 mx-1">Total</span>
-								<span class="col-sm text-truncate w-25 mx-1">Quota</span>
-							</header>
-							<hr />
-							<div class="accordion pb-5" id="accordionExpenses">
-								<expense v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete">
-								</expense>
-							</div>
-						</div>
+						<expense-list :expenses="expenses" :username="username" @update="updateExpenses"></expense-list>
 					</section>
 				</div>
 			</div>
 		</section>
-
-		<div class="modal fade" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="deleteConfirmLabel">Delete expense</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						Are you sure you want to delete this expense?
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary mx-auto" @click='deleteExpense'>Yes</button>
-						<button type="button" class="btn btn-secondary mx-auto" data-bs-dismiss="modal">Cancel</button>
-					</div>
-				</div>
-			</div>
-		</div>
   `,
 
 	data: function () {
@@ -83,10 +53,6 @@ const Dashboard = {
 	},
 
 	methods: {
-		updateData() {
-			this.getBalance();
-		},
-
 		async getBalance() {
 			const response = await fetch('/api/balance/', {
 				method: 'GET',
@@ -111,47 +77,6 @@ const Dashboard = {
 			const res = await response.json();
 			console.log(res);
 			this.balance = res;
-		},
-
-		async deleteExpense() {
-			const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirm'));
-			modal.hide();
-			const response = await fetch(
-				`/api/budget/${this.selectedExpense.date.year}/${this.selectedExpense.date.month}/${this.selectedExpense._id}`,
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
-
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated'); ///////////////////////////////////////////////not trueeee
-				this.goToSignin();
-				return;
-			}
-
-			if (response.ok) {
-				this.expenses = this.expenses.filter((expense) => expense._id !== this.selectedExpense._id);
-				console.log('Deleted. New expenses: ', this.expenses);
-				this.selectedExpense = {};
-			}
-
-			const res = await response.json();
-			console.log(res);
-			this.updateData();
-		},
-
-		confirmDelete(expense) {
-			console.log(expense);
-			this.selectedExpense = expense;
-			const modal = new bootstrap.Modal(document.getElementById('deleteConfirm'));
-			modal.show();
-		},
-
-		goToSignin() {
-			this.$router.push({ path: '/signin' });
 		},
 
 		async getExpenses() {
@@ -180,6 +105,19 @@ const Dashboard = {
 			this.expenses = res;
 
 			this.updateData();
+		},
+
+		async updateExpenses(updatedExpenses) {
+			this.expenses = [...updatedExpenses];
+			console.log('New expenses:', this.expenses);
+		},
+
+		goToSignin() {
+			this.$router.push({ path: '/signin' });
+		},
+
+		updateData() {
+			this.getBalance();
 		},
 	},
 
