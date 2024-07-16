@@ -11858,4 +11858,19 @@ textarea.form-control-lg {
   font-weight: 500;
 }
 
+.tooltip-primary {
+  --bs-tooltip-bg: var(--bs-primary);
+  --bs-tooltip-color: var(--bs-white);
+}
+
+.tooltip-secondary {
+  --bs-tooltip-bg: var(--bs-secondary);
+  --bs-tooltip-color: var(--bs-white);
+}
+
+.tooltip-danger {
+  --bs-tooltip-bg: var(--bs-danger);
+  --bs-tooltip-color: var(--bs-white);
+}
+
 /*# sourceMappingURL=custom.css.map */

@@ -63,7 +63,7 @@ router.get('/', verifyUser, async (req, res) => {
 			expectedBack: {
 				$cond: {
 					if: { $and: [{ $ne: ['$category', 'Refound'] }, { $eq: ['$contributors.user_id', '$payer_id'] }] },
-					then: { $subtract: ['$total_cost', '$contributors.quota'] },
+					then: { $multiply: [{ $subtract: ['$total_cost', '$contributors.quota'] }, -1] },
 					else: 0,
 				},
 			},
@@ -249,8 +249,8 @@ router.get('/:id', verifyUser, async (req, res) => {
 
 		let balance = [];
 		if (aggregationResults.length > 0) {
-			aggregationResults[0].expectedBack = aggregationResults[1].debt;
-			aggregationResults[1].expectedBack = aggregationResults[0].debt;
+			aggregationResults[0].expectedBack = -aggregationResults[1].debt;
+			aggregationResults[1].expectedBack = -aggregationResults[0].debt;
 
 			balance = aggregationResults;
 		} else {

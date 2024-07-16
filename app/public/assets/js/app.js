@@ -5,6 +5,7 @@ import Topbar from '../components/Topbar.js';
 import Sidebar from '../components/Sidebar.js';
 import ExpenseLineChart from '../components/ExpenseLineChart.js';
 import ExpenseList from '../components/ExpenseList.js';
+import Balance from '../components/Balance.js';
 
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
@@ -35,6 +36,7 @@ app.component('topbar', Topbar);
 app.component('sidebar', Sidebar);
 app.component('expense-line-chart', ExpenseLineChart);
 app.component('expense-list', ExpenseList);
+app.component('balance', Balance);
 
 // Mount the Vue application
 app.mount('#app');

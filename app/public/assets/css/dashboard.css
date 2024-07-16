@@ -62,4 +62,9 @@
   padding: .75rem 1rem;
 }
 
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bd-violet-bg);
+  --bs-tooltip-color: var(--bs-white);
+}
+
 

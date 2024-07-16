@@ -27,8 +27,8 @@ const Dashboard = {
 						<h2 class="mt-2">Welcome back <span class="text-primary">{{name}}</span>!</h2>
 
 						<div class="my-4">
-							<h3>Total Balance</h3>
-							<h4 class="fs-2 fw-bolder text-primary">{{ this.balance }} €</h4>
+							<h3>Balance</h3>
+							<balance :balance="balance"></balance>
 						</div>
 						<h2 class="mb-2">Expenses</h2>
 						<expense-line-chart :expenses="expenses"></expense-line-chart>
@@ -48,7 +48,14 @@ const Dashboard = {
 			surname: '',
 			expenses: [],
 			selectedExpense: {},
-			balance: 0,
+			balance: {
+				totalExpense: 0,
+				payed: 0,
+				expectedBack: 0,
+				debt: 0,
+				refounded: 0,
+				received: 0,
+			},
 		};
 	},
 
