@@ -10,7 +10,7 @@ const UserDetails = {
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
 						<div
 							class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-							<h1 class="h1">{{ $route.params.otherUsername }} Details</h1>
+							<h1 class="h1">{{ this.otherUsername }} Details</h1>
 							
 							<div class="btn-toolbar mb-2 mb-md-0">
 								<div class="btn-group me-2">
@@ -21,11 +21,9 @@ const UserDetails = {
 							
 						</div>
 
-						<div class="my-4">
-							<h3>Balance with the user:</h3>
-              <h4 :class={ "text-danger", total < 0 }>Total: {{ total }} </h4>
-              <hr/>
-							<h5 class="fs-2 fw-bolder text-primary" v-for="user in balance">{{ user._id  }} {{ user.balance.toFixed(2) }} €</h5>
+						<div class="my-4" v-if="balance.length > 0">
+							<h3>Balance with the user {{ this.otherUsername }}:</h3>
+              <balance :balance="balance[0]"></balance>
 						</div>
 					</section>
 				</div>
@@ -36,7 +34,7 @@ const UserDetails = {
 	data: function () {
 		return {
 			balance: [],
-      total: 0,
+			otherUsername: '',
 		};
 	},
 
@@ -46,9 +44,9 @@ const UserDetails = {
 		},
 
 		async getBalance() {
-			console.log('Viewing details of', this.$route.params.otherUsername);
+			console.log('Viewing details of', this.otherUsername);
 
-			const response = await fetch(`/api/balance/${this.$route.params.otherUsername}`, {
+			const response = await fetch(`/api/balance/${this.otherUsername}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -58,7 +56,7 @@ const UserDetails = {
 			if (response.status === 403) {
 				console.error('403 Forbidden: user not authenticated');
 				this.goToSignin();
-        return;
+				return;
 			}
 
 			if (!response.ok) {
@@ -69,9 +67,8 @@ const UserDetails = {
 			}
 
 			const res = await response.json();
-			console.log("balance", res);
+			console.log('balance', res);
 			this.balance = res;
-      this.total = this.balance[0].balance - this.balance[1].balance
 		},
 
 		goToSignin() {
@@ -79,9 +76,13 @@ const UserDetails = {
 		},
 	},
 
+	created() {
+		this.otherUsername = this.$route.params.otherUsername;
+	},
+
 	mounted: async function () {
-    await this.getBalance();
-  },
+		await this.getBalance();
+	},
 };
 
 export default UserDetails;
