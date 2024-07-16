@@ -8,8 +8,7 @@ const Dashboard = {
 					<sidebar></sidebar>
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
-						<div
-							class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 							<h1 class="h1">Dashboard</h1>
 							
 							<div class="btn-toolbar mb-2 mb-md-0">
@@ -32,7 +31,7 @@ const Dashboard = {
 							<h4 class="fs-2 fw-bolder text-primary">{{ this.balance.toFixed(2) }} €</h4>
 						</div>
 						<h2 class="mb-2">Expenses</h2>
-						<canvas class="mb-4 w-100" id="myChart" width="900" height="380"></canvas>
+						<expense-line-chart :expenses="expenses"></expense-line-chart>
 
 						<h3>Expense list</h3>
 						<div class="table-responsive small">
@@ -80,14 +79,12 @@ const Dashboard = {
 			expenses: [],
 			selectedExpense: {},
 			balance: 0,
-			myChart: null,
 		};
 	},
 
 	methods: {
 		updateData() {
 			this.getBalance();
-			this.drawLinePlot();
 		},
 
 		async getBalance() {
@@ -170,7 +167,7 @@ const Dashboard = {
 				this.goToSignin();
 				return;
 			}
-			
+
 			if (!response.ok) {
 				const errorMessage = `Error: ${response.statusText}`;
 				this.$router.push({ path: `/error/${errorMessage}` });
@@ -183,46 +180,6 @@ const Dashboard = {
 			this.expenses = res;
 
 			this.updateData();
-		},
-
-		drawLinePlot() {
-			if (this.myChart) {
-				this.myChart.destroy();
-			}
-
-			const data = {
-				labels: this.expenses.map(
-					(expense) => expense.date.day.toString() + '/' + expense.date.month.toString() + '/' + expense.date.year.toString()
-				),
-				datasets: [
-					{
-						data: this.expenses.map((expense) => expense.total_cost),
-						lineTension: 0,
-						backgroundColor: 'transparent',
-						borderColor: '#28a745',
-						borderWidth: 4,
-						pointBackgroundColor: '#28a745',
-					},
-				],
-			};
-
-			const options = {
-				plugins: {
-					legend: {
-						display: false,
-					},
-					tooltip: {
-						boxPadding: 3,
-					},
-				},
-			};
-
-			const ctx = document.getElementById('myChart');
-			this.myChart = new Chart(ctx, {
-				type: 'line',
-				data,
-				options,
-			});
 		},
 	},
 

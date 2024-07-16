@@ -3,6 +3,7 @@ import ThemeDropdown from '../components/ThemeDropdown.js';
 import Icons from '../components/Icons.js';
 import Topbar from '../components/Topbar.js';
 import Sidebar from '../components/Sidebar.js';
+import ExpenseLineChart from '../components/ExpenseLineChart.js';
 
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
@@ -31,6 +32,7 @@ app.component('theme-dropdown', ThemeDropdown);
 app.component('icons', Icons);
 app.component('topbar', Topbar);
 app.component('sidebar', Sidebar);
+app.component('expense-line-chart', ExpenseLineChart);
 
 // Mount the Vue application
 app.mount('#app');
