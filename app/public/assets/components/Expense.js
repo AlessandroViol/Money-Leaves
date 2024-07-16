@@ -45,7 +45,7 @@ const Expense = {
 					</div>
 					<h4 class="text-end mt-3 mx-4">Total: <strong>{{ expense.total_cost.toFixed(2) }} €</strong></h4>
 
-					<button type="button" class="btn btn-sm btn-danger" @click="deleteExpense">Delete</button>
+					<button type="button" class="btn btn-sm" :class="{'btn-danger': isUserPayer(), 'btn-outline-danger': !isUserPayer() }" :disabled="!isUserPayer()" @click="deleteExpense">Delete</button>
         </div>
       </div>
     </div>
@@ -75,6 +75,10 @@ const Expense = {
 	methods: {
 		isUserContributor(contributor) {
 			return contributor.user_id === this.username;
+		},
+
+		isUserPayer() {
+			return this.expense.payer_id === this.username;
 		},
 
 		deleteExpense() {
