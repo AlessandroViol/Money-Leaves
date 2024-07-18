@@ -1,4 +1,4 @@
-import Expense from '../components/Expense.js';
+import ExpenseListItem from '../components/ExpenseListItem.js';
 import ThemeDropdown from '../components/ThemeDropdown.js';
 import Icons from '../components/Icons.js';
 import Topbar from '../components/Topbar.js';
@@ -30,7 +30,7 @@ const router = createRouter({ history: createWebHistory(), routes });
 const app = createApp();
 app.use(router);
 
-app.component('expense', Expense);
+app.component('expense-list-item', ExpenseListItem);
 app.component('theme-dropdown', ThemeDropdown);
 app.component('icons', Icons);
 app.component('topbar', Topbar);

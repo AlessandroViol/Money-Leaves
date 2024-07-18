@@ -1,4 +1,4 @@
-const Expense = {
+const ExpenseListItem = {
 	template: `
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -150,4 +150,4 @@ const Expense = {
 	},
 };
 
-export default Expense;
+export default ExpenseListItem;

@@ -25,8 +25,8 @@ const ExpenseList = {
 		</header>
 		<hr class="m-2"/>
 		<div class="accordion pb-5" id="accordionExpenses">
-			<expense v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete">
-			</expense>
+			<expense-list-item v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete">
+			</expense-list-item>
 		</div>
 
 		<div class="modal fade" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
