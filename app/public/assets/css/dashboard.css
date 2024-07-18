@@ -67,4 +67,6 @@
   --bs-tooltip-color: var(--bs-white);
 }
 
-
+.accordion-button:not(.collapsed) .text-white-custom{
+  color: #fff !important;
+}

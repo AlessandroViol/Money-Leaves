@@ -3,10 +3,40 @@ const Expense = {
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#accordionExpense'+index" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-          <span class="small col-sm text-truncate w-25 mx-1">{{ dateObjToString(expense.date) }}</span>
-          <span class="small col-sm-6 text-truncate w-25 mx-1">{{ expense.category }}</span>
-          <span class="small col-sm text-truncate w-25 mx-1">{{ expense.total_cost.toFixed(2) }} €</span>
-          <span class="small col-sm text-truncate w-25 mx-1">{{ getQuota().toFixed(2) }} €</span>
+					<div class="container-fluid">
+						<div class="row row-cols-4 gx-2">
+
+							<div class="col-3 text-truncate">
+								<div class="row">
+
+									<div class="col text-truncate">
+										<span class="text-white-custom" :class="{'text-primary fw-medium': isUserPayer()}">{{ expense.payer_id }}</span>
+									</div>
+
+								</div>
+								<div class="row">
+								
+									<div class="col text-truncate">
+										<span class="text-white-custom small text-secondary mt-1 " style="font-size: 0.75em;">{{ dateObjToString(expense.date) }}</span>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="col-5 text-truncate">
+								<span class="align-middle text-white-custom" :class="{'text-danger': expense.category === 'Refound'}">{{ expense.category }}</span>
+							</div>
+
+							<div class="col-2 text-truncate">
+								<span class="align-middle">{{ expense.total_cost.toFixed(2) }} €</span>
+							</div>
+
+							<div class="col-2 text-truncate">
+								<span class="align-middle">{{ getQuota().toFixed(2) }} €</span>
+							</div>
+							
+						</div>
+					</div>
         </button>
       </h2>
 
