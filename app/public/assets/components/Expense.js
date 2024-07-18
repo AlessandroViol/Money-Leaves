@@ -76,6 +76,14 @@ const Expense = {
 					<h4 class="text-end mt-3 mx-4">Total: <strong>{{ expense.total_cost.toFixed(2) }} €</strong></h4>
 
 					<button type="button" class="btn btn-sm btn-danger" v-if="isUserPayer()" @click="deleteExpense">Delete</button>
+					<quick-refound-button v-if="!isUserPayer() && expense.category !== 'Refound'" 
+						:username="this.username" 
+						:recipient="this.expense.payer_id" 
+						:motive="this.expense.description"
+						:amount="this.getQuota()"
+						:index="this.index"
+					>
+					</quick-refound-button>
         </div>
       </div>
     </div>
@@ -140,7 +148,6 @@ const Expense = {
 			return dateStr;
 		},
 	},
-	computed: {},
 };
 
 export default Expense;
