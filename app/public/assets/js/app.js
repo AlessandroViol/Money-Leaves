@@ -7,6 +7,8 @@ import ExpenseLineChart from '../components/ExpenseLineChart.js';
 import ExpenseList from '../components/ExpenseList.js';
 import Balance from '../components/Balance.js';
 import QuickRefoundButton from '../components/QuickRefoundButton.js';
+import Expense from '../components/Expense.js';
+import ExpenseDate from '../components/ExpenseDate.js';
 
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
@@ -30,14 +32,16 @@ const router = createRouter({ history: createWebHistory(), routes });
 const app = createApp();
 app.use(router);
 
-app.component('expense-list-item', ExpenseListItem);
 app.component('theme-dropdown', ThemeDropdown);
 app.component('icons', Icons);
 app.component('topbar', Topbar);
 app.component('sidebar', Sidebar);
-app.component('expense-line-chart', ExpenseLineChart);
-app.component('expense-list', ExpenseList);
 app.component('balance', Balance);
+app.component('expense-line-chart', ExpenseLineChart);
+app.component('expense-date', ExpenseDate);
+app.component('expense-list', ExpenseList);
+app.component('expense-list-item', ExpenseListItem);
+app.component('expense', Expense);
 app.component('quick-refound-button', QuickRefoundButton);
 
 // Mount the Vue application

@@ -81,7 +81,7 @@ const Balance = {
                 data-bs-custom-class="tooltip-danger" 
                 data-bs-title="How much money the user has been refounded."
               >
-                Debt
+                Received
               </span>
             </h5>
             <p class="card-text">{{ this.balance.received.toFixed(2) }} €</p>
