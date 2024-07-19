@@ -8,7 +8,7 @@ const Dashboard = {
 					<sidebar></sidebar>
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
-							<h1 class="h1">Dashboard</h1>
+							<h1 class="h1 mt-3">Dashboard</h1>
 						<h2 class="mt-2">Welcome back <span class="text-primary">{{name}}</span>!</h2>
 
 						<div class="my-4">
@@ -60,14 +60,7 @@ const Dashboard = {
 							</div>
 						</div>
 						<div id="expenseSearch" class="rounded-bottom shadow mb-3 w-100 collapse">
-							<input class="py-3 rounded-bottom bg-body-secondary form-control w-100 rounded-0 border-0" type="text" list="datalistOptions" placeholder="Search" aria-label="Search" v-model="query"/>
-							<datalist id="datalistOptions">
-								<option value="San Francisco">
-								<option value="New York">
-								<option value="Seattle">
-								<option value="Los Angeles">
-								<option value="Chicago">
-							</datalist>
+							<input class="py-3 rounded-bottom bg-body-secondary form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search" v-model="query"/>
 						</div>
 						
 						<expense-list :expenses="expenses" :username="username" @update="updateExpenses"></expense-list>
@@ -297,7 +290,7 @@ const Dashboard = {
 	watch: {
 		async query(value) {
 			if (value === '') {
-				await getExpenses();
+				await this.getExpenses();
 				return;
 			}
 			const response = await fetch(`/api/budget/search?q=${value}`, {

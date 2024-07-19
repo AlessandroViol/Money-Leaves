@@ -1,3 +1,5 @@
+const { toRaw } = Vue;
+
 const ExpenseLineChart = {
 	template: `
     <canvas class="mb-4 w-100" id="myChart" width="900" height="380"></canvas>
@@ -18,10 +20,6 @@ const ExpenseLineChart = {
 
 	methods: {
 		drawLinePlot() {
-			if (this.myChart) {
-				this.myChart.destroy();
-			}
-
 			const data = {
 				labels: this.expenses.map(
 					(expense) => expense.date.day.toString() + '/' + expense.date.month.toString() + '/' + expense.date.year.toString()
@@ -66,6 +64,7 @@ const ExpenseLineChart = {
 		expenses: {
 			deep: true,
 			handler() {
+				toRaw(this.myChart).destroy();
 				this.drawLinePlot();
 			},
 		},
