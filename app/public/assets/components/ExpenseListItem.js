@@ -51,6 +51,7 @@ const ExpenseListItem = {
 						:motive="this.expense.description"
 						:amount="this.getQuota()"
 						:index="this.index"
+						@create="addExpense"
 					>
 					</quick-refound-button>
         </div>
@@ -90,6 +91,10 @@ const ExpenseListItem = {
 
 		deleteExpense() {
 			this.$emit('delete', this.expense);
+		},
+
+		addExpense(newExpense) {
+			this.$emit('add', newExpense);
 		},
 
 		getQuota() {

@@ -25,7 +25,7 @@ const ExpenseList = {
 		</header>
 		<hr class="m-2"/>
 		<div class="accordion pb-5" id="accordionExpenses">
-			<expense-list-item v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete">
+			<expense-list-item v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete" @add="this.addExpense">
 			</expense-list-item>
 		</div>
 
@@ -101,6 +101,11 @@ const ExpenseList = {
 			this.selectedExpense = expense;
 			const modal = new bootstrap.Modal(document.getElementById('deleteConfirm'));
 			modal.show();
+		},
+
+		addExpense(newExpense) {
+			const updatedExpenses = this.expenses.push(newExpense);
+			this.$emit('update', updatedExpenses);
 		},
 
 		goToSignin() {

@@ -72,6 +72,8 @@ const QuickRefoundButton = {
 		};
 	},
 
+	emits: ['create'],
+
 	methods: {
 		confirmRefound() {
 			console.log('INdex ', this.index);
@@ -110,7 +112,7 @@ const QuickRefoundButton = {
 
 			const res = await response.json();
 			console.log(res);
-			this.expenses = res;
+			this.$emit('create', this.expense);
 		},
 	},
 
