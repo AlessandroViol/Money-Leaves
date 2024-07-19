@@ -5,7 +5,7 @@ const Dashboard = {
 
 			<div class="container-fluid">
 				<div class="row">
-					<sidebar></sidebar>
+					<sidebar :active_page="'dashboard'"></sidebar>
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
 							<h1 class="h1 mt-3">Dashboard</h1>

@@ -36,9 +36,15 @@ const Sidebar = {
 
           <ul class="nav flex-column">
             <li class="nav-item">
-              <router-link to="/" class="nav-link d-flex align-items-center gap-2 active" aria-current="page">
+              <router-link to="/" class="nav-link d-flex align-items-center gap-2" :class="{'active': this.active_page === 'dashboard'}" aria-current="page">
                 <svg class="bi"><use xlink:href="#house-fill" /></svg>
                 Dashboard
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/users" class="nav-link d-flex align-items-center gap-2" :class="{'active': this.active_page === 'users'}" aria-current="page">
+                <svg class="bi"><use xlink:href="#people" /></svg>
+                Users
               </router-link>
             </li>
             <li class="nav-item">
@@ -52,12 +58,6 @@ const Sidebar = {
                 <svg class="bi"><use xlink:href="#cart" /></svg>
                 Products
               </a>
-            </li>
-            <li class="nav-item">
-              <router-link to="/users" class="nav-link d-flex align-items-center gap-2" aria-current="page">
-                <svg class="bi"><use xlink:href="#people" /></svg>
-                Users
-              </router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="#">
@@ -128,6 +128,13 @@ const Sidebar = {
       </div>
     </div>
   `,
+
+	props: {
+		active_page: {
+			type: String,
+			required: true,
+		},
+	},
 
 	methods: {
 		goToSignin() {
