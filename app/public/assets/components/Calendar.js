@@ -7,10 +7,10 @@ const Calendar = {
             <button class="btn cal-btn" type="button" @click="prevMonth">
               <svg class="bi" width="16" height="16"><use xlink:href="#arrow-left-short"/></svg>
             </button>
-						<select class="form-select cal-month-select" @change="monthSelect($event)">
+						<select class="form-select cal-month-select" v-model="currentMonth" @change="emitDate">
               <option v-for="(month, index) in monthNames" :key="month" :value="index">{{ month }}</option>
             </select>
-            <select class="form-select cal-year-select" @change="yearSelect($event)">
+            <select class="form-select cal-year-select" v-model="currentYear" @change="emitDate">
               <option v-for="year in yearRange" :key="year" :value="year">{{ year }}</option>
             </select>
             <button class="btn cal-btn" type="button" @click="nextMonth">
@@ -133,13 +133,7 @@ const Calendar = {
 			console.log('Selected Date:', this.currentDate);
 		},
 
-		monthSelect(event) {
-			this.currentMonth = event.target.value;
-			this.$emit('updateDate', { day: this.currentDate.getDate(), month: this.currentMonth + 1, year: this.currentYear });
-		},
-
-		yearSelect(event) {
-			this.currentMonth = event.target.value;
+		emitDate() {
 			this.$emit('updateDate', { day: this.currentDate.getDate(), month: this.currentMonth + 1, year: this.currentYear });
 		},
 	},
@@ -154,12 +148,12 @@ const Calendar = {
 				month: this.currentMonth,
 				year: this.currentYear,
 			});
-			this.$emit('updateDate', { day: this.currentDate.getDate(), month: this.currentMonth + 1, year: this.currentYear });
+			this.emitDate();
 		},
 	},
 
 	created: function () {
-		this.$emit('updateDate', { day: this.currentDate.getDate(), month: this.currentMonth + 1, year: this.currentYear });
+		this.emitDate();
 	},
 
 	emits: ['updateDate'],

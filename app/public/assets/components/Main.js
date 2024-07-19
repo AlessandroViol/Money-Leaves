@@ -25,19 +25,24 @@ const Dashboard = {
 									<button type="button" class="btn btn-sm btn-outline-secondary" @click="filterExpenses('last-month')">Last month</button>
 									<button type="button" class="btn btn-sm btn-outline-secondary" @click="filterExpenses('last-year')">Last year</button>
 								</div>
-								<button id="filter-calendar" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-									<svg class="bi">
-										<use xlink:href="#calendar3" />
-									</svg>
-								</button>
-								<div class="dropdown-menu py-0 border-0">
-									<calendar @updateDate="updateDate">
-										<div class="btn-group mx-5 mb-2">
-											<button class="btn btn-outline-primary" @click="filterExpenses('date')">Date</button>
-											<button class="btn btn-outline-primary" @click="filterExpenses('month')">Month</button>
-											<button class="btn btn-outline-primary" @click="filterExpenses('year')">Year</button>
-										</div>
-									</calendar>
+
+								<div class="btn-group">
+									<button id="filter-calendar" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" 
+										type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" 
+									>
+										<svg class="bi">
+											<use xlink:href="#calendar3" />
+										</svg>
+									</button>
+									<div class="dropdown-menu dropdown-menu-end py-0 border-0">
+										<calendar @updateDate="updateDate">
+											<div class="btn-group mx-5 mb-2">
+												<button class="btn btn-outline-primary" @click="filterExpenses('date')">Date</button>
+												<button class="btn btn-outline-primary" @click="filterExpenses('month')">Month</button>
+												<button class="btn btn-outline-primary" @click="filterExpenses('year')">Year</button>
+											</div>
+										</calendar>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -185,7 +190,8 @@ const Dashboard = {
 
 			if (filter === 'date' || filter === 'month' || filter === 'year') {
 				const dropdownElement = document.getElementById('filter-calendar');
-				const dropdownList = new bootstrap.Dropdown(dropdownElement).hide();
+				const dropdown = new bootstrap.Dropdown(dropdownElement);
+				dropdown.hide();
 			}
 
 			switch (filter) {
