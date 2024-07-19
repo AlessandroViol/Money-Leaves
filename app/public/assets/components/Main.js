@@ -25,7 +25,7 @@ const Dashboard = {
 									<button type="button" class="btn btn-sm btn-outline-secondary" @click="filterExpenses('last-month')">Last month</button>
 									<button type="button" class="btn btn-sm btn-outline-secondary" @click="filterExpenses('last-year')">Last year</button>
 								</div>
-								<button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+								<button id="filter-calendar" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 									<svg class="bi">
 										<use xlink:href="#calendar3" />
 									</svg>
@@ -151,7 +151,11 @@ const Dashboard = {
 
 			const res = await response.json();
 			console.log(res);
-			this.expenses = res;
+			this.expenses = res.sort((a, b) => {
+				const dateA = new Date(a.date.year, a.date.month - 1, a.date.day);
+				const dateB = new Date(b.date.year, b.date.month - 1, b.date.day);
+				return dateB - dateA;
+			});
 
 			this.updateData();
 		},
@@ -179,72 +183,51 @@ const Dashboard = {
 			console.log('Current Filter', this.currentFilter);
 			console.log('Selected Date', this.selectedDate);
 
-			if (
-				(filter === this.currentFilter) === 'date' &&
-				this.selectedDate.day === this.showedDate.day &&
-				this.selectedDate.month === this.showedDate.month &&
-				this.selectedDate.year === this.showedDate.year
-			) {
-				console.log('Same Date');
-				return;
+			if (filter === 'date' || filter === 'month' || filter === 'year') {
+				const dropdownElement = document.getElementById('filter-calendar');
+				const dropdownList = new bootstrap.Dropdown(dropdownElement).hide();
 			}
 
-			if (
-				(filter === this.currentFilter) === 'month' &&
-				this.selectedDate.month === this.showedDate.month &&
-				this.selectedDate.year === this.showedDate.year
-			) {
-				console.log('Same Month');
-				return;
-			}
+			switch (filter) {
+				case 'all':
+					this.showedDate = {};
+					this.currentFilter = 'all';
 
-			if ((filter === this.currentFilter) === 'year' && this.selectedDate.year === this.showedDate.year) {
-				console.log('Same Year');
-				return;
-			}
+					await this.getExpenses();
+					break;
+				case 'last-month':
+					this.showedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1 };
+					this.currentFilter = 'last-month';
 
-			if (filter !== this.currentFilter || (filter === this.currentFilter) === 'date') {
-				switch (filter) {
-					case 'all':
-						this.showedDate = {};
-						this.currentFilter = 'all';
+					await this.getExpenses(new Date().getFullYear(), new Date().getMonth() + 1);
+					break;
+				case 'last-year':
+					this.showedDate = { year: new Date().getFullYear() };
+					this.currentFilter = 'last-year';
 
-						await this.getExpenses();
-						break;
-					case 'last-month':
-						this.showedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1 };
-						this.currentFilter = 'last-month';
+					await this.getExpenses(new Date().getFullYear());
+					break;
+				case 'year':
+					this.showedDate = this.selectedDate;
+					this.currentFilter = 'year';
 
-						await this.getExpenses(new Date().getFullYear(), new Date().getMonth() + 1);
-						break;
-					case 'last-year':
-						this.showedDate = { year: new Date().getFullYear() };
-						this.currentFilter = 'last-year';
+					await this.getExpenses(this.selectedDate.year);
+					break;
+				case 'month':
+					this.showedDate = this.selectedDate;
+					this.currentFilter = 'month';
 
-						await this.getExpenses(new Date().getFullYear());
-						break;
-					case 'year':
-						this.showedDate = this.selectedDate;
-						this.currentFilter = 'year';
+					await this.getExpenses(this.selectedDate.year, this.selectedDate.month);
+					break;
+				case 'date':
+					this.showedDate = this.selectedDate;
+					this.currentFilter = 'date';
 
-						await this.getExpenses(this.selectedDate.year);
-						break;
-					case 'month':
-						this.showedDate = this.selectedDate;
-						this.currentFilter = 'month';
-
-						await this.getExpenses(this.selectedDate.year, this.selectedDate.month);
-						break;
-					case 'date':
-						this.showedDate = this.selectedDate;
-						this.currentFilter = 'date';
-
-						await this.getExpenses(this.selectedDate.year, this.selectedDate.month);
-						if (this.expenses.length > 0) {
-							this.expenses = this.expenses.filter((expense) => expense.date.day === this.selectedDate.day);
-						}
-						break;
-				}
+					await this.getExpenses(this.selectedDate.year, this.selectedDate.month);
+					if (this.expenses.length > 0) {
+						this.expenses = this.expenses.filter((expense) => expense.date.day === this.selectedDate.day);
+					}
+					break;
 			}
 		},
 	},
@@ -317,7 +300,11 @@ const Dashboard = {
 				const res = await response.json();
 				console.log('Displaying dashboard for: ', res.username);
 
-				this.expenses = res;
+				this.expenses = res.sort((a, b) => {
+					const dateA = new Date(a.date.year, a.date.month - 1, a.date.day);
+					const dateB = new Date(b.date.year, b.date.month - 1, b.date.day);
+					return dateB - dateA;
+				});
 			}
 		},
 	},
