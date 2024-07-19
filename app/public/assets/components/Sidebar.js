@@ -26,7 +26,7 @@ const Sidebar = {
           ></button>
         </div>
         
-        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+        <div class="offcanvas-body d-md-flex flex-column p-0 overflow-y-auto">
           <div class="navbar-brand me-0 px-3 fs-6 text-white d-flex align-items-center d-none d-md-block">
             <span class="material-symbols-outlined text-primary me-2">
               temp_preferences_eco
@@ -36,10 +36,10 @@ const Sidebar = {
 
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
+              <router-link to="/" class="nav-link d-flex align-items-center gap-2 active" aria-current="page">
                 <svg class="bi"><use xlink:href="#house-fill" /></svg>
                 Dashboard
-              </a>
+              </router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="#">
@@ -54,10 +54,10 @@ const Sidebar = {
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <router-link to="/users" class="nav-link d-flex align-items-center gap-2" aria-current="page">
                 <svg class="bi"><use xlink:href="#people" /></svg>
-                Customers
-              </a>
+                Users
+              </router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="#">
@@ -129,11 +129,11 @@ const Sidebar = {
     </div>
   `,
 
-  methods: {
-    goToSignin() {
+	methods: {
+		goToSignin() {
 			this.$router.push({ path: '/signin' });
-		}
-  }
+		},
+	},
 };
 
 export default Sidebar;
