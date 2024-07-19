@@ -8,31 +8,41 @@ const Dashboard = {
 					<sidebar></sidebar>
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
-						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 							<h1 class="h1">Dashboard</h1>
-							
-							<div class="btn-toolbar mb-2 mb-md-0">
-								<div class="btn-group me-2">
-									<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-									<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-								</div>
-								<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-									<svg class="bi"><use xlink:href="#calendar3" /></svg>
-									This week
-								</button>
-							</div>
-							
-						</div>
-						
 						<h2 class="mt-2">Welcome back <span class="text-primary">{{name}}</span>!</h2>
 
 						<div class="my-4">
 							<h3>Balance</h3>
 							<balance :balance="balance"></balance>
 						</div>
-						<h2 class="mb-2">Expenses</h2>
-						<expense-line-chart :expenses="expenses"></expense-line-chart>
 
+						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+							<h2 class="mb-2">Expenses</h2>
+							
+							<div class="btn-toolbar mb-2 mb-md-0">
+								<div class="btn-group me-2">
+									<button type="button" class="btn btn-sm btn-outline-secondary" @click="filterExpenses('all')">All</button>
+									<button type="button" class="btn btn-sm btn-outline-secondary" @click="filterExpenses('last-month')">Last month</button>
+									<button type="button" class="btn btn-sm btn-outline-secondary" @click="filterExpenses('last-year')">Last year</button>
+								</div>
+								<button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+									<svg class="bi">
+										<use xlink:href="#calendar3" />
+									</svg>
+								</button>
+								<div class="dropdown-menu py-0 border-0">
+									<calendar @updateDate="updateDate">
+										<div class="btn-group mx-5 mb-2">
+											<button class="btn btn-outline-primary" @click="filterExpenses('date')">Date</button>
+											<button class="btn btn-outline-primary" @click="filterExpenses('month')">Month</button>
+											<button class="btn btn-outline-primary" @click="filterExpenses('year')">Year</button>
+										</div>
+									</calendar>
+								</div>
+							</div>
+						</div>
+
+						<expense-line-chart :expenses="expenses"></expense-line-chart>
 						<h3>Expense list</h3>
 						<expense-list :expenses="expenses" :username="username" @update="updateExpenses"></expense-list>
 					</section>
@@ -56,6 +66,9 @@ const Dashboard = {
 				refounded: 0,
 				received: 0,
 			},
+			selectedDate: {},
+			showedDate: {},
+			currentFilter: 'all',
 		};
 	},
 
@@ -86,8 +99,17 @@ const Dashboard = {
 			this.balance = res;
 		},
 
-		async getExpenses() {
-			const response = await fetch('/api/budget/', {
+		async getExpenses(year, month) {
+			let apiPath;
+			if (!year) {
+				apiPath = '/api/budget/';
+			} else if (!month) {
+				apiPath = `/api/budget/${year}`;
+			} else {
+				apiPath = `/api/budget/${year}/${month}`;
+			}
+
+			const response = await fetch(apiPath, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -125,6 +147,85 @@ const Dashboard = {
 
 		updateData() {
 			this.getBalance();
+		},
+
+		updateDate(date) {
+			console.log('Date', date);
+			this.selectedDate = date;
+		},
+
+		async filterExpenses(filter) {
+			console.log('Filter', filter);
+			console.log('Current Filter', this.currentFilter);
+			console.log('Selected Date', this.selectedDate);
+
+			if (
+				(filter === this.currentFilter) === 'date' &&
+				this.selectedDate.day === this.showedDate.day &&
+				this.selectedDate.month === this.showedDate.month &&
+				this.selectedDate.year === this.showedDate.year
+			) {
+				console.log('Same Date');
+				return;
+			}
+
+			if (
+				(filter === this.currentFilter) === 'month' &&
+				this.selectedDate.month === this.showedDate.month &&
+				this.selectedDate.year === this.showedDate.year
+			) {
+				console.log('Same Month');
+				return;
+			}
+
+			if ((filter === this.currentFilter) === 'year' && this.selectedDate.year === this.showedDate.year) {
+				console.log('Same Year');
+				return;
+			}
+
+			if (filter !== this.currentFilter || (filter === this.currentFilter) === 'date') {
+				switch (filter) {
+					case 'all':
+						this.showedDate = {};
+						this.currentFilter = 'all';
+
+						await this.getExpenses();
+						break;
+					case 'last-month':
+						this.showedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1 };
+						this.currentFilter = 'last-month';
+
+						await this.getExpenses(new Date().getFullYear(), new Date().getMonth() + 1);
+						break;
+					case 'last-year':
+						this.showedDate = { year: new Date().getFullYear() };
+						this.currentFilter = 'last-year';
+
+						await this.getExpenses(new Date().getFullYear());
+						break;
+					case 'year':
+						this.showedDate = this.selectedDate;
+						this.currentFilter = 'year';
+
+						await this.getExpenses(this.selectedDate.year);
+						break;
+					case 'month':
+						this.showedDate = this.selectedDate;
+						this.currentFilter = 'month';
+
+						await this.getExpenses(this.selectedDate.year, this.selectedDate.month);
+						break;
+					case 'date':
+						this.showedDate = this.selectedDate;
+						this.currentFilter = 'date';
+
+						await this.getExpenses(this.selectedDate.year, this.selectedDate.month);
+						if (this.expenses.length > 0) {
+							this.expenses = this.expenses.filter((expense) => expense.date.day === this.selectedDate.day);
+						}
+						break;
+				}
+			}
 		},
 	},
 

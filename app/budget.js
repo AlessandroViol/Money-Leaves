@@ -36,7 +36,7 @@ function isDateValid({ year, month = 1, day = 1 }) {
 async function verifyExpense(req, res, next) {
 	const expense = {
 		payer_id: req.body.payer_id,
-		total_cost: parseInt(req.body.total_cost),
+		total_cost: parseFloat(req.body.total_cost),
 		description: req.body.description,
 		category: req.body.category,
 		date: {
@@ -314,7 +314,7 @@ router.get('/:year/:month/:id', verifyUser, async (req, res) => {
 router.post('/:year/:month', verifyUser, verifyExpense, async (req, res) => {
 	const newExpense = {
 		payer_id: req.body.payer_id,
-		total_cost: parseInt(req.body.total_cost),
+		total_cost: parseFloat(req.body.total_cost),
 		description: req.body.description,
 		category: req.body.category,
 		date: {
@@ -339,7 +339,7 @@ router.put('/:year/:month/:id', verifyUser, verifyExpense, async (req, res) => {
 
 	const expense_id = req.params.id;
 	const payer_id = req.body.payer_id;
-	const total_cost = parseInt(req.body.total_cost);
+	const total_cost = parseFloat(req.body.total_cost);
 	const description = req.body.description;
 	const category = req.body.category;
 	const year = parseInt(req.params.year);

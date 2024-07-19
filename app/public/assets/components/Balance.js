@@ -16,6 +16,7 @@ const Balance = {
               </span>
             </h5>
             <p class="card-text">{{ this.balance.totalExpense.toFixed(2) }} €</p>
+
             <h5 class="card-title">
               <span 
               data-bs-toggle="tooltip"
@@ -27,9 +28,14 @@ const Balance = {
               </span>
             </h5>
             <p class="card-text">{{ this.balance.payed.toFixed(2) }} €</p>
+
+            <hr/>
+            <h5 class="card-title">Total</h5>
+            <p class="card-text">{{ this.balance.totalExpense.toFixed(2) - this.balance.payed.toFixed(2) }} €</p>
           </div>
         </div>
       </div>
+
       <div class="col">
         <div class="card border-secondary m-3" style="max-width: 18rem; min-width: 10rem;">
           <div class="card-header text-secondary h5">Pending</div>
@@ -45,6 +51,7 @@ const Balance = {
               </span>
             </h5>
             <p class="card-text">{{ this.balance.debt.toFixed(2) }} €</p>
+
             <h5 class="card-title">
               <span 
                 data-bs-toggle="tooltip"
@@ -56,9 +63,14 @@ const Balance = {
               </span>
             </h5>
             <p class="card-text">{{ this.balance.expectedBack.toFixed(2) }} €</p>
+
+            <hr/>
+            <h5 class="card-title">Total</h5>
+            <p class="card-text">{{ parseFloat(this.balance.debt.toFixed(2)) + parseFloat(this.balance.expectedBack.toFixed(2)) }} €</p>
           </div>
         </div>
       </div>
+
       <div class="col">
         <div class="card border-danger m-3" style="max-width: 18rem; min-width: 10rem;">
           <div class="card-header text-danger h5">Refounds</div>
@@ -74,6 +86,7 @@ const Balance = {
               </span>
             </h5>
             <p class="card-text">{{ this.balance.refounded.toFixed(2) }} €</p>
+
             <h5 class="card-title">
               <span 
                 data-bs-toggle="tooltip"
@@ -85,6 +98,10 @@ const Balance = {
               </span>
             </h5>
             <p class="card-text">{{ this.balance.received.toFixed(2) }} €</p>
+            
+            <hr/>
+            <h5 class="card-title">Total</h5>
+            <p class="card-text">{{ parseFloat(this.balance.refounded.toFixed(2)) + parseFloat(this.balance.received.toFixed(2)) }} €</p>
           </div>
         </div>
       </div>
@@ -97,10 +114,6 @@ const Balance = {
 			required: true,
 		},
 	},
-
-	data: function () {},
-
-	methods: {},
 
 	mounted: function () {
 		const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
