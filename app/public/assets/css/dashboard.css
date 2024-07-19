@@ -34,6 +34,12 @@
   }
 }
 
+[data-bs-theme="light"] {
+  .search-icon {
+    color: var(--bs-black)
+  }
+}
+
 .sidebar .nav-link {
   font-size: .875rem;
   font-weight: 500;

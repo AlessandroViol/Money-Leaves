@@ -43,7 +43,33 @@ const Dashboard = {
 						</div>
 
 						<expense-line-chart :expenses="expenses"></expense-line-chart>
-						<h3>Expense list</h3>
+						<div class="d-flex justify-content-between">
+							<h3>Expense list</h3>
+							<div>
+								<button
+									class="nav-link px-3 text-white"
+									type="button"
+									data-bs-toggle="collapse"
+									data-bs-target="#expenseSearch"
+									aria-controls="expenseSearch"
+									aria-expanded="false"
+									aria-label="Toggle search"
+								>
+									<svg class="bi align-middle search-icon"><use xlink:href="#search" /></svg>
+								</button>
+							</div>
+						</div>
+						<div id="expenseSearch" class="rounded-bottom shadow mb-3 w-100 collapse">
+							<input class="py-3 rounded-bottom bg-body-secondary form-control w-100 rounded-0 border-0" type="text" list="datalistOptions" placeholder="Search" aria-label="Search" v-model="query"/>
+							<datalist id="datalistOptions">
+								<option value="San Francisco">
+								<option value="New York">
+								<option value="Seattle">
+								<option value="Los Angeles">
+								<option value="Chicago">
+							</datalist>
+						</div>
+						
 						<expense-list :expenses="expenses" :username="username" @update="updateExpenses"></expense-list>
 					</section>
 				</div>
@@ -69,6 +95,7 @@ const Dashboard = {
 			selectedDate: {},
 			showedDate: {},
 			currentFilter: 'all',
+			query: '',
 		};
 	},
 
@@ -265,6 +292,41 @@ const Dashboard = {
 
 	mounted: async function () {
 		await this.getExpenses();
+	},
+
+	watch: {
+		async query(value) {
+			if (value === '') {
+				await getExpenses();
+				return;
+			}
+			const response = await fetch(`/api/budget/search?q=${value}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (response.status === 403) {
+				console.error('403 Forbidden: user not authenticated');
+				this.goToSignin();
+				return;
+			}
+
+			if (!response.ok) {
+				const errorMessage = `Error: ${response.statusText}`;
+				this.$router.push({ path: `/error/${errorMessage}` });
+				console.error(errorMessage);
+				return;
+			}
+
+			if (response.ok) {
+				const res = await response.json();
+				console.log('Displaying dashboard for: ', res.username);
+
+				this.expenses = res;
+			}
+		},
 	},
 };
 
