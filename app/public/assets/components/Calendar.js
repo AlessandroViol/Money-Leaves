@@ -150,10 +150,6 @@ const Calendar = {
 	},
 
 	emits: ['updateDate'],
-
-	created() {
-		this.currentMonthName = this.monthNames[this.currentMonth];
-	},
 };
 
 export default Calendar;

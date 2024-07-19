@@ -25,7 +25,7 @@ const ExpenseList = {
 		</header>
 		<hr class="m-2"/>
 		<div class="accordion pb-5" id="accordionExpenses">
-			<expense-list-item v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @delete="this.confirmDelete" @add="this.addExpense">
+			<expense-list-item v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @deleteExpense="this.confirmDelete" @addExpense="this.addExpense">
 			</expense-list-item>
 		</div>
 
@@ -89,7 +89,7 @@ const ExpenseList = {
 				const updatedExpenses = this.expenses.filter((expense) => expense._id !== this.selectedExpense._id);
 				console.log('Deleted. New expenses: ', updatedExpenses);
 				this.selectedExpense = {};
-				this.$emit('update', updatedExpenses);
+				this.$emit('updateExpenses', updatedExpenses);
 			}
 
 			const res = await response.json();
@@ -104,8 +104,8 @@ const ExpenseList = {
 		},
 
 		addExpense(newExpense) {
-			const updatedExpenses = this.expenses.push(newExpense);
-			this.$emit('update', updatedExpenses);
+			this.expenses.push(newExpense);
+			this.$emit('updateExpenses', this.expenses);
 		},
 
 		goToSignin() {
@@ -113,7 +113,7 @@ const ExpenseList = {
 		},
 	},
 
-	emits: ['update'],
+	emits: ['updateExpenses'],
 };
 
 export default ExpenseList;

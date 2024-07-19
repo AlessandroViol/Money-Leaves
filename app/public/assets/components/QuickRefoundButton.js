@@ -72,7 +72,7 @@ const QuickRefoundButton = {
 		};
 	},
 
-	emits: ['create'],
+	emits: ['addRefound'],
 
 	methods: {
 		confirmRefound() {
@@ -112,7 +112,8 @@ const QuickRefoundButton = {
 
 			const res = await response.json();
 			console.log(res);
-			this.$emit('create', this.expense);
+			this.expense._id = res.insertedId;
+			this.$emit('addRefound', this.expense);
 		},
 	},
 

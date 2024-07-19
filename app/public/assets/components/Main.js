@@ -63,7 +63,7 @@ const Dashboard = {
 							<input class="py-3 rounded-bottom bg-body-secondary form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search" v-model="query"/>
 						</div>
 						
-						<expense-list :expenses="expenses" :username="username" @update="updateExpenses"></expense-list>
+						<expense-list :expenses="expenses" :username="username" @updateExpenses="updateExpenses"></expense-list>
 					</section>
 				</div>
 			</div>
