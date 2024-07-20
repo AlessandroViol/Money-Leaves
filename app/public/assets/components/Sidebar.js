@@ -48,15 +48,15 @@ const Sidebar = {
               </router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
-                <svg class="bi"><use xlink:href="#file-earmark" /></svg>
-                Orders
-              </a>
+              <router-link to="/create" class="nav-link d-flex align-items-center gap-2" :class="{'active': this.active_page === 'new-expense'}" aria-current="page">
+                <svg class="bi"><use xlink:href="#cart" /></svg>
+                New Expense
+              </router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="#">
-                <svg class="bi"><use xlink:href="#cart" /></svg>
-                Products
+                <svg class="bi"><use xlink:href="#file-earmark" /></svg>
+                Orders
               </a>
             </li>
             <li class="nav-item">
