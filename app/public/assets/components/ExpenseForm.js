@@ -4,7 +4,7 @@ const ExpenseForm = {
       <label for="payer_id" class="form-label">Payer username</label>
       <div class="input-group mb-3">
         <span class="input-group-text" id="payer_id">@</span>
-        <input type="text" class="form-control" :value="username" aria-label="Payer Username" aria-describedby="payer_id" readonly>
+        <input type="text" class="form-control" :value="expense.payer_id" aria-label="Payer Username" aria-describedby="payer_id" readonly>
       </div>
       
       <label for="total_cost" class="form-label">Total</label>
@@ -13,14 +13,14 @@ const ExpenseForm = {
           type="number" 
           class="form-control" 
           aria-label="Euros amount (with dot and two decimal places)" 
-          v-model.number="total_cost"
+          v-model.number="expense.total_cost"
           min="0" max="2000" 
         >
         <span class="input-group-text" id="total_cost">€</span>
       </div>
 
       <label for="category" class="form-label">Category</label>
-      <select class="form-select mb-3" v-model="selected_category" aria-label="Default select example">
+      <select class="form-select mb-3" v-model="expense.category" aria-label="Default select example">
         <option disabled value="">Select a category</option>
         <option v-for="category in categories" :value="category">{{category}}</option>
       </select>
@@ -44,7 +44,7 @@ const ExpenseForm = {
 
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" id="description" rows="3" v-model="description" placeholder="Expense's description"></textarea>
+        <textarea class="form-control" id="description" rows="3" v-model="expense.description" placeholder="Expense's description"></textarea>
       </div>
 
       <div class="bg-body-tertiary px-4 pb-2 rounded-3">
@@ -54,7 +54,7 @@ const ExpenseForm = {
             <span class="col text-end">Quota</span>
           </div>
         </header>
-        <div class="row py-2 d-flex flex-row border-top" v-for="contributor in contributors">
+        <div class="row py-2 d-flex flex-row border-top" v-for="contributor in expense.contributors">
           <span class="col" :class="{'text-primary fw-medium': isCurrentUser(contributor.user_id)}">
             @{{ contributor.user_id }}
           </span>
@@ -69,6 +69,7 @@ const ExpenseForm = {
                   class="form-control" 
                   aria-label="Euros amount (with dot and two decimal places)" 
                   v-model.number="contributor.quota"
+                  @input="updateQuota"
                   min="-2000" max="2000" 
                 >
                 <span class="input-group-text" id="quota">€</span>
@@ -105,7 +106,7 @@ const ExpenseForm = {
 
             <div class="px-3">
               <div v-for="user in userList">
-                <div class="row py-2 d-flex flex-row border-bottom" v-if="user._id !== username">
+                <div class="row py-2 d-flex flex-row border-bottom" v-if="!isCurrentUser(user._id)">
                   <span class="col">
                     @{{ user._id }}
                   </span>
@@ -136,9 +137,6 @@ const ExpenseForm = {
 
 	data: function () {
 		return {
-			username: this.defaultValues.payer_id,
-
-			total_cost: this.defaultValues.total_cost,
 			categories: [
 				'Refound',
 				'Food and beverages',
@@ -148,11 +146,6 @@ const ExpenseForm = {
 				'Travel',
 				'Present',
 			],
-			selected_category: this.defaultValues.category,
-			selected_date: this.defaultValues.date,
-			description: this.defaultValues.description,
-
-			contributors: this.defaultValues.contributors,
 
 			query: '',
 			userList: [],
@@ -171,25 +164,32 @@ const ExpenseForm = {
 	methods: {
 		updateDate(date) {
 			console.log('Date', date);
-			this.selected_date = date;
+			this.expense.date = date;
+		},
+
+		updateQuota() {
+			this.expense.contributors[0].quota =
+				this.expense.total_cost -
+				this.expense.contributors.reduce((sumOfQuotas, { quota }) => sumOfQuotas + quota, 0) +
+				this.expense.contributors[0].quota;
 		},
 
 		isCurrentUser(user_id) {
-			return user_id === this.username;
+			return user_id === this.expense.payer_id;
 		},
 
 		isContributor(user_id) {
-			return this.contributors.find((contributor) => contributor.user_id === user_id);
+			return this.expense.contributors.find((contributor) => contributor.user_id === user_id);
 		},
 
 		addContributor(user_id) {
 			if (!this.isContributor(user_id)) {
-				this.contributors.push({ user_id, quota: 0 });
+				this.expense.contributors.push({ user_id, quota: 0 });
 			}
 		},
 
 		removeContributor(user_id) {
-			this.contributors = this.contributors.filter((contributor) => contributor.user_id !== user_id);
+			this.expense.contributors = this.expense.contributors.filter((contributor) => contributor.user_id !== user_id);
 		},
 
 		collapseSearch() {
@@ -200,17 +200,19 @@ const ExpenseForm = {
 
 	computed: {
 		date_string() {
-			return `${this.selected_date.day}/${this.selected_date.month}/${this.selected_date.year}`;
+			return `${this.expense.date.day}/${this.expense.date.month}/${this.expense.date.year}`;
 		},
 	},
 
 	watch: {
-		total_cost(value) {
-			this.contributors[0].quota =
-				value - this.contributors.reduce((sumOfQuotas, { quota }) => sumOfQuotas + quota, 0) + this.contributors[0].quota;
+		'expense.total_cost'(value) {
+			let payer_quota =
+				value -
+				this.expense.contributors.reduce((sumOfQuotas, { quota }) => sumOfQuotas + quota, 0) +
+				this.expense.contributors[0].quota;
 
+			this.expense.contributors[0].quota = payer_quota;
 			this.expense.total_cost = value;
-			this.expense.contributors[0].quota = this.contributors[0].quota;
 		},
 
 		async query(value) {
