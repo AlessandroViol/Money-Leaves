@@ -9,22 +9,7 @@ const Users = {
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
             <h1 class="h1 mt-3">Users</h1>
-						<div class="d-flex justify-content-between">
-							<div>
-								<button
-									class="nav-link px-3 text-white"
-									type="button"
-									data-bs-toggle="collapse"
-									data-bs-target="#expenseSearch"
-									aria-controls="expenseSearch"
-									aria-expanded="false"
-									aria-label="Toggle search"
-								>
-									<svg class="bi align-middle search-icon"><use xlink:href="#search" /></svg>
-								</button>
-							</div>
-						</div>
-						<div id="expenseSearch" class="rounded shadow mb-3 w-100 collapse">
+						<div id="expenseSearch" class="rounded shadow mb-3 w-100">
 							<input class="py-3 rounded bg-body-secondary form-control w-100 border-0" type="text" placeholder="Search" aria-label="Search" v-model="query"/>
 						</div>
 

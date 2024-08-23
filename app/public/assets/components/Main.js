@@ -47,7 +47,7 @@ const Dashboard = {
 							</div>
 						</div>
 
-						<expense-line-chart :expenses="expenses"></expense-line-chart>
+						<expense-line-chart :expenses="expenses" :username="username"></expense-line-chart>
 						<div class="d-flex justify-content-between">
 							<h3>Expense list</h3>
 							<div>
