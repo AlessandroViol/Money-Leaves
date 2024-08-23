@@ -30,7 +30,7 @@ const CreateExpense = {
 										<expense :expense="expense" :username="username"></expense> 
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-primary mx-auto" >Yes</button>
+										<button type="button" class="btn btn-primary mx-auto" @click="createExpense">Create</button>
 										<button type="button" class="btn btn-secondary mx-auto" data-bs-dismiss="modal">Cancel</button>
 									</div>
 								</div>
@@ -62,17 +62,42 @@ const CreateExpense = {
 		},
 
 		confirmExpense() {
-			console.log('Expense created: ', this.expense);
-
 			const modal = new bootstrap.Modal(document.getElementById(`createExpenseConfirm`));
 			modal.show();
+		},
+
+		async createExpense() {
+			console.log('Adding expense :', this.expense);
+			const response = await fetch(`/api/budget/${this.expense.date.year}/${this.expense.date.month}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(this.expense),
+			});
+
+			if (response.status === 403) {
+				console.error('403 Forbidden: user not authenticated');
+				this.goToSignin();
+				return;
+			}
+
+			if (!response.ok) {
+				const errorMessage = `Error: ${response.statusText}`;
+				this.$router.push({ path: `/error/${errorMessage}` });
+				console.error(errorMessage);
+				return;
+			}
+
+			const res = await response.json();
+			console.log(res);
+			this.$router.push({ path: '/' });
 		},
 	},
 
 	watch: {},
 
 	created: async function () {
-		console.log('created');
 		const response = await fetch('/api/budget/whoami', {
 			method: 'GET',
 			headers: {
