@@ -168,10 +168,7 @@ const ExpenseForm = {
 		},
 
 		updateQuota() {
-			this.expense.contributors[0].quota =
-				this.expense.total_cost -
-				this.expense.contributors.reduce((sumOfQuotas, { quota }) => sumOfQuotas + quota, 0) +
-				this.expense.contributors[0].quota;
+			this.expense.contributors[0].quota = this.payer_quota;
 		},
 
 		isCurrentUser(user_id) {
@@ -199,20 +196,49 @@ const ExpenseForm = {
 	},
 
 	computed: {
+		payer_quota() {
+			return (
+				this.expense.total_cost -
+				this.expense.contributors.reduce((sumOfQuotas, { quota }) => sumOfQuotas + quota, 0) +
+				this.expense.contributors[0].quota
+			);
+		},
+
 		date_string() {
 			return `${this.expense.date.day}/${this.expense.date.month}/${this.expense.date.year}`;
 		},
 	},
 
-	watch: {
-		'expense.total_cost'(value) {
-			let payer_quota =
-				value -
-				this.expense.contributors.reduce((sumOfQuotas, { quota }) => sumOfQuotas + quota, 0) +
-				this.expense.contributors[0].quota;
+	emits: ['editedExpense'],
 
-			this.expense.contributors[0].quota = payer_quota;
-			this.expense.total_cost = value;
+	watch: {
+		'expense.total_cost'() {
+			this.expense.contributors[0].quota = this.payer_quota;
+			this.$emit('editedExpense', this.expense);
+		},
+
+		expense: {
+			a: `'expense.category'() {
+        this.$emit('editedExpense', this.expense);
+      },
+      
+      'expense.description'() {
+        this.$emit('editedExpense', this.expense);
+      },
+
+      'expense.date'() {
+        this.$emit('editedExpense', this.expense);
+      },
+
+      'expense.contributors'() {
+        this.$emit('editedExpense', this.expense);
+      },`,
+
+			handler(newValue, oldValue) {
+				this.$emit('editedExpense', oldValue);
+			},
+
+			deep: true,
 		},
 
 		async query(value) {

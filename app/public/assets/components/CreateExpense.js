@@ -13,7 +13,7 @@ const CreateExpense = {
 							<h1 class="h1">New Expense</h1>
 						</div>
 						
-						<expense-form :defaultValues="expense"></expense-form>
+						<expense-form :defaultValues="expense" @editedExpense="updateExpense"></expense-form>
 
 						<div>
 							<button type="button" class="btn btn-sm btn-primary" @click="confirmExpense">Create Expense</button>
@@ -55,6 +55,10 @@ const CreateExpense = {
 	methods: {
 		goToSignin() {
 			this.$router.push({ path: '/signin' });
+		},
+
+		updateExpense(newExpense) {
+			this.expense = newExpense;
 		},
 
 		confirmExpense() {
