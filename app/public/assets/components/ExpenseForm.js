@@ -151,6 +151,7 @@ const ExpenseForm = {
 			userList: [],
 
 			expense: {
+				_id: this.defaultValues._id,
 				payer_id: this.defaultValues.payer_id,
 				total_cost: this.defaultValues.total_cost,
 				description: this.defaultValues.description,

@@ -44,6 +44,7 @@ const ExpenseListItem = {
         <div class="accordion-body">
 
 					<expense :expense="expense" :username="this.username"></expense> 
+					<edit-expense :oldExpense="expense" v-if="isUserPayer()"></edit-expense>
 					<button type="button" class="btn btn-sm btn-danger" v-if="isUserPayer()" @click="deleteExpense">Delete</button>
 					<quick-refound-button v-if="!isUserPayer() && expense.category !== 'Refound'" 
 						:username="this.username" 

@@ -67,6 +67,9 @@ const CreateExpense = {
 		},
 
 		async createExpense() {
+			const modal = new bootstrap.Modal(document.getElementById(`createExpenseConfirm`));
+			modal.hide();
+
 			console.log('Adding expense :', this.expense);
 			const response = await fetch(`/api/budget/${this.expense.date.year}/${this.expense.date.month}`, {
 				method: 'POST',

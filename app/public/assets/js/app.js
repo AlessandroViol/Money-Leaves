@@ -11,6 +11,7 @@ import Expense from '../components/Expense.js';
 import ExpenseDate from '../components/ExpenseDate.js';
 import Calendar from '../components/Calendar.js';
 import ExpenseForm from '../components/ExpenseForm.js';
+import EditExpense from '../components/EditExpense.js';
 
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
@@ -51,6 +52,7 @@ app.component('expense', Expense);
 app.component('quick-refound-button', QuickRefoundButton);
 app.component('calendar', Calendar);
 app.component('expense-form', ExpenseForm);
+app.component('edit-expense', EditExpense);
 
 // Mount the Vue application
 app.mount('#app');
