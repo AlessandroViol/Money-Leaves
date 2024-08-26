@@ -1,3 +1,5 @@
+import { apiEditExpense } from '../js/serverInteractions.js';
+
 const EditExpense = {
 	template: `
     <div>
@@ -51,37 +53,10 @@ const EditExpense = {
 		},
 
 		async editExpense() {
-			const modal = new bootstrap.Modal(document.getElementById(`editExpenseConfirm${this.index}`));
+			const modal = bootstrap.Modal.getInstance(document.getElementById(`editExpenseConfirm${this.index}`));
 			modal.hide();
 
-			console.log('Adding expense :', this.newExpense);
-			const response = await fetch(
-				`/api/budget/${this.newExpense.date.year}/${this.newExpense.date.month}/${this.newExpense._id}`,
-				{
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(this.newExpense),
-				}
-			);
-
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
-			}
-
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			const res = await response.json();
-			console.log(res);
-			this.$router.push({ path: '/' });
+			await apiEditExpense(this.newExpense, this.$router);
 		},
 	},
 };

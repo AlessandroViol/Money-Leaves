@@ -1,3 +1,5 @@
+import { apiQueryUser } from '../js/serverInteractions.js';
+
 const ExpenseForm = {
 	template: `
     <div class="my-4">
@@ -219,22 +221,6 @@ const ExpenseForm = {
 		},
 
 		expense: {
-			a: `'expense.category'() {
-        this.$emit('editedExpense', this.expense);
-      },
-      
-      'expense.description'() {
-        this.$emit('editedExpense', this.expense);
-      },
-
-      'expense.date'() {
-        this.$emit('editedExpense', this.expense);
-      },
-
-      'expense.contributors'() {
-        this.$emit('editedExpense', this.expense);
-      },`,
-
 			handler(newValue, oldValue) {
 				this.$emit('editedExpense', oldValue);
 			},
@@ -247,30 +233,10 @@ const ExpenseForm = {
 				this.userList = [];
 				return;
 			}
-			const response = await fetch(`/api/users/search?q=${value}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
 
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
-			}
+			const res = await apiQueryUser(value, this.$router);
 
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			if (response.ok) {
-				const res = await response.json();
-				console.log('Users: ', res);
-
+			if (res) {
 				this.userList = res;
 			}
 		},

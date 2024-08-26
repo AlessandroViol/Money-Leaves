@@ -1,3 +1,5 @@
+import { apiDeleteExpense } from '../js/serverInteractions.js';
+
 const ExpenseList = {
 	template: `
 		<header class="" style="padding-left:1.25rem; padding-right:2.5rem;">
@@ -25,7 +27,14 @@ const ExpenseList = {
 		</header>
 		<hr class="m-2"/>
 		<div class="accordion pb-5" id="accordionExpenses">
-			<expense-list-item v-for="(expense, index) in this.expenses" :expense="expense" :username="this.username" :index="index" @deleteExpense="this.confirmDelete" @addExpense="this.addExpense">
+			<expense-list-item 
+				v-for="(expense, index) in this.expenses" 
+				:expense="expense" 
+				:username="this.username" 
+				:index="index" 
+				@deleteExpense="this.confirmDelete" 
+				@addExpense="this.addExpense"
+			>
 			</expense-list-item>
 		</div>
 
@@ -66,46 +75,38 @@ const ExpenseList = {
 	},
 
 	methods: {
+		confirmDelete(expense) {
+			const modal = new bootstrap.Modal(document.getElementById('deleteConfirm'));
+			modal.show();
+
+			console.log(expense);
+			this.selectedExpense = expense;
+		},
+
 		async deleteExpense() {
 			const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirm'));
 			modal.hide();
-			const response = await fetch(
-				`/api/budget/${this.selectedExpense.date.year}/${this.selectedExpense.date.month}/${this.selectedExpense._id}`,
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
 
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated'); ///////////////////////////////////////////////not trueeee user may not be the payer
-				this.goToSignin();
-				return;
-			}
+			const collapseElementList = document.querySelectorAll('.accordion-collapse.show');
+			const collapseList = [...collapseElementList].map((collapseEl) => new bootstrap.Collapse(collapseEl));
 
-			if (response.ok) {
+			const res = await apiDeleteExpense(this.selectedExpense, this.$router);
+
+			if (res && res.deletedCount > 0) {
 				const updatedExpenses = this.expenses.filter((expense) => expense._id !== this.selectedExpense._id);
-				console.log('Deleted. New expenses: ', updatedExpenses);
 				this.selectedExpense = {};
+
+				console.log('Expense deleted. New expenses: ', updatedExpenses);
 				this.$emit('updateExpenses', updatedExpenses);
 			}
-
-			const res = await response.json();
-			console.log(res);
-		},
-
-		confirmDelete(expense) {
-			console.log(expense);
-			this.selectedExpense = expense;
-			const modal = new bootstrap.Modal(document.getElementById('deleteConfirm'));
-			modal.show();
 		},
 
 		addExpense(newExpense) {
 			this.expenses.push(newExpense);
 			this.$emit('updateExpenses', this.expenses);
+
+			const collapseElementList = document.querySelectorAll('.accordion-collapse.show');
+			const collapseList = [...collapseElementList].map((collapseEl) => new bootstrap.Collapse(collapseEl));
 		},
 
 		goToSignin() {

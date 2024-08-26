@@ -1,3 +1,5 @@
+import { apiCreateExpense, apiWhoAmI } from '../js/serverInteractions.js';
+
 const CreateExpense = {
 	template: `
 		<section class="bg-body d-flex flex-column vh-100">
@@ -53,10 +55,6 @@ const CreateExpense = {
 	},
 
 	methods: {
-		goToSignin() {
-			this.$router.push({ path: '/signin' });
-		},
-
 		updateExpense(newExpense) {
 			this.expense = newExpense;
 		},
@@ -67,62 +65,24 @@ const CreateExpense = {
 		},
 
 		async createExpense() {
-			const modal = new bootstrap.Modal(document.getElementById(`createExpenseConfirm`));
+			const modal = bootstrap.Modal.getInstance(document.getElementById(`createExpenseConfirm`));
 			modal.hide();
 
-			console.log('Adding expense :', this.expense);
-			const response = await fetch(`/api/budget/${this.expense.date.year}/${this.expense.date.month}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(this.expense),
-			});
-
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
+			const res = await apiCreateExpense(this.expense, this.$router);
+			if (res) {
+				this.$router.push({ path: '/' });
 			}
-
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			const res = await response.json();
-			console.log(res);
-			this.$router.push({ path: '/' });
 		},
 	},
 
 	watch: {},
 
 	created: async function () {
-		const response = await fetch('/api/budget/whoami', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		console.log('created');
 
-		if (response.status === 403) {
-			console.error('403 Forbidden: user not authenticated');
-			this.goToSignin();
-			return;
-		}
+		const res = await apiWhoAmI(this.$router);
 
-		if (!response.ok) {
-			const errorMessage = `Error: ${response.statusText}`;
-			this.$router.push({ path: `/error/${errorMessage}` });
-			console.error(errorMessage);
-			return;
-		}
-
-		if (response.ok) {
-			const res = await response.json();
+		if (res) {
 			this.username = res.username;
 
 			this.expense = {

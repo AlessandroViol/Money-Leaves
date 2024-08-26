@@ -1,3 +1,5 @@
+import { apiGetBalance, apiGetExpenses, apiQueryExpense, apiWhoAmI } from '../js/serverInteractions.js';
+
 const Dashboard = {
 	template: `
 		<section class="bg-body d-flex flex-column vh-100">
@@ -99,83 +101,35 @@ const Dashboard = {
 
 	methods: {
 		async getBalance() {
-			const response = await fetch('/api/balance/', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const res = await apiGetBalance(this.$router);
 
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
+			if (res) {
+				this.balance = res;
 			}
-
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			const res = await response.json();
-			console.log(res);
-			this.balance = res;
 		},
 
-		async getExpenses(year, month) {
-			let apiPath;
-			if (!year) {
-				apiPath = '/api/budget/';
-			} else if (!month) {
-				apiPath = `/api/budget/${year}`;
-			} else {
-				apiPath = `/api/budget/${year}/${month}`;
-			}
-
-			const response = await fetch(apiPath, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
-			}
-
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			const res = await response.json();
-			console.log(res);
-			this.expenses = res.sort((a, b) => {
+		sortExpenses() {
+			this.expenses = this.expenses.sort((a, b) => {
 				const dateA = new Date(a.date.year, a.date.month - 1, a.date.day);
 				const dateB = new Date(b.date.year, b.date.month - 1, b.date.day);
 				return dateB - dateA;
 			});
+		},
 
-			this.updateData();
+		async getExpenses(year, month) {
+			const res = await apiGetExpenses(year, month, this.$router);
+
+			if (res) {
+				this.expenses = res;
+				this.sortExpenses();
+			}
+
+			this.getBalance();
 		},
 
 		async updateExpenses(updatedExpenses) {
 			this.expenses = [...updatedExpenses];
-			console.log('New expenses:', this.expenses);
-		},
-
-		goToSignin() {
-			this.$router.push({ path: '/signin' });
-		},
-
-		updateData() {
-			this.getBalance();
+			this.sortExpenses();
 		},
 
 		updateDate(date) {
@@ -242,30 +196,10 @@ const Dashboard = {
 
 	created: async function () {
 		console.log('created');
-		const response = await fetch('/api/budget/whoami', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
 
-		if (response.status === 403) {
-			console.error('403 Forbidden: user not authenticated');
-			this.goToSignin();
-			return;
-		}
+		const res = await apiWhoAmI(this.$router);
 
-		if (!response.ok) {
-			const errorMessage = `Error: ${response.statusText}`;
-			this.$router.push({ path: `/error/${errorMessage}` });
-			console.error(errorMessage);
-			return;
-		}
-
-		if (response.ok) {
-			const res = await response.json();
-			console.log('Displaying dashboard for: ', res.username);
-
+		if (res) {
 			this.username = res.username;
 			this.name = res.name;
 			this.surname = res.surname;
@@ -282,35 +216,11 @@ const Dashboard = {
 				await this.getExpenses();
 				return;
 			}
-			const response = await fetch(`/api/budget/search?q=${value}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
 
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
-			}
+			const res = await apiQueryExpense(value, this.$router);
 
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			if (response.ok) {
-				const res = await response.json();
-				console.log('Displaying dashboard for: ', res.username);
-
-				this.expenses = res.sort((a, b) => {
-					const dateA = new Date(a.date.year, a.date.month - 1, a.date.day);
-					const dateB = new Date(b.date.year, b.date.month - 1, b.date.day);
-					return dateB - dateA;
-				});
+			if (res) {
+				this.sortExpenses();
 			}
 		},
 	},

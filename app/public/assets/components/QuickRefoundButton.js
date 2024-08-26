@@ -1,3 +1,5 @@
+import { apiCreateExpense } from '../js/serverInteractions.js';
+
 const QuickRefoundButton = {
 	template: `
     <div>
@@ -76,7 +78,7 @@ const QuickRefoundButton = {
 
 	methods: {
 		confirmRefound() {
-			console.log('INdex ', this.index);
+			console.log('Index ', this.index);
 			const modal = new bootstrap.Modal(document.getElementById(`quickRefoundConfirm${this.index}`));
 			modal.show();
 		},
@@ -86,34 +88,15 @@ const QuickRefoundButton = {
 		},
 
 		async createExpense() {
-			const response = await fetch(`/api/budget/${this.expense.date.year}/${this.expense.date.month}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(this.expense),
-			});
-
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated'); //!!!!!!!!!!!!!!!!!!!!!!!!! also user not payer, should not go to sign in
-				//this.goToSignin();
-				return;
-			}
-
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
 			const modal = bootstrap.Modal.getInstance(document.getElementById(`quickRefoundConfirm${this.index}`));
 			modal.hide();
 
-			const res = await response.json();
-			console.log(res);
-			this.expense._id = res.insertedId;
-			this.$emit('addRefound', this.expense);
+			const res = await apiCreateExpense(this.expense, this.$router);
+			if (res) {
+				this.expense._id = res.insertedId;
+				console.log('Created quick refound: ', this.expense);
+				this.$emit('addRefound', this.expense);
+			}
 		},
 	},
 

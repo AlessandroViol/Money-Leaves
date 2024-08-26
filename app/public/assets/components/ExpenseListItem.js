@@ -79,8 +79,7 @@ const ExpenseListItem = {
 		return {};
 	},
 
-	emits: ['deleteExpense'],
-	emits: ['addExpense'],
+	emits: ['deleteExpense', 'addExpense'],
 
 	methods: {
 		isUserContributor(contributor) {
