@@ -1,3 +1,5 @@
+import { apiQueryUser } from '../js/serverInteractions.js';
+
 const Users = {
 	template: `
 		<section class="bg-body d-flex flex-column vh-100">
@@ -53,30 +55,9 @@ const Users = {
 				this.userList = [];
 				return;
 			}
-			const response = await fetch(`/api/users/search?q=${value}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
 
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
-			}
-
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			if (response.ok) {
-				const res = await response.json();
-				console.log('Users: ', res);
-
+			const res = await apiQueryUser(value, this.$router);
+			if (res) {
 				this.userList = res;
 			}
 		},
@@ -84,28 +65,10 @@ const Users = {
 
 	created: async function () {
 		console.log('created');
-		const response = await fetch('/api/budget/whoami', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
 
-		if (response.status === 403) {
-			console.error('403 Forbidden: user not authenticated');
-			this.goToSignin();
-			return;
-		}
+		const res = await apiWhoAmI(this.$router);
 
-		if (!response.ok) {
-			const errorMessage = `Error: ${response.statusText}`;
-			this.$router.push({ path: `/error/${errorMessage}` });
-			console.error(errorMessage);
-			return;
-		}
-
-		if (response.ok) {
-			const res = await response.json();
+		if (res) {
 			this.username = res.username;
 		}
 	},

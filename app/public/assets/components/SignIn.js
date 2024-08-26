@@ -1,3 +1,5 @@
+import { apiSignIn } from '../js/serverInteractions.js';
+
 const SignIn = {
 	template: `
     <div class="form-auth m-auto py-4 ">
@@ -47,37 +49,18 @@ const SignIn = {
 
 	methods: {
 		async submit() {
-			const username = this.username;
-			const password = this.password;
-
-			const response = await fetch('/api/auth/signin', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ _id: username, password }),
-			});
-
-			if (response.status === 403) {
-				console.error('403 Forbidden: Invalid credentials');
+			const res = await apiSignIn(this.username, this.password, this.$router);
+			if (res.status === 400) {
 				this.isInvalid = true;
 				return;
 			}
 
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				console.error(errorMessage);
-				alert(errorMessage);
-				return;
-			}
+			if (res.status === 200) {
+				this.isInvalid = false;
+				console.log('Logged user ', res.res.username);
 
-			if (response.ok) {
 				this.$router.push({ path: '/' });
 			}
-
-			this.isInvalid = false;
-			const res = await response.json();
-			console.log(res);
 		},
 	},
 

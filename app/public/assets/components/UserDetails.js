@@ -1,3 +1,5 @@
+import { apiGetBalanceWithUser } from '../js/serverInteractions.js';
+
 const UserDetails = {
 	template: `
 		<section class="bg-body d-flex flex-column vh-100">
@@ -5,7 +7,7 @@ const UserDetails = {
 
 			<div class="container-fluid">
 				<div class="row">
-					<sidebar></sidebar>
+					<sidebar :active_page="'users'"></sidebar>
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
 						<div
@@ -38,28 +40,7 @@ const UserDetails = {
 		async getBalance() {
 			console.log('Viewing details of', this.otherUsername);
 
-			const response = await fetch(`/api/balance/${this.otherUsername}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-
-			if (response.status === 403) {
-				console.error('403 Forbidden: user not authenticated');
-				this.goToSignin();
-				return;
-			}
-
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				this.$router.push({ path: `/error/${errorMessage}` });
-				console.error(errorMessage);
-				return;
-			}
-
-			const res = await response.json();
-			console.log('balance', res);
+			const res = await apiGetBalanceWithUser(this.otherUsername, this.$router);
 			this.balance = res;
 		},
 

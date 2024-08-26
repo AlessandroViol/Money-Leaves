@@ -59,15 +59,9 @@ const Sidebar = {
 
           <ul class="nav flex-column mb-auto">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
-                <svg class="bi"><use xlink:href="#gear-wide-connected" /></svg>
-                Settings
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" @click="goToSignin" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" @click.prevent="goToSignin" href="#">
                 <svg class="bi"><use xlink:href="#door-closed" /></svg>
-                Sign out
+                Go to sign in
               </a>
             </li>
           </ul>
@@ -84,7 +78,7 @@ const Sidebar = {
 	},
 
 	methods: {
-		goToSignin() {
+		async goToSignin() {
 			this.$router.push({ path: '/signin' });
 		},
 	},

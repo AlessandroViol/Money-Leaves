@@ -50,6 +50,33 @@ export async function apiGetBalance(router) {
 	return res;
 }
 
+export async function apiGetBalanceWithUser(otherUsername, router) {
+	const response = await fetch(`/api/balance/${otherUsername}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	if (response.status === 403) {
+		console.error('403 Forbidden: user not authenticated');
+		router.push({ path: `/signin` });
+		return;
+	}
+
+	if (!response.ok) {
+		const errorMessage = `Error: ${response.statusText}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
+		return;
+	}
+
+	const res = await response.json();
+	console.log(`Balance with the user ${otherUsername}`, res);
+
+	return res;
+}
+
 export async function apiGetExpenses(year, month, router) {
 	let apiPath;
 	if (!year) {
@@ -195,6 +222,34 @@ export async function apiQueryExpense(query, router) {
 	console.log(`Found ${res.length} matching expenses for the query ${query}`);
 
 	return res;
+}
+
+export async function apiSignIn(username, password, router) {
+	const response = await fetch('/api/auth/signin', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ _id: username, password }),
+	});
+
+	if (response.status === 403) {
+		console.error('403 Forbidden: Invalid credentials');
+		return { status: 400 };
+	}
+
+	if (!response.ok) {
+		const errorMessage = `Error: ${response.statusText}`;
+		console.error(errorMessage);
+		alert(errorMessage);
+		return { status: 400 };
+	}
+
+	router.push({ path: '/' });
+
+	const res = await response.json();
+	console.log(`${res.username} signed in`);
+	return { status: 200, res };
 }
 
 export async function apiQueryUser(query, router) {
