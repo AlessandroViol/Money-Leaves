@@ -4,7 +4,7 @@ const EditExpense = {
       <button type="button" class="btn btn-sm btn-primary" @click="confirmExpense">Edit Expense</button>
     </div>
 
-    <div class="modal fade" id="editExpenseConfirm" tabindex="-1" aria-labelledby="editExpenseConfirmLabel" aria-hidden="true">
+    <div class="modal fade" :id="'editExpenseConfirm'+this.index" tabindex="-1" aria-labelledby="editExpenseConfirmLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -23,9 +23,13 @@ const EditExpense = {
     </div>
   `,
 
-  props: {
+	props: {
 		oldExpense: {
 			type: Object,
+			required: true,
+		},
+		index: {
+			type: Number,
 			required: true,
 		},
 	},
@@ -42,22 +46,25 @@ const EditExpense = {
 		},
 
 		confirmExpense() {
-			const modal = new bootstrap.Modal(document.getElementById(`editExpenseConfirm`));
+			const modal = new bootstrap.Modal(document.getElementById(`editExpenseConfirm${this.index}`));
 			modal.show();
 		},
 
 		async editExpense() {
-			const modal = new bootstrap.Modal(document.getElementById(`editExpenseConfirm`));
+			const modal = new bootstrap.Modal(document.getElementById(`editExpenseConfirm${this.index}`));
 			modal.hide();
 
 			console.log('Adding expense :', this.newExpense);
-			const response = await fetch(`/api/budget/${this.newExpense.date.year}/${this.newExpense.date.month}/${this.newExpense._id}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(this.newExpense),
-			});
+			const response = await fetch(
+				`/api/budget/${this.newExpense.date.year}/${this.newExpense.date.month}/${this.newExpense._id}`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(this.newExpense),
+				}
+			);
 
 			if (response.status === 403) {
 				console.error('403 Forbidden: user not authenticated');
