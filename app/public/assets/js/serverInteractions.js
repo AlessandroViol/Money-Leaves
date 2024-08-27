@@ -141,10 +141,9 @@ export async function apiCreateExpense(expense, router) {
 	return res;
 }
 
-export async function apiEditExpense(expense, router) {
-	expense.date.month -= 2;
+export async function apiEditExpense(expense, originalDate, router) {
 	console.log('Adding expense :', expense);
-	const response = await fetch(`/api/budget/${expense.date.year}/${expense.date.month}/${expense._id}`, {
+	const response = await fetch(`/api/budget/${originalDate.year}/${originalDate.month}/${expense._id}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',

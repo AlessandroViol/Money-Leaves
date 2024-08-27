@@ -174,6 +174,7 @@ const ExpenseForm = {
 		updateDate(date) {
 			console.log('Date', date);
 			this.expense.date = date;
+			this.$emit('editedExpense', this.expense);
 		},
 
 		updateQuota() {
@@ -196,6 +197,7 @@ const ExpenseForm = {
 
 		removeContributor(user_id) {
 			this.expense.contributors = this.expense.contributors.filter((contributor) => contributor.user_id !== user_id);
+			this.updateQuota();
 		},
 
 		collapseSearch() {
@@ -228,7 +230,7 @@ const ExpenseForm = {
 
 		expense: {
 			handler(newValue, oldValue) {
-				this.$emit('editedExpense', oldValue);
+				this.$emit('editedExpense', newValue);
 			},
 
 			deep: true,

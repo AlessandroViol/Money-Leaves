@@ -56,7 +56,7 @@ const EditExpense = {
 			const modal = bootstrap.Modal.getInstance(document.getElementById(`editExpenseConfirm${this.index}`));
 			modal.hide();
 
-			await apiEditExpense(this.newExpense, this.$router);
+			await apiEditExpense(this.newExpense, this.oldExpense.date, this.$router);
 		},
 	},
 };

@@ -342,16 +342,20 @@ router.put('/:year/:month/:id', verifyUser, verifyExpense, async (req, res) => {
 	const total_cost = parseFloat(req.body.total_cost);
 	const description = req.body.description;
 	const category = req.body.category;
-	const year = parseInt(req.params.year);
-	const month = parseInt(req.params.month);
-	const day = parseInt(req.body.date.day);
 	const contributors = req.body.contributors;
+
+	const oldYear = parseInt(req.params.year);
+	const oldMonth = parseInt(req.params.month);
+
+	const year = parseInt(req.body.date.year);
+	const month = parseInt(req.body.date.month);
+	const day = parseInt(req.body.date.day);
 
 	console.log(`Viewing details of: ${expense_id}`);
 
 	const filter = {
-		'date.year': year,
-		'date.month': month,
+		'date.year': oldYear,
+		'date.month': oldMonth,
 		payer_id: user_id,
 	};
 
