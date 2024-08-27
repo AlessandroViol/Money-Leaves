@@ -44,17 +44,31 @@ const ExpenseListItem = {
         <div class="accordion-body">
 
 					<expense :expense="expense" :username="this.username"></expense> 
-					<edit-expense :oldExpense="expense" :index="this.index" v-if="isUserPayer()"></edit-expense>
-					<button type="button" class="btn btn-sm btn-danger" v-if="isUserPayer()" @click="deleteExpense">Delete</button>
-					<quick-refound-button v-if="!isUserPayer() && expense.category !== 'Refound'" 
-						:username="this.username" 
-						:recipient="this.expense.payer_id" 
-						:motive="this.expense.description"
-						:amount="this.getQuota()"
-						:index="this.index"
-						@addRefound="addExpense"
-					>
-					</quick-refound-button>
+
+					<div class="d-flex pe-0 me-0">
+						<span class="me-3">
+							<edit-expense :oldExpense="expense" :index="this.index" v-if="isUserPayer()"></edit-expense>
+						</span>
+
+						<span>
+							<button type="button" class="btn btn-sm btn-danger" v-if="isUserPayer()" @click="deleteExpense">Delete</button>
+						</span>
+
+						<span>
+							<quick-refound-button 
+								v-if="!isUserPayer() && expense.category !== 'Refound'" 
+								:username="this.username" 
+								:recipient="this.expense.payer_id" 
+								:motive="this.expense.description"
+								:amount="this.getQuota()"
+								:index="this.index"
+								@addRefound="addExpense"
+							>
+							</quick-refound-button>
+						</span>
+					</div>
+
+					
         </div>
       </div>
     </div>

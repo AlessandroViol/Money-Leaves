@@ -17,7 +17,7 @@ const CreateExpense = {
 						
 						<expense-form :defaultValues="expense" @editedExpense="updateExpense"></expense-form>
 
-						<div>
+						<div class="mb-4">
 							<button type="button" class="btn btn-sm btn-primary" @click="confirmExpense">Create Expense</button>
 						</div>
 

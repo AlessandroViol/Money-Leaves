@@ -9,40 +9,46 @@ const ExpenseForm = {
         <input type="text" class="form-control" :value="expense.payer_id" aria-label="Payer Username" aria-describedby="payer_id" readonly>
       </div>
       
-      <label for="total_cost" class="form-label">Total</label>
-      <div class="input-group mb-3">
-        <input 
-          type="number" 
-          class="form-control" 
-          aria-label="Euros amount (with dot and two decimal places)" 
-          v-model.number="expense.total_cost"
-          min="0" max="2000" 
-        >
-        <span class="input-group-text" id="total_cost">€</span>
+      <div class="row">
+        <span class="col" style="max-width: 16rem">
+          <label for="date" class="form-label">Date</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" aria-label="Expense date" aria-describedby="expense-date" :value="date_string" readonly>
+            <div class="btn-group">
+              <button id="filter-calendar" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center rounded-0 rounded-end gap-1" 
+                type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" 
+              >
+                <svg class="bi">
+                  <use xlink:href="#calendar3" />
+                </svg>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end py-0 border-0">
+                <calendar @updateDate="updateDate"></calendar>
+              </div>
+            </div>
+          </div>
+        </span>
+
+        <span class="col" style="max-width: 16rem">
+          <label for="total_cost" class="form-label">Total</label>
+          <div class="input-group mb-3">
+            <input 
+              type="number" 
+              class="form-control" 
+              aria-label="Euros amount (with dot and two decimal places)" 
+              v-model.number="expense.total_cost"
+              min="0" max="2000" 
+            >
+            <span class="input-group-text" id="total_cost">€</span>
+          </div>
+        </span>
       </div>
 
       <label for="category" class="form-label">Category</label>
-      <select class="form-select mb-3" v-model="expense.category" aria-label="Default select example">
+      <select class="form-select mb-3" v-model="expense.category" aria-label="Default select example"  style="max-width: 14rem">
         <option disabled value="">Select a category</option>
         <option v-for="category in categories" :value="category">{{category}}</option>
       </select>
-
-      <label for="date" class="form-label">Date</label>
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" aria-label="Expense date" aria-describedby="expense-date" :value="date_string" readonly>
-        <div class="btn-group">
-          <button id="filter-calendar" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center rounded-0 rounded-end gap-1" 
-            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" 
-          >
-            <svg class="bi">
-              <use xlink:href="#calendar3" />
-            </svg>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end py-0 border-0">
-            <calendar @updateDate="updateDate"></calendar>
-          </div>
-        </div>
-      </div>
 
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
@@ -56,16 +62,16 @@ const ExpenseForm = {
             <span class="col text-end">Quota</span>
           </div>
         </header>
-        <div class="row py-2 d-flex flex-row border-top" v-for="contributor in expense.contributors">
+        <div class="row py-2 d-flex flex-row border-top align-items-center " v-for="contributor in expense.contributors">
           <span class="col" :class="{'text-primary fw-medium': isCurrentUser(contributor.user_id)}">
             @{{ contributor.user_id }}
           </span>
-          <span class="col text-end" >
-            <span :class="{'text-danger': contributor.quota<0}" v-if="isCurrentUser(contributor.user_id)">
+          <span class="col text-end align-items-center ">
+            <span :class="{'text-danger': contributor.quota < 0}" v-if="isCurrentUser(contributor.user_id)">
               {{ contributor.quota.toFixed(2) }} €
             </span>
-            <span v-if="!isCurrentUser(contributor.user_id)">
-              <span class="input-group mb-3">
+            <div class="d-flex align-items-center justify-content-end" v-if="!isCurrentUser(contributor.user_id)">
+              <div class="input-group me-3" style="max-width: 8rem">
                 <input 
                   type="number" 
                   class="form-control" 
@@ -75,11 +81,11 @@ const ExpenseForm = {
                   min="-2000" max="2000" 
                 >
                 <span class="input-group-text" id="quota">€</span>
-              </span>
-              <a class="link-danger" href="#" @click.prevent="removeContributor(contributor.user_id)">
+              </div>
+              <a class="link-danger pb-1" href="#" @click.prevent="removeContributor(contributor.user_id)">
                 <span class="material-symbols-outlined align-middle" style="font-size:1rem;">cancel</span>
               </a>
-            </span>
+            </div>
           </span>
         </div>
         

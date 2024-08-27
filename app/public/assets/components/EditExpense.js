@@ -2,7 +2,7 @@ import { apiEditExpense } from '../js/serverInteractions.js';
 
 const EditExpense = {
 	template: `
-    <div>
+    <div class=" mx-0 px-0">
       <button type="button" class="btn btn-sm btn-primary" @click="confirmExpense">Edit Expense</button>
     </div>
 
