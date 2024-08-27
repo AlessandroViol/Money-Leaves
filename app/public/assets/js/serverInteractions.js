@@ -224,6 +224,34 @@ export async function apiQueryExpense(query, router) {
 	return res;
 }
 
+export async function apiSignUp(username, name, surname, password, router) {
+	const response = await fetch('/api/auth/signup', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ _id: username, name, surname, password }),
+	});
+
+	if (!response.ok) {
+		const res = { status: response.status, errorMessage: `Error: ${response.statusText}` };
+
+		if (response.status < 460 || response.status > 464) {
+			router.push({ path: `/error/${res.errorMessage}` });
+			console.error(res.errorMessage);
+
+			return;
+		} else {
+			return res;
+		}
+	}
+
+	const res = await response.json();
+	res.ok = true;
+	console.log('Account created', res);
+	return res;
+}
+
 export async function apiSignIn(username, password, router) {
 	const response = await fetch('/api/auth/signin', {
 		method: 'POST',

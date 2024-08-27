@@ -1,3 +1,5 @@
+import { apiSignUp } from '../js/serverInteractions.js';
+
 const SignUp = {
 	template: `
     <div class="form-auth m-auto py-4">
@@ -95,66 +97,43 @@ const SignUp = {
 
 	methods: {
 		async submit() {
-			const username = this.username;
-			const name = this.name;
-			const surname = this.surname;
-			const password = this.password;
+			const res = await apiSignUp(this.username, this.name, this.surname, this.password, this.$router);
 
-			const response = await fetch('/api/auth/signup', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ _id: username, name, surname, password }),
-			});
-
-			if (response.status === 460) {
-				console.error('460 Forbidden: invalid password');
+			if (res.status === 460) {
 				this.isPasswordInvalid = true;
 			} else {
 				this.isPasswordInvalid = false;
 			}
 
-			if (response.status === 461) {
-				console.error('461 Forbidden: invalid username');
+			if (res.status === 461) {
 				this.isUsernameInvalid = true;
 			} else {
 				this.isUsernameInvalid = false;
 			}
 
-			if (response.status === 462) {
-				console.error('462 Forbidden: invalid name');
+			if (res.status === 462) {
 				this.isNameInvalid = true;
 			} else {
 				this.isNameInvalid = false;
 			}
 
-			if (response.status === 463) {
-				console.error('463 Forbidden: invalid surname');
+			if (res.status === 463) {
 				this.isSurnameInvalid = true;
 			} else {
 				this.isSurnameInvalid = false;
 			}
 
-			if (response.status === 464) {
-				console.error('464 Forbidden: username already exists');
+			if (res.status === 464) {
 				this.isUsernameAlreadyTanken = true;
 			} else {
 				this.isUsernameAlreadyTanken = false;
 			}
 
-			if (!response.ok) {
-				const errorMessage = `Error: ${response.statusText}`;
-				console.error(errorMessage);
-				return;
-			}
-
-			if (response.ok) {
+			if (res.ok) {
 				const modal = new bootstrap.Modal(document.getElementById('signUpConfirm'));
 				modal.show();
 			}
 
-			const res = await response.json();
 			console.log(res);
 		},
 
@@ -176,6 +155,7 @@ const SignUp = {
 
 			return isDisabled;
 		},
+
 		isDifferentPassword() {
 			if (this.password !== this.passwordRepeat) {
 				console.error('Password must match!');
