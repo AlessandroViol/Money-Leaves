@@ -11873,4 +11873,9 @@ textarea.form-control-lg {
   --bs-tooltip-color: var(--bs-white);
 }
 
+.tooltip-warning {
+  --bs-tooltip-bg: var(--bs-warning);
+  --bs-tooltip-color: var(--bs-black);
+}
+
 /*# sourceMappingURL=custom.css.map */

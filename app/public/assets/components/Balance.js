@@ -1,16 +1,78 @@
 const Balance = {
 	template: `
-    <div class="row row-cols-1 row-cols-sm-3 g-3 ">
-      <div class="col">
-        <div class="card border-primary m-3" style="max-width: 18rem; min-width: 10rem;">
+    
+    <h4 class="ms-3">
+      Summary
+    </h4>
+    <div class="ms-4 ps-2 mt-2">
+      <div>
+        <h5 class="mt-3">
+          <span
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+            data-bs-custom-class="tooltip-primary"
+            data-bs-title="Sum of the money spent and given."
+          >
+            Total Expenditure: 
+          </span>
+          <p class="text-primary my-2">
+            {{ (this.balance.payed + this.balance.refounded).toFixed(2) }} €
+          </p>
+        </h5>
+      </div>
+
+      <div>
+        <h5 class="mt-3">
+          <span
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+            data-bs-custom-class="tooltip-danger"
+            data-bs-title="Money received as refounding."
+          >
+            Total Income
+          </span>
+          <p class="text-danger my-2">
+            {{ this.balance.received.toFixed(2) }} €
+          </p>
+        </h5>
+      </div>
+
+      <hr class="mx-2 me-5"/>
+
+      <div>
+        <h5 class="mt-3">
+          <span
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+            data-bs-custom-class="tooltip-primary"
+            data-bs-title="Total money spent in the expenses."
+          >
+            Total Money Spent
+          </span>
+          <p class="text-primary my-2">
+            {{ (this.balance.payed + this.balance.refounded + this.balance.received).toFixed(2) }} €
+          </p>
+        </h5>
+      </div>
+    </div>
+
+
+
+
+    <h4 class="ms-3 mt-5">
+      Details
+    </h4>
+    <div class="row row-cols-1 row-cols-sm-3 g-3">
+      <div class="col d-flex flex-column">
+        <div class="card border-primary h-100 m-3" style="max-width: 18rem; min-width: 10rem">
           <div class="card-header text-primary h5">Payments</div>
           <div class="card-body">
-            <h5 class="card-title" >
-              <span 
-              data-bs-toggle="tooltip"
-              data-bs-placement="right" 
-              data-bs-custom-class="tooltip-primary" 
-              data-bs-title="The amount of money the user has spended."
+            <h5 class="card-title">
+              <span
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-primary"
+                data-bs-title="Money of your quotas."
               >
                 Total Expense
               </span>
@@ -18,90 +80,104 @@ const Balance = {
             <p class="card-text">{{ this.balance.totalExpense.toFixed(2) }} €</p>
 
             <h5 class="card-title">
-              <span 
-              data-bs-toggle="tooltip"
-              data-bs-placement="right" 
-              data-bs-custom-class="tooltip-primary" 
-              data-bs-title="Total of the upfront payments made by the user."
+              <span
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-primary"
+                data-bs-title="Money you spent."
               >
-                Total Quotas
+                Total Payed
               </span>
             </h5>
             <p class="card-text">{{ this.balance.payed.toFixed(2) }} €</p>
-
-            <hr/>
-            <h5 class="card-title">Total</h5>
-            <p class="card-text">{{ this.balance.totalExpense.toFixed(2) - this.balance.payed.toFixed(2) }} €</p>
           </div>
         </div>
       </div>
 
       <div class="col">
-        <div class="card border-secondary m-3" style="max-width: 18rem; min-width: 10rem;">
-          <div class="card-header text-secondary h5">Pending</div>
+        <div class="card border-secondary m-3" style="max-width: 18rem; min-width: 10rem">
+          <div class="card-header text-secondary h5">Debts</div>
           <div class="card-body">
             <h5 class="card-title">
-              <span 
+              <span
                 data-bs-toggle="tooltip"
-                data-bs-placement="right" 
-                data-bs-custom-class="tooltip-secondary" 
-                data-bs-title="Sum of the quotas for which the user has not payed upfront."
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-secondary"
+                data-bs-title="Money payed by other users to cover your quotas."
               >
-                Debt
+                Total Debt
               </span>
             </h5>
             <p class="card-text">{{ this.balance.debt.toFixed(2) }} €</p>
 
             <h5 class="card-title">
-              <span 
+              <span
                 data-bs-toggle="tooltip"
-                data-bs-placement="right" 
-                data-bs-custom-class="tooltip-secondary" 
-                data-bs-title="Sum of the quotas of the other contributors when the user payed upfront."
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-secondary"
+                data-bs-title="Money payed back to other users."
               >
-                Credit
+                Total Given
               </span>
             </h5>
-            <p class="card-text">{{ this.balance.expectedBack.toFixed(2) }} €</p>
+            <p class="card-text">{{ this.balance.refounded.toFixed(2) }} €</p>
 
-            <hr/>
-            <h5 class="card-title">Total</h5>
-            <p class="card-text">{{ parseFloat(this.balance.debt.toFixed(2)) + parseFloat(this.balance.expectedBack.toFixed(2)) }} €</p>
+            <hr />
+            <h5 class="card-title">
+              <span
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-secondary"
+                data-bs-title="Money that still needs to be payed."
+              >
+                Unsettled
+              </span>
+            </h5>
+            <p class="card-text">{{ (this.balance.debt - this.balance.refounded).toFixed(2) }} €</p>
           </div>
         </div>
       </div>
 
       <div class="col">
-        <div class="card border-danger m-3" style="max-width: 18rem; min-width: 10rem;">
-          <div class="card-header text-danger h5">Refounds</div>
-          <div class="card-body ">
+        <div class="card border-danger m-3" style="max-width: 18rem; min-width: 10rem">
+          <div class="card-header text-danger h5">Credits</div>
+          <div class="card-body">
             <h5 class="card-title">
-              <span 
+              <span
                 data-bs-toggle="tooltip"
-                data-bs-placement="right" 
-                data-bs-custom-class="tooltip-danger" 
-                data-bs-title="How much money the user has refounded."
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-danger"
+                data-bs-title="Money expected back from other users."
               >
-                Given
+                Total Credit
               </span>
             </h5>
-            <p class="card-text">{{ this.balance.refounded.toFixed(2) }} €</p>
+            <p class="card-text">{{ this.balance.expectedBack.toFixed(2) }} €</p>
 
             <h5 class="card-title">
-              <span 
+              <span
                 data-bs-toggle="tooltip"
-                data-bs-placement="right" 
-                data-bs-custom-class="tooltip-danger" 
-                data-bs-title="How much money the user has been refounded."
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-danger"
+                data-bs-title="Money received as refounding."
               >
-                Received
+                Total Received
               </span>
             </h5>
             <p class="card-text">{{ this.balance.received.toFixed(2) }} €</p>
-            
-            <hr/>
-            <h5 class="card-title">Total</h5>
-            <p class="card-text">{{ parseFloat(this.balance.refounded.toFixed(2)) + parseFloat(this.balance.received.toFixed(2)) }} €</p>
+
+            <hr />
+            <h5 class="card-title">
+              <span
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-custom-class="tooltip-danger"
+                data-bs-title="Money that you still need to receive back."
+              >
+                Unsettled
+              </span>
+            </h5>
+            <p class="card-text">{{ (this.balance.expectedBack - this.balance.received).toFixed(2) }} €</p>
           </div>
         </div>
       </div>

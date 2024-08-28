@@ -73,3 +73,8 @@ $link-hover-color: tint-color($primary, 20%);
   --bs-tooltip-bg: var(--bs-danger);
   --bs-tooltip-color: var(--bs-white);
 }
+
+.tooltip-warning {
+  --bs-tooltip-bg: var(--bs-warning);
+  --bs-tooltip-color: var(--bs-black);
+}

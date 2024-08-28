@@ -15,6 +15,7 @@ const Dashboard = {
 
 						<div class="my-4">
 							<h3>Balance</h3>
+							<hr/>
 							<balance :balance="balance"></balance>
 						</div>
 
@@ -130,6 +131,7 @@ const Dashboard = {
 		async updateExpenses(updatedExpenses) {
 			this.expenses = [...updatedExpenses];
 			this.sortExpenses();
+			await this.getBalance();
 		},
 
 		updateDate(date) {
