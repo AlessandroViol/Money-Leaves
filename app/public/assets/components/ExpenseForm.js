@@ -164,8 +164,10 @@ const ExpenseForm = {
 				total_cost: this.defaultValues.total_cost,
 				description: this.defaultValues.description,
 				category: this.defaultValues.category,
-				date: this.defaultValues.date,
-				contributors: this.defaultValues.contributors,
+				date: { ...this.defaultValues.date },
+				contributors: this.defaultValues.contributors.map((contributor) => {
+					return { ...contributor };
+				}),
 			},
 		};
 	},

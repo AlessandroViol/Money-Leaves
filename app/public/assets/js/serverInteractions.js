@@ -142,7 +142,7 @@ export async function apiCreateExpense(expense, router) {
 }
 
 export async function apiEditExpense(expense, originalDate, router) {
-	console.log('Adding expense :', expense);
+	console.log('Editing expense :', expense);
 	const response = await fetch(`/api/budget/${originalDate.year}/${originalDate.month}/${expense._id}`, {
 		method: 'PUT',
 		headers: {

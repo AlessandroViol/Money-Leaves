@@ -15,7 +15,7 @@ import EditExpense from '../components/EditExpense.js';
 
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
-import Main from '../components/Main.js';
+import Dashboard from '../components/Dashboard.js';
 import ErrorLandingScreen from '../components/ErrorLandingScreen.js';
 import UserDetails from '../components/UserDetails.js';
 import Users from '../components/Users.js';
@@ -25,7 +25,7 @@ const { createApp } = Vue;
 const { createRouter, createWebHistory } = VueRouter;
 
 const routes = [
-	{ path: '/', component: Main },
+	{ path: '/', component: Dashboard },
 	{ path: '/signin', component: SignIn },
 	{ path: '/signup', component: SignUp },
 	{ path: '/error/:description', component: ErrorLandingScreen },

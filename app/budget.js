@@ -347,8 +347,8 @@ router.put('/:year/:month/:id', verifyUser, verifyExpense, async (req, res) => {
 	const oldYear = parseInt(req.params.year);
 	const oldMonth = parseInt(req.params.month);
 
-	const year = parseInt(req.body.date.year);
-	const month = parseInt(req.body.date.month);
+	const year = req.body.date.year ? parseInt(req.body.date.year) : oldYear;
+	const month = req.body.date.month ? parseInt(req.body.date.month) : oldMonth;
 	const day = parseInt(req.body.date.day);
 
 	console.log(`Viewing details of: ${expense_id}`);

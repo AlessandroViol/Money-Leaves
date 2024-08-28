@@ -47,7 +47,7 @@ const ExpenseListItem = {
 
 					<div class="d-flex pe-0 me-0">
 						<span class="me-3">
-							<edit-expense :oldExpense="expense" :index="this.index" v-if="isUserPayer()"></edit-expense>
+							<edit-expense :oldExpense="{...expense, date:{...expense.date}}" :index="this.index" v-if="isUserPayer()" @editExpense="editExpense"></edit-expense>
 						</span>
 
 						<span>
@@ -93,7 +93,7 @@ const ExpenseListItem = {
 		return {};
 	},
 
-	emits: ['deleteExpense', 'addExpense'],
+	emits: ['deleteExpense', 'addExpense', 'editExpense'],
 
 	methods: {
 		isUserContributor(contributor) {
@@ -110,6 +110,10 @@ const ExpenseListItem = {
 
 		addExpense(newExpense) {
 			this.$emit('addExpense', newExpense);
+		},
+
+		editExpense(editedExpense) {
+			this.$emit('editExpense', { ...editedExpense, date: { ...editedExpense.date } });
 		},
 
 		getQuota() {

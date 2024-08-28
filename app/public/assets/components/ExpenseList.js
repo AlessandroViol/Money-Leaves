@@ -34,6 +34,7 @@ const ExpenseList = {
 				:index="index" 
 				@deleteExpense="this.confirmDelete" 
 				@addExpense="this.addExpense"
+				@editExpense="this.editExpense"
 			>
 			</expense-list-item>
 		</div>
@@ -107,6 +108,13 @@ const ExpenseList = {
 
 			const collapseElementList = document.querySelectorAll('.accordion-collapse.show');
 			const collapseList = [...collapseElementList].map((collapseEl) => new bootstrap.Collapse(collapseEl));
+		},
+
+		editExpense(editedExpense) {
+			const idx = this.expenses.findIndex((expense) => expense._id === editedExpense._id);
+			this.expenses[idx] = editedExpense;
+
+			this.$emit('updateExpenses', this.expenses);
 		},
 
 		goToSignin() {

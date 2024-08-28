@@ -30,6 +30,7 @@ const EditExpense = {
 			type: Object,
 			required: true,
 		},
+
 		index: {
 			type: Number,
 			required: true,
@@ -40,6 +41,18 @@ const EditExpense = {
 		return {
 			newExpense: {},
 		};
+	},
+
+	emits: ['editExpense'],
+
+	watch: {
+		'oldExpense.date': {
+			handler(newValue, oldValue) {
+				console.log('Old date', newValue);
+			},
+
+			deep: true,
+		},
 	},
 
 	methods: {
@@ -56,7 +69,11 @@ const EditExpense = {
 			const modal = bootstrap.Modal.getInstance(document.getElementById(`editExpenseConfirm${this.index}`));
 			modal.hide();
 
-			await apiEditExpense(this.newExpense, this.oldExpense.date, this.$router);
+			const res = await apiEditExpense(this.newExpense, this.oldExpense.date, this.$router);
+
+			if (res && res.modifiedCount > 0) {
+				this.$emit('editExpense', this.newExpense);
+			}
 		},
 	},
 };
