@@ -23,7 +23,7 @@ const ExpenseForm = {
                 </svg>
               </button>
               <div class="dropdown-menu dropdown-menu-end py-0 border-0">
-                <calendar @updateDate="updateDate"></calendar>
+                <calendar :startDate="defaultValue? defaultValue.date : undefined" @updateDate="updateDate"></calendar>
               </div>
             </div>
             <div v-if="!is_date_valid" class="invalid-feedback">The date must be between today and 01/01/2020.</div>

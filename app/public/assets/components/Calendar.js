@@ -40,6 +40,11 @@ const Calendar = {
     </div>
   `,
 
+	startDate: {
+		type: Object,
+		required: false,
+	},
+
 	data() {
 		return {
 			monthNames: [
@@ -58,9 +63,17 @@ const Calendar = {
 			],
 			weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 
-			currentDate: new Date(),
-			currentMonth: new Date().getMonth(),
-			currentYear: new Date().getFullYear(),
+			currentDate: this.startDate
+				? new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day)
+				: new Date(),
+
+			currentMonth: this.startDate
+				? new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day).getMonth()
+				: new Date().getMonth(),
+
+			currentYear: this.startDate
+				? new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day).getFullYear()
+				: new Date().getFullYear(),
 		};
 	},
 
