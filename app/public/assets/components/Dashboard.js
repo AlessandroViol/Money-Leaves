@@ -53,7 +53,7 @@ const Dashboard = {
 
 						<h5 class="text-secondary mb-5" v-if="this.expenses.length === 0">There are no expenses</h5>
 
-						<div class="container-fluid row-cols-1 row-cols-sm-2 w-100">
+						<div class="container-fluid row-cols-1 row-cols-sm-2 w-100 mb-5">
 							<div class="row w-100">
 								<div class="col-10">
 									<expense-line-chart v-if="this.expenses.length !== 0" :expenses="expenses" :username="username"></expense-line-chart>

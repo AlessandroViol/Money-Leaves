@@ -106,6 +106,8 @@ const DoughnutChartContributors = {
 						boxPadding: 3,
 					},
 				},
+				responsive: true,
+				maintainAspectRatio: true,
 			};
 
 			const ctx = document.getElementById('doughnutChartContributors');
