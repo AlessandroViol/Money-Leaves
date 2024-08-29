@@ -16,7 +16,7 @@ const Balance = {
             Total Expenditure: 
           </span>
           <p class="text-primary my-2">
-            {{ (this.balance.payed + this.balance.refounded).toFixed(2) }} €
+            {{ (this.balance.totalExpenditure).toFixed(2) }} €
           </p>
         </h5>
       </div>
@@ -32,7 +32,7 @@ const Balance = {
             Total Income
           </span>
           <p class="text-danger my-2">
-            {{ this.balance.received.toFixed(2) }} €
+            {{ this.balance.totalIncome.toFixed(2) }} €
           </p>
         </h5>
       </div>
@@ -50,7 +50,7 @@ const Balance = {
             Total Money Spent
           </span>
           <p class="text-primary my-2">
-            {{ (this.balance.payed + this.balance.refounded + this.balance.received).toFixed(2) }} €
+            {{ this.balance.totalMoneySpent.toFixed(2) }} €
           </p>
         </h5>
       </div>
@@ -64,7 +64,7 @@ const Balance = {
     </h4>
     <div class="row row-cols-1 row-cols-sm-3 g-3">
       <div class="col d-flex flex-column">
-        <div class="card border-primary h-100 m-3" style="max-width: 18rem; min-width: 10rem">
+        <div class="card border-primary h-100 my-3" style="max-width: 18rem; min-width: 10rem">
           <div class="card-header text-primary h5">Payments</div>
           <div class="card-body">
             <h5 class="card-title">
@@ -89,13 +89,13 @@ const Balance = {
                 Total Payed
               </span>
             </h5>
-            <p class="card-text">{{ this.balance.payed.toFixed(2) }} €</p>
+            <p class="card-text">{{ this.balance.totalPayed.toFixed(2) }} €</p>
           </div>
         </div>
       </div>
 
       <div class="col">
-        <div class="card border-secondary m-3" style="max-width: 18rem; min-width: 10rem">
+        <div class="card border-secondary my-3" style="max-width: 18rem; min-width: 10rem">
           <div class="card-header text-secondary h5">Debts</div>
           <div class="card-body">
             <h5 class="card-title">
@@ -108,7 +108,7 @@ const Balance = {
                 Total Debt
               </span>
             </h5>
-            <p class="card-text">{{ this.balance.debt.toFixed(2) }} €</p>
+            <p class="card-text">{{ this.balance.totalDebt.toFixed(2) }} €</p>
 
             <h5 class="card-title">
               <span
@@ -120,7 +120,7 @@ const Balance = {
                 Total Given
               </span>
             </h5>
-            <p class="card-text">{{ this.balance.refounded.toFixed(2) }} €</p>
+            <p class="card-text">{{ this.balance.totalGiven.toFixed(2) }} €</p>
 
             <hr />
             <h5 class="card-title">
@@ -133,13 +133,13 @@ const Balance = {
                 Unsettled
               </span>
             </h5>
-            <p class="card-text">{{ (this.balance.debt - this.balance.refounded).toFixed(2) }} €</p>
+            <p class="card-text">{{ (this.balance.totalDebt - this.balance.totalGiven).toFixed(2) }} €</p>
           </div>
         </div>
       </div>
 
       <div class="col">
-        <div class="card border-danger m-3" style="max-width: 18rem; min-width: 10rem">
+        <div class="card border-danger my-3" style="max-width: 18rem; min-width: 11rem">
           <div class="card-header text-danger h5">Credits</div>
           <div class="card-body">
             <h5 class="card-title">
@@ -152,7 +152,7 @@ const Balance = {
                 Total Credit
               </span>
             </h5>
-            <p class="card-text">{{ this.balance.expectedBack.toFixed(2) }} €</p>
+            <p class="card-text">{{ this.balance.totalCredit.toFixed(2) }} €</p>
 
             <h5 class="card-title">
               <span
@@ -164,7 +164,7 @@ const Balance = {
                 Total Received
               </span>
             </h5>
-            <p class="card-text">{{ this.balance.received.toFixed(2) }} €</p>
+            <p class="card-text">{{ this.balance.totalReceived.toFixed(2) }} €</p>
 
             <hr />
             <h5 class="card-title">
@@ -177,7 +177,7 @@ const Balance = {
                 Unsettled
               </span>
             </h5>
-            <p class="card-text">{{ (this.balance.expectedBack - this.balance.received).toFixed(2) }} €</p>
+            <p class="card-text">{{ (this.balance.totalCredit - this.balance.totalReceived).toFixed(2) }} €</p>
           </div>
         </div>
       </div>

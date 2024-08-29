@@ -1,5 +1,4 @@
 import { apiEditExpense } from '../js/serverInteractions.js';
-import ExpenseForm from './ExpenseForm.js';
 
 const EditExpense = {
 	template: `

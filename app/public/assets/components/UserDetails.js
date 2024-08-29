@@ -15,9 +15,10 @@ const UserDetails = {
 							<h1 class="h1">{{ this.otherUsername }} Details</h1>
 						</div>
 
-						<div class="my-4" v-if="balance.length > 0">
+						<div class="my-4">
 							<h3>Balance with the user {{ this.otherUsername }}:</h3>
-              <balance :balance="balance[0]"></balance>
+              <balance v-if="balance.totalExpenditure !== 0 || balance.totalIncome !== 0" :balance="balance"></balance>
+							<h5 v-if="balance.totalExpenditure === 0 && balance.totalIncome === 0" class="text-secondary">There are no expenses with the user</h5>
 						</div>
 					</section>
 				</div>
@@ -27,7 +28,18 @@ const UserDetails = {
 
 	data: function () {
 		return {
-			balance: [],
+			balance: {
+				totalExpense: 0,
+				totalPayed: 0,
+				totalCredit: 0,
+				totalDebt: 0,
+				totalGiven: 0,
+				totalReceived: 0,
+				totalExpenditure: 0,
+				totalIncome: 0,
+				totalMoneySpent: 0,
+			},
+
 			otherUsername: '',
 		};
 	},
@@ -41,7 +53,10 @@ const UserDetails = {
 			console.log('Viewing details of', this.otherUsername);
 
 			const res = await apiGetBalanceWithUser(this.otherUsername, this.$router);
-			this.balance = res;
+
+			if (res) {
+				this.balance = res;
+			}
 		},
 
 		goToSignin() {

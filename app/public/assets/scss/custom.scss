@@ -88,3 +88,12 @@ $link-hover-color: tint-color($primary, 20%);
 .invalid-label {
   color: var(--bs-form-invalid-border-color);
 }
+
+//custom select
+.form-select {
+  // Focus state
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);;
+  }
+}

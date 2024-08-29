@@ -1,4 +1,4 @@
-import { apiQueryUser } from '../js/serverInteractions.js';
+import { apiQueryUser, apiWhoAmI } from '../js/serverInteractions.js';
 
 const Users = {
 	template: `
@@ -11,7 +11,7 @@ const Users = {
 
 					<section class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-body">
             <h1 class="h1 mt-3">Users</h1>
-						<div id="expenseSearch" class="rounded shadow mb-3 w-100">
+						<div id="userSearch" class="rounded shadow mb-3 w-100">
 							<input class="py-3 rounded bg-body-secondary form-control w-100 border-0" type="text" placeholder="Search" aria-label="Search" v-model="query"/>
 						</div>
 

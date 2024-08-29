@@ -16,7 +16,8 @@ const Dashboard = {
 						<div class="my-4">
 							<h3>Balance</h3>
 							<hr/>
-							<balance :balance="balance"></balance>
+							<balance v-if="balance.totalExpenditure !== 0 || balance.totalIncome !== 0" :balance="balance"></balance>
+							<h5 class="text-secondary" v-if="balance.totalExpenditure === 0 && balance.totalIncome === 0">There are no expenses yet</h5>
 						</div>
 
 						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -50,8 +51,9 @@ const Dashboard = {
 							</div>
 						</div>
 
-						<expense-line-chart :expenses="expenses" :username="username"></expense-line-chart>
-						<div class="d-flex justify-content-between">
+						<h5 class="text-secondary mb-5" v-if="this.expenses.length === 0">There are no expenses</h5>
+						<expense-line-chart v-if="this.expenses.length !== 0" :expenses="expenses" :username="username"></expense-line-chart>
+						<div class="d-flex justify-content-between" v-if="this.expenses.length !== 0">
 							<h3>Expense list</h3>
 							<div>
 								<button
@@ -71,7 +73,7 @@ const Dashboard = {
 							<input class="py-3 rounded-bottom bg-body-secondary form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search" v-model="query"/>
 						</div>
 						
-						<expense-list :expenses="expenses" :username="username" @updateExpenses="updateExpenses"></expense-list>
+						<expense-list v-if="this.expenses.length !== 0" :expenses="expenses" :username="username" @updateExpenses="updateExpenses"></expense-list>
 					</section>
 				</div>
 			</div>
@@ -83,18 +85,25 @@ const Dashboard = {
 			username: '',
 			name: '',
 			surname: '',
+
 			expenses: [],
 			selectedExpense: {},
+
 			balance: {
 				totalExpense: 0,
-				payed: 0,
-				expectedBack: 0,
-				debt: 0,
-				refounded: 0,
-				received: 0,
+				totalPayed: 0,
+				totalCredit: 0,
+				totalDebt: 0,
+				totalGiven: 0,
+				totalReceived: 0,
+				totalExpenditure: 0,
+				totalIncome: 0,
+				totalMoneySpent: 0,
 			},
+
 			selectedDate: {},
 			showedDate: {},
+
 			currentFilter: 'all',
 			query: '',
 		};

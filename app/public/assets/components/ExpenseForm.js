@@ -116,8 +116,8 @@ const ExpenseForm = {
               class="btn btn-outline-secondary btn-lg px-3 w-100"
               type="button"
               data-bs-toggle="collapse"
-              data-bs-target="#expenseSearch"
-              aria-controls="expenseSearch"
+              data-bs-target="#userSearch"
+              aria-controls="userSearch"
               aria-expanded="false"
               aria-label="Toggle search"
               @click="collapseSearch"
@@ -128,7 +128,7 @@ const ExpenseForm = {
             </button>
           </div>
 
-          <div id="expenseSearch" class="w-100 collapse px-2 mb-3">
+          <div id="userSearch" class="w-100 collapse px-2 mb-3">
             <div class="shadow mb-2">
               <input class="py-3 rounded bg-body-secondary form-control" type="text" placeholder="Search" aria-label="Search" v-model="query"/>
             </div>
@@ -153,7 +153,6 @@ const ExpenseForm = {
 
         </div>
       </div>
-      <div v-if="!is_expense_valid" class="invalid-label text-end">INVALID EXPENSE</div>
 
     </div>
     `,

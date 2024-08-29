@@ -60,7 +60,7 @@ router.get('/', verifyUser, async (req, res) => {
 			},
 
 			// how much money the user anticipated for the other users
-			expectedBack: {
+			credit: {
 				$cond: {
 					if: { $and: [{ $ne: ['$category', 'Refound'] }, { $eq: ['$contributors.user_id', '$payer_id'] }] },
 					then: { $multiply: [{ $subtract: ['$total_cost', '$contributors.quota'] }, -1] },
@@ -78,7 +78,7 @@ router.get('/', verifyUser, async (req, res) => {
 			},
 
 			// how much money the user returned to other users
-			refounded: {
+			given: {
 				$cond: {
 					if: { $and: [{ $eq: ['$category', 'Refound'] }, { $eq: ['$contributors.user_id', '$payer_id'] }] },
 					then: '$contributors.quota',
@@ -102,11 +102,11 @@ router.get('/', verifyUser, async (req, res) => {
 		$group: {
 			_id: '$_id',
 			totalExpense: { $sum: '$expense' },
-			payed: { $sum: '$payed' },
-			expectedBack: { $sum: '$expectedBack' },
-			debt: { $sum: '$debt' },
-			refounded: { $sum: '$refounded' },
-			received: { $sum: '$received' },
+			totalPayed: { $sum: '$payed' },
+			totalCredit: { $sum: '$credit' },
+			totalDebt: { $sum: '$debt' },
+			totalGiven: { $sum: '$given' },
+			totalReceived: { $sum: '$received' },
 		},
 	});
 
@@ -117,15 +117,21 @@ router.get('/', verifyUser, async (req, res) => {
 		let balance = [];
 		if (aggregationResult.length > 0) {
 			balance = aggregationResult[0];
+			balance.totalExpenditure = balance.totalPayed + balance.totalGiven;
+			balance.totalIncome = balance.totalReceived;
+			balance.totalMoneySpent = balance.totalPayed + balance.totalGiven + balance.totalReceived;
 		} else {
 			balance = {
 				_id: _id,
 				totalExpense: 0,
-				payed: 0,
-				expectedBack: 0,
-				debt: 0,
-				refounded: 0,
-				received: 0,
+				totalPayed: 0,
+				totalCredit: 0,
+				totalDebt: 0,
+				totalGiven: 0,
+				totalReceived: 0,
+				totalExpenditure: 0,
+				totalIncome: 0,
+				totalMoneySpent: 0,
 			};
 		}
 
@@ -203,7 +209,7 @@ router.get('/:id', verifyUser, async (req, res) => {
 				},
 			},
 
-			//	expectedBack: can't be computed with this particular pipeline. However, in the balance analysis of two users,
+			//	credit: can't be computed with this particular pipeline. However, in the balance analysis of two users,
 			//                it corresponds to the debt of the other user. After the processing we just need to swap the values
 
 			debt: {
@@ -214,7 +220,7 @@ router.get('/:id', verifyUser, async (req, res) => {
 				},
 			},
 
-			refounded: {
+			given: {
 				$cond: {
 					if: { $and: [{ $eq: ['$category', 'Refound'] }, { $eq: ['$contributors.user_id', '$payer_id'] }] },
 					then: '$contributors.quota',
@@ -237,10 +243,10 @@ router.get('/:id', verifyUser, async (req, res) => {
 		$group: {
 			_id: '$_id',
 			totalExpense: { $sum: '$expense' },
-			payed: { $sum: '$payed' },
-			debt: { $sum: '$debt' },
-			refounded: { $sum: '$refounded' },
-			received: { $sum: '$received' },
+			totalPayed: { $sum: '$payed' },
+			totalDebt: { $sum: '$debt' },
+			totalGiven: { $sum: '$given' },
+			totalReceived: { $sum: '$received' },
 		},
 	});
 
@@ -249,19 +255,28 @@ router.get('/:id', verifyUser, async (req, res) => {
 
 		let balance = [];
 		if (aggregationResults.length > 0) {
-			aggregationResults[0].expectedBack = -aggregationResults[1].debt;
-			aggregationResults[1].expectedBack = -aggregationResults[0].debt;
+			aggregationResults[0].totalCredit = -aggregationResults[1].totalDebt;
+			aggregationResults[1].totalCredit = -aggregationResults[0].totalDebt;
 
-			balance = aggregationResults;
+			balance = aggregationResults.filter((obj) => {
+				return obj._id === _id;
+			})[0];
+
+			balance.totalExpenditure = balance.totalPayed + balance.totalGiven;
+			balance.totalIncome = balance.totalReceived;
+			balance.totalMoneySpent = balance.totalPayed + balance.totalGiven + balance.totalReceived;
 		} else {
 			balance = {
 				_id: _id,
 				totalExpense: 0,
-				payed: 0,
-				expectedBack: 0,
-				debt: 0,
-				refounded: 0,
-				received: 0,
+				totalPayed: 0,
+				totalCredit: 0,
+				totalDebt: 0,
+				totalGiven: 0,
+				totalReceived: 0,
+				totalExpenditure: 0,
+				totalIncome: 0,
+				totalMoneySpent: 0,
 			};
 		}
 
