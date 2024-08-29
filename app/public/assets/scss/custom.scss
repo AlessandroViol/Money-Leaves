@@ -78,3 +78,13 @@ $link-hover-color: tint-color($primary, 20%);
   --bs-tooltip-bg: var(--bs-warning);
   --bs-tooltip-color: var(--bs-black);
 }
+
+//custom invalid styling
+.invalid-box {
+  border: var(--bs-border-width) solid;
+  border-color: var(--bs-form-invalid-border-color);
+}
+
+.invalid-label {
+  color: var(--bs-form-invalid-border-color);
+}

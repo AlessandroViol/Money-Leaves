@@ -11878,4 +11878,13 @@ textarea.form-control-lg {
   --bs-tooltip-color: var(--bs-black);
 }
 
+.invalid-box {
+  border: var(--bs-border-width) solid;
+  border-color: var(--bs-form-invalid-border-color);
+}
+
+.invalid-label {
+  color: var(--bs-form-invalid-border-color);
+}
+
 /*# sourceMappingURL=custom.css.map */
