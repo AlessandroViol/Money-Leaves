@@ -208,7 +208,6 @@ const ExpenseForm = {
 		},
 
 		updateDate(date) {
-			console.log('Date', date);
 			this.expense.date = date;
 			this.$emit('editedExpense', this.expense);
 		},

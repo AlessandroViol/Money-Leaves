@@ -84,8 +84,6 @@ const CreateExpense = {
 	watch: {},
 
 	created: async function () {
-		console.log('created');
-
 		const res = await apiWhoAmI(this.$router);
 
 		if (res) {

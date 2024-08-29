@@ -134,7 +134,7 @@ const SignUp = {
 				modal.show();
 			}
 
-			console.log(res);
+			console.log('Sign up result', res);
 		},
 
 		goToSignIn() {
@@ -158,7 +158,6 @@ const SignUp = {
 
 		isDifferentPassword() {
 			if (this.password !== this.passwordRepeat) {
-				console.error('Password must match!');
 				return true;
 			} else {
 				return false;

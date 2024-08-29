@@ -156,11 +156,6 @@ const Calendar = {
 			this.currentYear = val.getFullYear();
 			this.currentMonth = val.getMonth();
 
-			console.log('Date (calendar)', {
-				day: this.currentDate.getDate(),
-				month: this.currentMonth,
-				year: this.currentYear,
-			});
 			this.emitDate();
 		},
 	},

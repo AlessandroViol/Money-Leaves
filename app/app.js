@@ -43,7 +43,7 @@ app.get('/api/users/search', verifyUser, async (req, res) => {
 	}
 
 	try {
-		const searchRegex = new RegExp(query, 'i'); // 'i' for case-insensitive
+		const searchRegex = new RegExp(query, 'i');
 		const filter = {
 			$or: [{ _id: searchRegex }, { name: searchRegex }, { surname: searchRegex }],
 		};

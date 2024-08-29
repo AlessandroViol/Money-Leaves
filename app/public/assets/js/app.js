@@ -58,5 +58,4 @@ app.component('calendar', Calendar);
 app.component('expense-form', ExpenseForm);
 app.component('edit-expense', EditExpense);
 
-// Mount the Vue application
 app.mount('#app');

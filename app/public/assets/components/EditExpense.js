@@ -47,16 +47,6 @@ const EditExpense = {
 
 	emits: ['editExpense'],
 
-	watch: {
-		oldExpense: {
-			handler(newValue, oldValue) {
-				console.log('Old expense', newValue);
-			},
-
-			deep: true,
-		},
-	},
-
 	methods: {
 		updateExpense(editedExpense) {
 			this.newExpense = editedExpense;

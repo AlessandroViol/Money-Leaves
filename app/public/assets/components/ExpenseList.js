@@ -80,7 +80,7 @@ const ExpenseList = {
 			const modal = new bootstrap.Modal(document.getElementById('deleteConfirm'));
 			modal.show();
 
-			console.log(expense);
+			console.log('Deleting expense:', expense);
 			this.selectedExpense = expense;
 		},
 
@@ -97,7 +97,7 @@ const ExpenseList = {
 				const updatedExpenses = this.expenses.filter((expense) => expense._id !== this.selectedExpense._id);
 				this.selectedExpense = {};
 
-				console.log('Expense deleted. New expenses: ', updatedExpenses);
+				console.log('Expense deleted. Updated expenses: ', updatedExpenses);
 				this.$emit('updateExpenses', updatedExpenses);
 			}
 		},

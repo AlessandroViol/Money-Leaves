@@ -163,14 +163,11 @@ const Dashboard = {
 		},
 
 		updateDate(date) {
-			console.log('Date', date);
 			this.selectedDate = date;
 		},
 
 		async filterExpenses(filter) {
-			console.log('Filter', filter);
 			console.log('Current Filter', this.currentFilter);
-			console.log('Selected Date', this.selectedDate);
 
 			if (filter === 'date' || filter === 'month' || filter === 'year') {
 				const dropdownElement = document.getElementById('filter-calendar');
@@ -225,8 +222,6 @@ const Dashboard = {
 	computed: {},
 
 	created: async function () {
-		console.log('created');
-
 		const res = await apiWhoAmI(this.$router);
 
 		if (res) {

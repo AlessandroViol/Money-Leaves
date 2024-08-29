@@ -351,7 +351,7 @@ router.put('/:year/:month/:id', verifyUser, verifyExpense, async (req, res) => {
 	const month = req.body.date.month ? parseInt(req.body.date.month) : oldMonth;
 	const day = parseInt(req.body.date.day);
 
-	console.log(`Viewing details of: ${expense_id}`);
+	console.log(`Editing expense: ${expense_id}`);
 
 	const filter = {
 		'date.year': oldYear,
@@ -361,19 +361,15 @@ router.put('/:year/:month/:id', verifyUser, verifyExpense, async (req, res) => {
 
 	try {
 		const expenses = await db.collection('expenses').find(filter).toArray();
-		console.log('Compatible expenses: ', expenses);
 		const expense = expenses.find((expense) => expense._id.equals(expense_id));
-		console.log('Match: ', expense);
+		console.log('Matching expense: ', expense);
 
 		if (expense !== undefined) {
 			const editedExpense = {
 				$set: { payer_id, total_cost, description, category, date: { ...expense.date, year, month, day }, contributors },
 			};
 
-			console.log(`Editing expense ${expense_id}: `, expense);
-
 			const updated = await db.collection('expenses').updateOne({ _id: new ObjectId(expense_id) }, editedExpense);
-			console.log('HERE');
 			res.json(updated);
 		} else {
 			res.status(404).json({ error: 'Expense not found' });

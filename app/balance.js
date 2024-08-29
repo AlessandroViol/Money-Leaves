@@ -112,7 +112,7 @@ router.get('/', verifyUser, async (req, res) => {
 
 	try {
 		const aggregationResult = await db.collection('expenses').aggregate(pipeline).toArray();
-		console.log('Balance:', aggregationResult);
+		console.log('Balance query result:', aggregationResult);
 
 		let balance = [];
 		if (aggregationResult.length > 0) {
@@ -184,9 +184,6 @@ router.get('/:id', verifyUser, async (req, res) => {
 			$or: [{ 'contributors.user_id': _id }, { 'contributors.user_id': other_id }],
 		},
 	});
-
-	const aggregationTest = await db.collection('expenses').aggregate(pipeline).toArray();
-	console.log('API test:', aggregationTest);
 
 	// Divides the quota and total cost for each divided document into one or more of 6 categories:
 	pipeline.push({
@@ -280,7 +277,7 @@ router.get('/:id', verifyUser, async (req, res) => {
 			};
 		}
 
-		console.log('Balance with friend:', balance);
+		console.log(`Balance with ${other_id}:`, balance);
 		res.json(balance);
 	} catch (error) {
 		res.status(500).json({ error: 'An error occurred when updating the expense' });

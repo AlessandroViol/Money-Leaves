@@ -20,7 +20,7 @@ export async function apiWhoAmI(router) {
 	}
 
 	const res = await response.json();
-	console.log('Logged user: ', res.username);
+	console.log('Info about logged user ', res.username);
 	return res;
 }
 
@@ -46,7 +46,7 @@ export async function apiGetBalance(router) {
 	}
 
 	const res = await response.json();
-	console.log(res);
+	console.log('Balance: ', res);
 	return res;
 }
 
@@ -59,8 +59,10 @@ export async function apiGetBalanceWithUser(otherUsername, router) {
 	});
 
 	if (response.status === 403) {
-		console.error('403 Forbidden: user not authenticated');
-		router.push({ path: `/signin` });
+		const res = await response.json();
+		const errorMessage = `Error: ${res.error}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
 		return;
 	}
 
@@ -100,6 +102,14 @@ export async function apiGetExpenses(year, month, router) {
 		return;
 	}
 
+	if (response.status === 400) {
+		const res = await response.json();
+		const errorMessage = `Error: ${res.error}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
+		return;
+	}
+
 	if (!response.ok) {
 		const errorMessage = `Error: ${response.statusText}`;
 		router.push({ path: `/error/${errorMessage}` });
@@ -108,7 +118,7 @@ export async function apiGetExpenses(year, month, router) {
 	}
 
 	const res = await response.json();
-	console.log(res);
+	console.log('Expense list:', res);
 
 	return res;
 }
@@ -128,6 +138,14 @@ export async function apiCreateExpense(expense, router) {
 		return;
 	}
 
+	if (response.status === 400) {
+		const res = await response.json();
+		const errorMessage = `Error: ${res.error}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
+		return;
+	}
+
 	if (!response.ok) {
 		const errorMessage = `Error: ${response.statusText}`;
 		router.push({ path: `/error/${errorMessage}` });
@@ -136,13 +154,13 @@ export async function apiCreateExpense(expense, router) {
 	}
 
 	const res = await response.json();
-	console.log('Created expense', res);
+	console.log('Created expense:', res);
 
 	return res;
 }
 
 export async function apiEditExpense(expense, originalDate, router) {
-	console.log('Editing expense :', expense);
+	console.log('Editing expense:', expense);
 	const response = await fetch(`/api/budget/${originalDate.year}/${originalDate.month}/${expense._id}`, {
 		method: 'PUT',
 		headers: {
@@ -152,8 +170,17 @@ export async function apiEditExpense(expense, originalDate, router) {
 	});
 
 	if (response.status === 403) {
-		console.error('403 Forbidden: user not authenticated');
-		router.push({ path: `/signin` });
+		console.error('403 Forbidden: User not authorized');
+		const errorMessage = `Error: User not authorized`;
+		router.push({ path: `/error/${errorMessage}` });
+		return;
+	}
+
+	if (response.status === 400 || response.status === 404) {
+		const res = await response.json();
+		const errorMessage = `Error: ${res.error}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
 		return;
 	}
 
@@ -165,7 +192,7 @@ export async function apiEditExpense(expense, originalDate, router) {
 	}
 
 	const res = await response.json();
-	console.log(res);
+	console.log('Editing result: ', res);
 	return res;
 }
 
@@ -178,8 +205,17 @@ export async function apiDeleteExpense(expense, router) {
 	});
 
 	if (response.status === 403) {
-		console.error('403 Forbidden: user not authenticated'); ///////////////////////////////////////////////not trueeee user may not be the payer
-		router.push({ path: `/signin` });
+		console.error('403 Forbidden: User not authorized');
+		const errorMessage = `Error: User not authorized`;
+		router.push({ path: `/error/${errorMessage}` });
+		return;
+	}
+
+	if (response.status === 400 || response.status === 404) {
+		const res = await response.json();
+		const errorMessage = `Error: ${res.error}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
 		return;
 	}
 
@@ -191,7 +227,7 @@ export async function apiDeleteExpense(expense, router) {
 	}
 
 	const res = await response.json();
-	console.log('Expenses deleted: ', res.deletedCount);
+	console.log('Deletion result: ', res.deletedCount);
 
 	return res;
 }
@@ -207,6 +243,14 @@ export async function apiQueryExpense(query, router) {
 	if (response.status === 403) {
 		console.error('403 Forbidden: user not authenticated');
 		router.push({ path: `/signin` });
+		return;
+	}
+
+	if (response.status === 400) {
+		const res = await response.json();
+		const errorMessage = `Error: ${res.error}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
 		return;
 	}
 
@@ -247,7 +291,7 @@ export async function apiSignUp(username, name, surname, password, router) {
 
 	const res = await response.json();
 	res.ok = true;
-	console.log('Account created', res);
+	console.log('Account created:', res);
 	return res;
 }
 
@@ -312,6 +356,14 @@ export async function apiQueryUser(query, router) {
 	if (response.status === 403) {
 		console.error('403 Forbidden: user not authenticated');
 		router.push({ path: `/signin` });
+		return;
+	}
+
+	if (response.status === 400) {
+		const res = await response.json();
+		const errorMessage = `Error: ${res.error}`;
+		router.push({ path: `/error/${errorMessage}` });
+		console.error(errorMessage);
 		return;
 	}
 

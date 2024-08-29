@@ -57,7 +57,7 @@ const SignIn = {
 
 			if (res.status === 200) {
 				this.isInvalid = false;
-				console.log('Logged user ', res.res.username);
+				console.log('Logged in user ', res.res.username);
 
 				this.$router.push({ path: '/' });
 			}

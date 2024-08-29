@@ -78,7 +78,7 @@ const QuickRefoundButton = {
 
 	methods: {
 		confirmRefound() {
-			console.log('Index ', this.index);
+			console.log('Selected expense #: ', this.index);
 			const modal = new bootstrap.Modal(document.getElementById(`quickRefoundConfirm${this.index}`));
 			modal.show();
 		},
@@ -98,10 +98,6 @@ const QuickRefoundButton = {
 				this.$emit('addRefound', this.expense);
 			}
 		},
-	},
-
-	mounted: function () {
-		console.log('Quick refound: ', this.expense);
 	},
 };
 

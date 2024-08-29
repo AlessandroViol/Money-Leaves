@@ -25,41 +25,32 @@ function validator({
 	const containsLetter = /[a-zA-Z]/.test(str);
 	result = result && containsLetter;
 
-	console.log('contains letter: ', containsLetter);
-
 	// checks for whitespaces
 	if (!allowWhiteSpaces) {
 		const hasWhiteSpace = /\s/.test(str);
 		result = result && !hasWhiteSpace;
-
-		console.log('contains whitespace: ', hasWhiteSpace);
 	}
 
 	// checks length in range
 	result = result && str.length >= minLength && str.length <= maxLength;
-	console.log('Is in length range: ', str.length >= minLength && str.length <= maxLength);
 
 	// checks for numbers
 	if (!allowNumbers) {
 		const hasNumber = /\d/.test(str);
 		result = result && !hasNumber;
-		console.log('contains numbers: ', hasNumber);
 	}
 
 	// Count the number of numbers in the string
 	const count = (str.match(/\d/g) || []).length;
 	result = result && count >= minNumber;
-	console.log('contains enough numbers: ', count >= minNumber);
 
 	// checks for symbols
 	if (!allowSymbols) {
 		const hasSymbol = /[^a-zA-Z0-9]/.test(str);
 		result = result && !hasSymbol;
-		console.log('contains symbols: ', hasSymbol);
 	}
 
-	console.log('Final evaluatio: ', result);
-	console.log(',######################################\n');
+	console.log('Final evaluation: ', result);
 	return result;
 }
 
@@ -82,8 +73,6 @@ async function verifyUser(req, res, next) {
 
 // create new user's credentials
 router.post('/signup', async (req, res) => {
-	console.log('req', req.body);
-
 	const hashedPassword = await bcrypt.hash(req.body.password, 10);
 	const newUser = {
 		_id: req.body._id.trim(),
@@ -117,7 +106,6 @@ router.post('/signup', async (req, res) => {
 		res.json(newUser);
 	} catch (err) {
 		if (err.code === 11000) {
-			// Duplicate key error code
 			res.status(464).json({ error: 'Username already exists' });
 		} else {
 			console.error('Error inserting user:', err);
@@ -132,19 +120,18 @@ router.post('/signin', async (req, res) => {
 		const user = await db.collection('users').findOne({ _id: req.body._id });
 
 		if (user === null) {
-			res.status(403).send('Not authenticated!');
-			console.log('Not logged in ', req.body._id);
+			res.status(403).send('Invalid credentials!');
+			console.log('Username not found: ', req.body._id);
 		} else {
 			const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
 
 			if (isPasswordValid) {
 				req.session.user = { _id: user._id };
-				//res.redirect('/api/restricted');
 
 				console.log('Logged in ', user._id);
 				res.json(req.session.user);
 			} else {
-				res.status(403).send('Not authenticated!');
+				res.status(403).send('Invalid credentials!');
 				console.log('Not logged in ', user._id);
 			}
 		}
