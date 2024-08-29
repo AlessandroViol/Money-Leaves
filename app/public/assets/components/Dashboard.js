@@ -52,7 +52,26 @@ const Dashboard = {
 						</div>
 
 						<h5 class="text-secondary mb-5" v-if="this.expenses.length === 0">There are no expenses</h5>
-						<expense-line-chart v-if="this.expenses.length !== 0" :expenses="expenses" :username="username"></expense-line-chart>
+
+						<div class="container-fluid row-cols-1 row-cols-sm-2 w-100">
+							<div class="row w-100">
+								<div class="col-10">
+									<expense-line-chart v-if="this.expenses.length !== 0" :expenses="expenses" :username="username"></expense-line-chart>
+								</div>
+								<div class="col-2 h-100">
+									<div class="col">
+										<div class="text-center text-secondary small mb-1">Categories</div>
+										<categories-pie v-if="this.expenses.length !== 0" :expenses="expenses"></categories-pie>
+									</div>
+									<div class="col">
+										<div class="text-center text-secondary small mb-1">Users</div>
+										<users-pie v-if="this.expenses.length !== 0" :expenses="expenses" :username="username"></users-pie>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
 						<div class="d-flex justify-content-between" v-if="this.expenses.length !== 0">
 							<h3>Expense list</h3>
 							<div>

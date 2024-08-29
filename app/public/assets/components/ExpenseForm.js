@@ -107,7 +107,7 @@ const ExpenseForm = {
                 >
                 <span class="input-group-text" id="quota">€</span>
               </div>
-              <a class="link-danger pb-1" href="#" @click.prevent="removeContributor(contributor.user_id)">
+              <a class="link-secondary pb-1" href="#" @click.prevent="removeContributor(contributor.user_id)">
                 <span class="material-symbols-outlined align-middle" style="font-size:1rem;">cancel</span>
               </a>
             </div>
