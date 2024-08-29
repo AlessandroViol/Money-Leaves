@@ -76,16 +76,20 @@ const ExpenseForm = {
           </div>
         </header>
 
-        <div v-if="!is_default_quota_valid" class="invalid-label small text-end">Your quota must be greater than 0.00 €.</div>
+        
         <div class="row py-2 d-flex flex-row border-top align-items-center " v-for="contributor in expense.contributors">
+					<div v-if="isCurrentUser(contributor.user_id)">
+						<div v-if="!is_default_quota_valid" class="invalid-label small text-end">Your quota must be greater than 0.00 €.</div>
+					</div>
+					<div v-if="!isCurrentUser(contributor.user_id)">
+            <div v-if="!isQuotaValid(contributor.quota) && expense.category !== 'Refound'" class="invalid-label text-end">Quota must be greater than 0.00 €</div>
+            <div v-if="!isQuotaValid(contributor.quota) && expense.category === 'Refound'" class="invalid-label text-end">Quota must be lesser than 0.00 €</div>
+          </div>
+
           <span class="col" :class="{'text-primary fw-medium': isCurrentUser(contributor.user_id)}">
             @{{ contributor.user_id }}
           </span>
-
-          <span v-if="!isCurrentUser(contributor.user_id)">
-            <div v-if="!isQuotaValid(contributor.quota) && expense.category !== 'Refound'" class="invalid-label text-end">Quota must be greater than 0.00 €</div>
-            <div v-if="!isQuotaValid(contributor.quota) && expense.category === 'Refound'" class="invalid-label text-end">Quota must be lesser than 0.00 €</div>
-          </span>
+          
           <span class="col text-end align-items-center ">
             <span :class="{'invalid-label': !is_default_quota_valid}" v-if="isCurrentUser(contributor.user_id)">
               {{ (contributor.quota).toFixed(2) }} €
