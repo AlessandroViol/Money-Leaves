@@ -1,3 +1,5 @@
+import { apiSignOut } from '../js/serverInteractions.js';
+
 const Sidebar = {
 	template: `
     <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
@@ -59,9 +61,9 @@ const Sidebar = {
 
           <ul class="nav flex-column mb-auto">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" @click.prevent="goToSignin" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" @click.prevent="signOut" href="#">
                 <svg class="bi"><use xlink:href="#door-closed" /></svg>
-                Go to sign in
+                Sign out
               </a>
             </li>
           </ul>
@@ -78,8 +80,12 @@ const Sidebar = {
 	},
 
 	methods: {
-		async goToSignin() {
-			this.$router.push({ path: '/signin' });
+		async signOut() {
+			const res = await apiSignOut(this.$router);
+
+			if (res) {
+				console.log('Logged out user.');
+			}
 		},
 	},
 };

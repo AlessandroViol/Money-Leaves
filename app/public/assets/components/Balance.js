@@ -56,9 +56,6 @@ const Balance = {
       </div>
     </div>
 
-
-
-
     <h4 class="ms-3 mt-5">
       Details
     </h4>

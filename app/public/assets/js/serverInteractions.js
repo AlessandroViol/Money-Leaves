@@ -279,6 +279,28 @@ export async function apiSignIn(username, password, router) {
 	return { status: 200, res };
 }
 
+export async function apiSignOut(router) {
+	const response = await fetch('/api/auth/signout', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	if (!response.ok) {
+		const errorMessage = `Error: ${response.statusText}`;
+		console.error(errorMessage);
+		alert(errorMessage);
+		return;
+	}
+
+	router.push({ path: '/signin' });
+
+	const res = await response.json();
+	console.log(`Signed out`);
+	return res;
+}
+
 export async function apiQueryUser(query, router) {
 	const response = await fetch(`/api/users/search?q=${query}`, {
 		method: 'GET',

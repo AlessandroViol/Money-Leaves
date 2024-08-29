@@ -66,7 +66,7 @@ const SignUp = {
               Please, sign in to continue.
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary mx-auto" @click="goToLogin">Go to sign in</button>
+              <button type="button" class="btn btn-primary mx-auto" @click="goToSignIn">Go to sign in</button>
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@ const SignUp = {
 			console.log(res);
 		},
 
-		goToLogin() {
+		goToSignIn() {
 			const modal = bootstrap.Modal.getInstance(document.getElementById('signUpConfirm'));
 			modal.hide();
 			this.$router.push({ path: '/signin' });

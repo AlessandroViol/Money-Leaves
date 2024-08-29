@@ -153,4 +153,22 @@ router.post('/signin', async (req, res) => {
 	}
 });
 
+// sign out
+router.post('/signout', (req, res) => {
+	if (req.session.user) {
+		req.session.destroy((err) => {
+			if (err) {
+				console.error('Error destroying session:', err);
+				return res.status(500).json({ error: 'Failed to log out' });
+			}
+
+			res.clearCookie('connect.sid');
+			console.log('Logged out successfully');
+			res.status(200).json({ message: 'Logged out successfully' });
+		});
+	} else {
+		res.status(400).json({ error: 'No active session' });
+	}
+});
+
 module.exports = { router, verifyUser, setDb };
