@@ -2,8 +2,8 @@ const { toRaw } = Vue;
 
 const DoughnutChartContributors = {
 	template: `
-    <div class="" style="width: 100%; height: auto;">
-      <canvas style="width: 100%; height: 100%;" id="doughnutChartContributors"></canvas>
+    <div style="width: 100%; height: 100%;">
+      <canvas id="doughnutChartContributors"></canvas>
     </div>
   `,
 
@@ -107,7 +107,7 @@ const DoughnutChartContributors = {
 					},
 				},
 				responsive: true,
-				maintainAspectRatio: true,
+				maintainAspectRatio: false,
 			};
 
 			const ctx = document.getElementById('doughnutChartContributors');

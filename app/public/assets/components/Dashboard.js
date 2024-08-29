@@ -60,11 +60,11 @@ const Dashboard = {
 								</div>
 								<div class="col-2 h-100">
 									<div class="col">
-										<div class="text-center text-secondary small mb-1">Categories</div>
+										<div class="text-center text-secondary small">Categories</div>
 										<categories-pie v-if="this.expenses.length !== 0" :expenses="expenses"></categories-pie>
 									</div>
 									<div class="col">
-										<div class="text-center text-secondary small mb-1">Users</div>
+										<div class="text-center text-secondary small">Users</div>
 										<users-pie v-if="this.expenses.length !== 0" :expenses="expenses" :username="username"></users-pie>
 									</div>
 								</div>
