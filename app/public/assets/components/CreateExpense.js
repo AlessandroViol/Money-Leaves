@@ -15,10 +15,10 @@ const CreateExpense = {
 							<h1 class="h1">New Expense</h1>
 						</div>
 						
-						<expense-form :defaultValues="expense" @editedExpense="updateExpense"></expense-form>
+						<expense-form :defaultValues="expense" @editedExpense="updateExpense" @isValid="changeValid"></expense-form>
 
 						<div class="mb-4">
-							<button type="button" class="btn btn-sm btn-primary" @click="confirmExpense">Create Expense</button>
+							<button type="button" class="btn btn-sm btn-primary" @click="confirmExpense" :disabled="!isValid">Create Expense</button>
 						</div>
 
 						<div class="modal fade" id="createExpenseConfirm" tabindex="-1" aria-labelledby="createExpenseConfirmLabel" aria-hidden="true">
@@ -51,6 +51,8 @@ const CreateExpense = {
 			username: '',
 
 			expense: {},
+
+			isValid: false,
 		};
 	},
 
@@ -72,6 +74,10 @@ const CreateExpense = {
 			if (res) {
 				this.$router.push({ path: '/' });
 			}
+		},
+
+		changeValid(value) {
+			this.isValid = value;
 		},
 	},
 

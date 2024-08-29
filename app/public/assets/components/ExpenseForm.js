@@ -52,7 +52,7 @@ const ExpenseForm = {
       <div class="mb-3">
         <label for="category" class="form-label has-validation">Category</label>
         <select class="form-select" :class="{'is-invalid': !is_category_valid}" v-model="expense.category" aria-label="Category select"  style="max-width: 14rem">
-          <option disabled value="">Select a category</option>
+          <option disabled value="Select a category" selected>Select a category</option>
           <option v-for="category in categories" :value="category">{{category}}</option>
         </select>
         <div v-if="!is_category_valid" class="invalid-feedback">You must select a category.</div>
@@ -88,7 +88,7 @@ const ExpenseForm = {
           </span>
           <span class="col text-end align-items-center ">
             <span :class="{'invalid-label': !is_default_quota_valid}" v-if="isCurrentUser(contributor.user_id)">
-              {{ contributor.quota.toFixed(2) }} €
+              {{ (contributor.quota).toFixed(2) }} €
             </span>
             <div class="d-flex align-items-center justify-content-end" v-if="!isCurrentUser(contributor.user_id)">
               <div class="input-group me-3" style="max-width: 8rem">
@@ -163,6 +163,11 @@ const ExpenseForm = {
 			type: Object,
 			required: true,
 		},
+
+		isOpen: {
+			type: Boolean,
+			required: false,
+		},
 	},
 
 	data: function () {
@@ -185,7 +190,7 @@ const ExpenseForm = {
 				payer_id: this.defaultValues.payer_id,
 				total_cost: this.defaultValues.total_cost,
 				description: this.defaultValues.description,
-				category: this.defaultValues.category,
+				category: this.defaultValues.category ? this.defaultValues.category : 'Select a category',
 				date: { ...this.defaultValues.date },
 				contributors: this.defaultValues.contributors.map((contributor) => {
 					return { ...contributor };
@@ -195,6 +200,10 @@ const ExpenseForm = {
 	},
 
 	methods: {
+		resetForm() {
+			this.expense = JSON.parse(JSON.stringify(this.defaultValues));
+		},
+
 		updateDate(date) {
 			console.log('Date', date);
 			this.expense.date = date;
@@ -278,7 +287,7 @@ const ExpenseForm = {
 		},
 
 		is_default_quota_valid() {
-			return this.expense.contributors[0].quota > 0;
+			return this.expense.contributors.length !== 0 && this.expense.contributors[0].quota > 0;
 		},
 
 		is_expense_valid() {
@@ -301,9 +310,13 @@ const ExpenseForm = {
 		},
 	},
 
-	emits: ['editedExpense'],
+	emits: ['editedExpense', 'isValid'],
 
 	watch: {
+		isOpen() {
+			this.resetForm();
+		},
+
 		'expense.total_cost'() {
 			this.expense.contributors[0].quota = this.payer_quota;
 			this.$emit('editedExpense', this.expense);
@@ -315,6 +328,10 @@ const ExpenseForm = {
 			},
 
 			deep: true,
+		},
+
+		is_expense_valid() {
+			this.$emit('isValid', this.is_expense_valid);
 		},
 
 		async query(value) {

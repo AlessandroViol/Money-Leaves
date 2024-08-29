@@ -1,4 +1,5 @@
 import { apiEditExpense } from '../js/serverInteractions.js';
+import ExpenseForm from './ExpenseForm.js';
 
 const EditExpense = {
 	template: `
@@ -14,10 +15,10 @@ const EditExpense = {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <expense-form :defaultValues="oldExpense" @editedExpense="updateExpense"></expense-form>
+            <expense-form :defaultValues="oldExpense" :isOpen="isOpen" @editedExpense="updateExpense" @isValid="changeValid"></expense-form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary mx-auto" @click="editExpense">Save</button>
+            <button type="button" class="btn btn-primary mx-auto" @click="editExpense" :disabled="!isValid">Save</button>
             <button type="button" class="btn btn-secondary mx-auto" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -39,6 +40,8 @@ const EditExpense = {
 
 	data: function () {
 		return {
+			isValid: true,
+			isOpen: false,
 			newExpense: {},
 		};
 	},
@@ -46,9 +49,9 @@ const EditExpense = {
 	emits: ['editExpense'],
 
 	watch: {
-		'oldExpense.date': {
+		oldExpense: {
 			handler(newValue, oldValue) {
-				console.log('Old date', newValue);
+				console.log('Old expense', newValue);
 			},
 
 			deep: true,
@@ -61,8 +64,18 @@ const EditExpense = {
 		},
 
 		confirmExpense() {
+			this.isOpen = true;
+
 			const modal = new bootstrap.Modal(document.getElementById(`editExpenseConfirm${this.index}`));
 			modal.show();
+
+			modal._element.addEventListener('hidden.bs.modal', () => {
+				this.isOpen = false;
+			});
+		},
+
+		changeValid(value) {
+			this.isValid = value;
 		},
 
 		async editExpense() {
