@@ -25,29 +25,41 @@ function validator({
 	const containsLetter = /[a-zA-Z]/.test(str);
 	result = result && containsLetter;
 
+	console.log('\tcontains letter: ', containsLetter);
+
 	// checks for whitespaces
 	if (!allowWhiteSpaces) {
 		const hasWhiteSpace = /\s/.test(str);
 		result = result && !hasWhiteSpace;
+
+		console.log('\twhitespace: ', hasWhiteSpace);
 	}
 
 	// checks length in range
 	result = result && str.length >= minLength && str.length <= maxLength;
+	
+	console.log('\tLength in range: ', str.length >= minLength && str.length <= maxLength);
 
 	// checks for numbers
 	if (!allowNumbers) {
 		const hasNumber = /\d/.test(str);
 		result = result && !hasNumber;
+		
+		console.log('\tnumbers: ', hasNumber);
 	}
 
 	// Count the number of numbers in the string
 	const count = (str.match(/\d/g) || []).length;
 	result = result && count >= minNumber;
+		
+	console.log('\tenough numbers: ', count >= minNumber);
 
 	// checks for symbols
 	if (!allowSymbols) {
-		const hasSymbol = /[^a-zA-Z0-9]/.test(str);
+		const hasSymbol = /[^a-zA-Z0-9\s]/.test(str);
 		result = result && !hasSymbol;
+
+		console.log('\tsymbols: ', hasSymbol);
 	}
 
 	console.log('Final evaluation: ', result);
@@ -81,7 +93,7 @@ router.post('/signup', async (req, res) => {
 		password: hashedPassword,
 	};
 
-	if (!validator({ str: req.body.password, allowWhiteSpaces: true, minLength: 6, maxLength: 18, minNumber: 2 })) {
+	if (!validator({ str: req.body.password, allowWhiteSpaces: false, minLength: 6, maxLength: 18, minNumber: 2 })) {
 		console.error('Invalid password');
 		return res.status(460).json({ error: 'Invalid password' });
 	}

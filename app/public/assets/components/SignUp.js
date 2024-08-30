@@ -151,7 +151,8 @@ const SignUp = {
 				this.name === '' ||
 				this.surname === '' ||
 				this.password === '' ||
-				this.passwordRepeat === '';
+				this.passwordRepeat === '' ||
+				this.password !== this.passwordRepeat;
 
 			return isDisabled;
 		},
