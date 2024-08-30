@@ -3,7 +3,7 @@ const { toRaw } = Vue;
 const DoughnutChartExpense = {
 	template: `
     <div style="width: 100%; height: 100%;">
-      <canvas id="doughnutChart"></canvas>
+      <canvas class="w-100" width="150" height="150" id="doughnutChart"></canvas>
     </div>
   `,
 

@@ -58,7 +58,7 @@ const Dashboard = {
 								<div class="col-10">
 									<expense-line-chart v-if="this.expenses.length !== 0" :expenses="expenses" :username="username"></expense-line-chart>
 								</div>
-								<div class="col-2 h-100">
+								<div class="col-2">
 									<div class="col">
 										<div class="text-center text-secondary small">Categories</div>
 										<categories-pie v-if="this.expenses.length !== 0" :expenses="expenses"></categories-pie>
