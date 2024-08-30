@@ -3,7 +3,7 @@ const { toRaw } = Vue;
 const DoughnutChartExpense = {
 	template: `
     <div style="width: 100%; height: 100%;">
-      <canvas class="w-100" width="150" height="150" id="doughnutChart"></canvas>
+      <canvas width="150" height="150" id="doughnutChart"></canvas>
     </div>
   `,
 
@@ -42,7 +42,7 @@ const DoughnutChartExpense = {
 				labels: Object.keys(categoryCounts),
 				datasets: [
 					{
-						label: 'Number of Expenses',
+						label: 'Expenses',
 						data: Object.values(categoryCounts),
 						backgroundColor: [
 							'rgba(40, 167, 69, 1)',
