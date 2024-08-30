@@ -55,7 +55,7 @@ const setupUsers = async (db) => {
 
 	let hashedPassword = (await bcrypt.hash('passwordA', 10)).toString();
 	let newUser = {
-		_id: 'Zuppiero',
+		_id: 'Ale',
 		name: 'Alessandro',
 		surname: 'Viol',
 		password: hashedPassword,
