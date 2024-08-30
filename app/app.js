@@ -66,7 +66,8 @@ app.listen(3000, async () => {
 	await client.connect();
 	db = client.db('money-leaves');
 
-	if (true || (await db.listCollections({ name: 'users' }).toArray()).length === 0) {
+	//reset the db
+	if ((await db.listCollections({ name: 'users' }).toArray()).length === 0) {
 		await setupUsers(db);
 		await setupExpenses(db);
 	}
