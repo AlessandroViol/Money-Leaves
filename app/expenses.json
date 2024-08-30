@@ -283,5 +283,141 @@
         "quota": -5.0
       }
     ]
+  },
+
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 20,
+    "description": "Steam gift",
+    "category": "Present",
+    "date": {
+      "year": 2024,
+      "month": 1,
+      "day": 10
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 10.0
+      },
+      {
+        "user_id": "Marchetti",
+        "quota": 10.0
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Marchetti",
+    "total_cost": 100,
+    "description": "Spotify",
+    "category": "Entertainment",
+    "date": {
+      "year": 2024,
+      "month": 3,
+      "day": 12
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 20.0
+      },
+      {
+        "user_id": "Marchetti",
+        "quota": 60.0
+      },
+      {
+        "user_id": "Fasi",
+        "quota": 20.0
+      }
+    ]
+  },
+  
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 0,
+    "description": "Spotify",
+    "category": "Refound",
+    "date": {
+      "year": 2024,
+      "month": 3,
+      "day": 13
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 20.0
+      },
+      {
+        "user_id": "Marchetti",
+        "quota":-20
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Zuppiero",
+    "total_cost": 52,
+    "description": "Dinner",
+    "category": "Food and beverages",
+    "date": {
+      "year": 2024,
+      "month": 4,
+      "day": 12
+    },
+    "contributors": [
+      {
+        "user_id": "Zuppiero",
+        "quota": 20.0
+      },
+      {
+        "user_id": "Carlo",
+        "quota": 32
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Carlo",
+    "total_cost": 0,
+    "description": "Dinner",
+    "category": "Refound",
+    "date": {
+      "year": 2024,
+      "month": 4,
+      "day": 15
+    },
+    "contributors": [
+      {
+        "user_id": "Carlo",
+        "quota": 32.0
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": -32
+      }
+    ]
+  },
+
+  {
+    "payer_id": "Denis",
+    "total_cost": 52,
+    "description": "Dinner",
+    "category": "Food and beverages",
+    "date": {
+      "year": 2024,
+      "month": 4,
+      "day": 26
+    },
+    "contributors": [
+      {
+        "user_id": "Denis",
+        "quota": 20.0
+      },
+      {
+        "user_id": "Zuppiero",
+        "quota": 32
+      }
+    ]
   }
 ]

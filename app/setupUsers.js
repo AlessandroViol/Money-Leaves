@@ -89,6 +89,42 @@ const setupUsers = async (db) => {
 	};
 	newUsers.push(newUser);
 
+	hashedPassword = await bcrypt.hash('asdasd12', 10);
+	newUser = {
+		_id: 'Marchetti',
+		name: 'Matteo',
+		surname: 'Marchetti',
+		password: hashedPassword,
+	};
+	newUsers.push(newUser);
+
+	hashedPassword = await bcrypt.hash('asdasd12', 10);
+	newUser = {
+		_id: 'Fasi',
+		name: 'Daniele',
+		surname: 'Fasan',
+		password: hashedPassword,
+	};
+	newUsers.push(newUser);
+
+	hashedPassword = await bcrypt.hash('asdasd12', 10);
+	newUser = {
+		_id: 'Carlo',
+		name: 'Carlo',
+		surname: 'Pisano',
+		password: hashedPassword,
+	};
+	newUsers.push(newUser);
+
+	hashedPassword = await bcrypt.hash('asdasd12', 10);
+	newUser = {
+		_id: 'Denis',
+		name: 'Denis',
+		surname: 'Guerra',
+		password: hashedPassword,
+	};
+	newUsers.push(newUser);
+
 	try {
 		await usersCollection.insertMany(newUsers);
 		console.log('Users populated');
