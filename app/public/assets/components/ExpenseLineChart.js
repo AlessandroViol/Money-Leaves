@@ -2,8 +2,8 @@ const { toRaw } = Vue;
 
 const ExpenseLineChart = {
 	template: `
-    <div style="width: 100%; height: 100%;">
-      <canvas class="w-100" width="900" height="300" id="myChart"></canvas>
+    <div class="chart-container">
+      <canvas class="w-100" id="myChart"></canvas>
     </div>
   `,
 
@@ -119,6 +119,7 @@ const ExpenseLineChart = {
 						boxPadding: 3,
 					},
 				},
+				responsive: true,
 				maintainAspectRatio: false,
 			};
 

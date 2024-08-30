@@ -81,7 +81,7 @@ router.post('/signup', async (req, res) => {
 		password: hashedPassword,
 	};
 
-	if (!validator({ str: req.body.password, allowWhiteSpaces: false, minLength: 6, maxLength: 18, minNumber: 2 })) {
+	if (!validator({ str: req.body.password, allowWhiteSpaces: true, minLength: 6, maxLength: 18, minNumber: 2 })) {
 		console.error('Invalid password');
 		return res.status(460).json({ error: 'Invalid password' });
 	}

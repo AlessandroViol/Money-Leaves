@@ -15,10 +15,10 @@ const Balance = {
           >
             Total Expenditure: 
           </span>
-          <p class="text-primary my-2">
-            {{ (this.balance.totalExpenditure).toFixed(2) }} €
-          </p>
         </h5>
+        <p class="h5 text-primary my-2">
+          {{ (this.balance.totalExpenditure).toFixed(2) }} €
+        </p>
       </div>
 
       <div>
@@ -31,10 +31,10 @@ const Balance = {
           >
             Total Income
           </span>
-          <p class="text-danger my-2">
-            {{ this.balance.totalIncome.toFixed(2) }} €
-          </p>
         </h5>
+        <p class="h5 text-danger my-2">
+          {{ this.balance.totalIncome.toFixed(2) }} €
+        </p>
       </div>
 
       <hr class="mx-2 me-5"/>
@@ -49,10 +49,10 @@ const Balance = {
           >
             Total Money Spent
           </span>
-          <p class="text-primary my-2">
-            {{ this.balance.totalMoneySpent.toFixed(2) }} €
-          </p>
         </h5>
+        <p class="h5 text-primary my-2">
+          {{ this.balance.totalMoneySpent.toFixed(2) }} €
+        </p>
       </div>
     </div>
 

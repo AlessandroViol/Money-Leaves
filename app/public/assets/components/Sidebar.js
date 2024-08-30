@@ -38,19 +38,34 @@ const Sidebar = {
 
           <ul class="nav flex-column">
             <li class="nav-item">
-              <router-link to="/" class="nav-link d-flex align-items-center gap-2" :class="{'active': this.active_page === 'dashboard'}" aria-current="page">
+              <router-link 
+                to="/" 
+                class="nav-link d-flex align-items-center gap-2" 
+                :class="{'active': this.active_page === 'dashboard'}" 
+                aria-current="page" 
+                @click.native="closeOffcanvas">
                 <svg class="bi"><use xlink:href="#house-fill" /></svg>
                 Dashboard
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/users" class="nav-link d-flex align-items-center gap-2" :class="{'active': this.active_page === 'users'}" aria-current="page">
+              <router-link 
+                to="/users" 
+                class="nav-link d-flex align-items-center gap-2" 
+                :class="{'active': this.active_page === 'users'}" 
+                aria-current="page" 
+                @click.native="closeOffcanvas">
                 <svg class="bi"><use xlink:href="#people" /></svg>
                 Users
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/create" class="nav-link d-flex align-items-center gap-2" :class="{'active': this.active_page === 'new-expense'}" aria-current="page">
+              <router-link 
+                to="/create" 
+                class="nav-link d-flex align-items-center gap-2" 
+                :class="{'active': this.active_page === 'new-expense'}" 
+                aria-current="page" 
+                @click.native="closeOffcanvas">
                 <svg class="bi"><use xlink:href="#cart" /></svg>
                 New Expense
               </router-link>
@@ -86,6 +101,22 @@ const Sidebar = {
 			if (res) {
 				console.log('Logged out user.');
 			}
+		},
+
+		// New method to close offcanvas
+		closeOffcanvas() {
+			const offcanvasElement = document.getElementById('sidebarMenu');
+			const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+			if (offcanvasInstance) {
+				offcanvasInstance.hide();
+			}
+		},
+	},
+
+	watch: {
+		// Watch for route changes to close offcanvas
+		$route() {
+			this.closeOffcanvas();
 		},
 	},
 };
